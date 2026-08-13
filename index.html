@@ -5,49 +5,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matematica alla Radice</title>
     <style>
-        /* Reset di base per tutti i browser */
+        /* Reset e impostazioni generali */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        /* Stile dello sfondo e del corpo pagina */
         body {
-            background-color: #1b4332; /* Verde bosco elegante e profondo */
-            color: #ffffff;            /* Testo bianco */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            padding: 2.5rem 1rem 1.5rem 1rem;
+            
+            /* GRADIENTE LATEX: Brown (#793802) -> ForestGreen (#1E7D32) */
+            background: linear-gradient(135deg, #793802 0%, #1E7D32 100%);
+            background-attachment: fixed;
+        }
+
+        /* Testata nella parte superiore dello schermo */
+        header {
             text-align: center;
-            padding: 20px;
+            max-width: 850px;
+            width: 100%;
+            margin-bottom: 2rem;
         }
 
-        /* Titolo Principale */
-        h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem); /* Testo grande e dinamico */
-            font-weight: 700;
+        header h1 {
+            font-size: clamp(2.5rem, 6vw, 4.2rem);
+            font-weight: 800;
             letter-spacing: -1px;
-            margin-bottom: 16px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 0.6rem;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+            line-height: 1.1;
         }
 
-        /* Sottotitolo / Descrizione */
-        p {
-            font-size: 1.25rem;
-            color: #d8f3dc; /* Verde chiarissimo e riposante */
-            max-width: 600px;
-            line-height: 1.5;
+        header p {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: #f0fdf4;
+            font-weight: 300;
+            opacity: 0.95;
+            letter-spacing: 0.3px;
+        }
+
+        /* Griglia dei Bottoni */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 960px;
+            margin: auto 0;
+        }
+
+        /* Stile delle Schede/Bottoni a effetto vetro satinato */
+        .card-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.8rem 1.5rem;
+            text-align: center;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .card-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffffff;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .card-button h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .card-button p {
+            font-size: 0.88rem;
+            color: #f0fdf4;
+            opacity: 0.9;
+        }
+
+        /* Piè di pagina */
+        footer {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #e2f1e7;
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        footer a {
+            color: #ffffff;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <h1>Matematica alla Radice</h1>
-    <p>Sito in costruzione. Un nuovo approccio alla comprensione e alla divulgazione della matematica.</p>
+    <!-- TESTATA SUPERIORE -->
+    <header>
+        <h1>Matematica alla Radice</h1>
+        <p>Un libro di testo di matematica per i licei scientifici</p>
+    </header>
+
+    <!-- GRIGLIA PRINCIPALE -->
+    <main class="grid-container">
+        
+        <div class="card-button" onclick="alert('Sezione Presentazione in arrivo!')">
+            <h3>Presentazione</h3>
+            <p>Scopri la struttura e la visione del testo</p>
+        </div>
+
+        <div class="card-button" onclick="alert('Sezione Download in arrivo!')">
+            <h3>Download</h3>
+            <p>Scarica i volumi del libro in formato PDF</p>
+        </div>
+
+        <div class="card-button" onclick="alert('Sezione Materiali aggiuntivi in arrivo!')">
+            <h3>Materiali aggiuntivi</h3>
+            <p>File GeoGebra e risorse integrative</p>
+        </div>
+
+        <div class="card-button" onclick="alert('Sezione Diritto d\'autore in arrivo!')">
+            <h3>Diritto d'autore</h3>
+            <p>Licenza Creative Commons CC BY-NC-ND 4.0</p>
+        </div>
+
+        <div class="card-button" onclick="alert('Sezione Segnalazioni in arrivo!')">
+            <h3>Segnalazioni</h3>
+            <p>Invia refusi o suggerimenti all'autore</p>
+        </div>
+
+        <div class="card-button" onclick="alert('Sezione Conosci l\'autore in arrivo!')">
+            <h3>Conosci l'autore</h3>
+            <p>Note biografiche e percorso del progetto</p>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 Matematica alla Radice. Contenuti distribuiti con licenza <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.it" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a>.</p>
+    </footer>
 
 </body>
 </html>
