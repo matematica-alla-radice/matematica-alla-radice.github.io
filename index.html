@@ -47,6 +47,7 @@
             font-size: clamp(1.05rem, 2.2vw, 1.3rem);
             color: #FFD700;
             font-weight: 300;
+            font-style: italic;
             opacity: 0.95;
         }
 
@@ -127,6 +128,11 @@
             filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
         }
 
+        /* Correzione specifica per centrare l'hover delle foglie a ore 12 e 6 */
+        .pos-12:hover, .pos-6:hover {
+            transform: translateX(-50%) scale(1.14);
+        }
+
         .leaf-group:hover .tikz-leaf-body {
             fill: rgba(255, 255, 255, 0.22);
             stroke: #FFD700;
@@ -165,13 +171,13 @@
             letter-spacing: 0.8px;
         }
 
-        /* POSIZIONAMENTO NELLO SPAZIO (Spostate più all'esterno per evitare sovrapposizioni) */
+        /* POSIZIONAMENTO NELLO SPAZIO (Lateralmente esterne e verticalmente centrate) */
         .pos-12 { top: 10px; left: 50%; transform: translateX(-50%); }
-        .pos-2  { top: 80px; right: -35px; }
-        .pos-4  { bottom: 80px; right: -35px; }
+        .pos-2  { top: 140px; right: -25px; }
+        .pos-4  { bottom: 140px; right: -25px; }
         .pos-6  { bottom: 10px; left: 50%; transform: translateX(-50%); }
-        .pos-8  { bottom: 80px; left: -35px; }
-        .pos-10 { top: 80px; left: -35px; }
+        .pos-8  { bottom: 140px; left: -25px; }
+        .pos-10 { top: 140px; left: -25px; }
 
         /* FOOTER & MODALE */
         footer {
