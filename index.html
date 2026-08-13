@@ -50,7 +50,7 @@
             opacity: 0.95;
         }
 
-        /* Layout Principale */
+        /* Layout Principale (scala 1.2) */
         main {
             width: 100%;
             max-width: 950px;
@@ -62,8 +62,8 @@
 
         .leaf-grid {
             position: relative;
-            width: 1300px;
-            height: 850px;
+            width: 1050px;
+            height: 700px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -78,8 +78,8 @@
         }
 
         .leaf-svg {
-            width: 450px;
-            height: 186px;
+            width: 360px;
+            height: 149px;
             overflow: visible;
             display: block;
         }
@@ -108,7 +108,7 @@
 
         .leaf-text {
             fill: #FFD700;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
             text-anchor: middle;
             letter-spacing: 0.5px;
@@ -149,8 +149,8 @@
         /* FOGLIA CENTRALE (DOWNLOAD) */
         .pos-center { z-index: 10; }
         .pos-center .leaf-svg {
-            width: 500px;
-            height: 206px;
+            width: 400px;
+            height: 165px;
         }
 
         .pos-center .tikz-leaf-body {
@@ -160,18 +160,18 @@
         }
 
         .pos-center .leaf-text {
-            font-size: 23px;
+            font-size: 18.5px;
             font-weight: 800;
             letter-spacing: 0.8px;
         }
 
-        /* POSIZIONAMENTO NELLO SPAZIO (ORIZZONTALI) */
-        .pos-2  { top: 130px; right: 25px; }
-        .pos-4  { bottom: 130px; right: 25px; }
-        .pos-6  { bottom: 15px; }
-        .pos-8  { bottom: 130px; left: 25px; }
-        .pos-10 { top: 130px; left: 25px; }
-        .pos-12 { top: 15px; }
+        /* POSIZIONAMENTO NELLO SPAZIO (Spostate più all'esterno per evitare sovrapposizioni) */
+        .pos-12 { top: 10px; left: 50%; transform: translateX(-50%); }
+        .pos-2  { top: 80px; right: -35px; }
+        .pos-4  { bottom: 80px; right: -35px; }
+        .pos-6  { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        .pos-8  { bottom: 80px; left: -35px; }
+        .pos-10 { top: 80px; left: -35px; }
 
         /* FOOTER & MODALE */
         footer {
@@ -243,6 +243,7 @@
                 position: relative !important;
                 top: auto !important; bottom: auto !important;
                 left: auto !important; right: auto !important;
+                transform: none !important;
             }
 
             .pos-center { order: -1; }
@@ -311,7 +312,7 @@
                         <use href="#icon-materiali" x="0" y="-20" />
                         <text x="0" y="10" class="leaf-text">
                             <tspan x="0" dy="0">Materiali</tspan>
-                            <tspan x="0" dy="15">aggiuntivi</tspan>
+                            <tspan x="0" dy="18">aggiuntivi</tspan>
                         </text>
                     </g>
                 </svg>
@@ -325,7 +326,7 @@
                         <use href="#icon-commenti" x="0" y="-20" />
                         <text x="0" y="10" class="leaf-text">
                             <tspan x="0" dy="0">Commenti</tspan>
-                            <tspan x="0" dy="15">degli studenti</tspan>
+                            <tspan x="0" dy="18">degli studenti</tspan>
                         </text>
                     </g>
                 </svg>
@@ -339,7 +340,7 @@
                         <use href="#icon-descrizione" x="0" y="-20" />
                         <text x="0" y="10" class="leaf-text">
                             <tspan x="0" dy="0">Descrizione</tspan>
-                            <tspan x="0" dy="15">del testo</tspan>
+                            <tspan x="0" dy="18">del testo</tspan>
                         </text>
                     </g>
                 </svg>
@@ -353,7 +354,7 @@
                         <use href="#icon-diritto" x="0" y="-20" />
                         <text x="0" y="10" class="leaf-text">
                             <tspan x="0" dy="0">Diritto</tspan>
-                            <tspan x="0" dy="15">d'autore</tspan>
+                            <tspan x="0" dy="18">d'autore</tspan>
                         </text>
                     </g>
                 </svg>
@@ -367,7 +368,7 @@
                         <use href="#icon-autore" x="0" y="-20" />
                         <text x="0" y="10" class="leaf-text">
                             <tspan x="0" dy="0">Presentazione</tspan>
-                            <tspan x="0" dy="15">dell'autore</tspan>
+                            <tspan x="0" dy="18">dell'autore</tspan>
                         </text>
                     </g>
                 </svg>
@@ -378,9 +379,11 @@
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
-                        <use href="#icon-segnalazioni" x="0" y="-18" />
-                        <text x="0" y="0" class="leaf-text">Segnalazioni</text>
-                        <tspan x="0" dy="15">per l'autore</tspan>
+                        <use href="#icon-segnalazioni" x="0" y="-20" />
+                        <text x="0" y="10" class="leaf-text">
+                            <tspan x="0" dy="0">Segnalazioni</tspan>
+                            <tspan x="0" dy="18">per l'autore</tspan>
+                        </text>
                     </g>
                 </svg>
             </div>
