@@ -20,7 +20,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 2rem 1rem;
-            /* Sfumatura Verde Boschi -> Marrone Terra */
+            /* Sfumatura Forest Green -> Terra */
             background: linear-gradient(to bottom, #1E7D32 0%, #793802 100%);
             background-attachment: fixed;
             overflow-x: hidden;
@@ -54,7 +54,7 @@
         /* Layout Principale */
         main {
             width: 100%;
-            max-width: 820px;
+            max-width: 850px;
             margin: auto 0;
             display: flex;
             justify-content: center;
@@ -70,40 +70,40 @@
             align-items: center;
         }
 
-        /* GRUPPO FOGLIA VETTORIALE INTERATTIVA */
+        /* GRUPPO FOGLIA INTERATTIVA (La tua forma TikZ) */
         .leaf-group {
             position: absolute;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 8px 18px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
         }
 
-        /* Struttura Foglia SVG */
         .leaf-svg {
-            width: 230px;
-            height: 130px;
+            width: 250px;
+            height: 125px;
             overflow: visible;
         }
 
-        .leaf-body {
-            fill: rgba(255, 255, 255, 0.14);
-            stroke: rgba(255, 255, 255, 0.4);
-            stroke-width: 2px;
+        /* Stili ripresi dal tuo xcolor (ForestGreen e green!20) in versione vetro */
+        .tikz-leaf-body {
+            fill: rgba(255, 255, 255, 0.15);
+            stroke: #228B22; /* ForestGreen */
+            stroke-width: 2.5px;
             backdrop-filter: blur(8px);
             transition: all 0.35s ease;
         }
 
-        .leaf-veins {
+        .tikz-leaf-stem {
             fill: none;
-            stroke: rgba(255, 255, 255, 0.3);
-            stroke-width: 1.5px;
+            stroke: #1E7D32; /* ForestGreen ultra thick */
+            stroke-width: 3.5px;
             stroke-linecap: round;
             transition: all 0.35s ease;
         }
 
         .leaf-text {
             fill: #ffffff;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 700;
             text-anchor: middle;
             pointer-events: none;
@@ -117,22 +117,22 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
 
-        /* HOVER SULLA FOGLIA */
+        /* Effetti al mouse */
         .leaf-group:hover {
             transform: scale(1.1) rotate(0deg) !important;
             z-index: 20;
             filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.45));
         }
 
-        .leaf-group:hover .leaf-body {
-            fill: rgba(255, 255, 255, 0.28);
+        .leaf-group:hover .tikz-leaf-body {
+            fill: rgba(255, 255, 255, 0.32);
             stroke: #ffffff;
-            stroke-width: 2.5px;
+            stroke-width: 3px;
         }
 
-        .leaf-group:hover .leaf-veins {
-            stroke: rgba(255, 255, 255, 0.65);
-            stroke-width: 2px;
+        .leaf-group:hover .tikz-leaf-stem {
+            stroke: #ffffff;
+            stroke-width: 4px;
         }
 
         /* FOGLIA CENTRALE (DOWNLOAD - Più grande) */
@@ -141,14 +141,14 @@
         }
 
         .pos-center .leaf-svg {
-            width: 270px;
-            height: 150px;
+            width: 290px;
+            height: 145px;
         }
 
-        .pos-center .leaf-body {
-            fill: rgba(255, 255, 255, 0.24);
+        .pos-center .tikz-leaf-body {
+            fill: rgba(255, 255, 255, 0.26);
             stroke: #ffffff;
-            stroke-width: 2.5px;
+            stroke-width: 3px;
         }
 
         .pos-center .leaf-text {
@@ -157,13 +157,13 @@
             letter-spacing: 1px;
         }
 
-        /* POSIZIONAMENTO E ORIENTAMENTO PARALLELO / NATURALE */
+        /* POSIZIONAMENTO PARALLELO / ARMONICO ED INCLINAZIONI NATURALI */
         .pos-12 { top: 0px; transform: rotate(-8deg); }
-        .pos-2  { top: 110px; right: 10px; transform: rotate(12deg); }
-        .pos-4  { bottom: 110px; right: 10px; transform: rotate(-10deg); }
+        .pos-2  { top: 110px; right: 0px; transform: rotate(12deg); }
+        .pos-4  { bottom: 110px; right: 0px; transform: rotate(-10deg); }
         .pos-6  { bottom: 0px; transform: rotate(6deg); }
-        .pos-8  { bottom: 110px; left: 10px; transform: rotate(-12deg); }
-        .pos-10 { top: 110px; left: 10px; transform: rotate(10deg); }
+        .pos-8  { bottom: 110px; left: 0px; transform: rotate(-12deg); }
+        .pos-10 { top: 110px; left: 0px; transform: rotate(10deg); }
 
         /* FOOTER & MODAL LICENZA */
         footer {
@@ -186,7 +186,7 @@
             font-weight: 600;
         }
 
-        /* Pop-up Modale Interno Licenza */
+        /* Modale Interno Licenza Safe Check */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -226,7 +226,7 @@
             float: right;
         }
 
-        /* SMARTPHONE: Layout in colonna */
+        /* SMARTPHONE: Incolonnamento automatico */
         @media (max-width: 768px) {
             .leaf-grid {
                 width: 100%;
@@ -242,45 +242,34 @@
                 transform: rotate(0deg) !important;
             }
 
-            .pos-center {
-                order: -1;
-            }
+            .pos-center { order: -1; }
 
             .leaf-svg {
-                width: 280px !important;
-                height: 110px !important;
+                width: 290px !important;
+                height: 125px !important;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- DEFINIZIONE DELI PATTERN E ICONE VETTORIALI -->
+    <!-- REPLICA ESATTA DEL TUO CODICE TIKZ IN SINTASSI SVG -->
     <svg style="display: none;">
         <defs>
-            <!-- SAGOMA BOTANICA DELLA FOGLIA (Lanceolata/Ovata con picciolo e venature) -->
-            <g id="botanical-leaf">
-                <!-- Picciolo + Profilo Foglia Botanica Reale -->
-                <path class="leaf-body" d="
-                    M 15,95 
-                    C 5,110 0,120 5,125 
-                    C 10,128 20,118 28,100 
-                    C 45,35 150,15 260,65 
-                    C 275,72 275,78 260,85 
-                    C 150,135 45,120 28,100 Z" />
-                
-                <!-- Nervatura Centrale e Secondarie -->
-                <path class="leaf-veins" d="
-                    M 5,125 C 20,115 28,100 265,75 
-                    M 75,65 C 90,48 115,42 135,40 
-                    M 125,70 C 145,52 170,48 190,46 
-                    M 175,73 C 195,60 220,56 238,55 
-                    M 75,88 C 90,105 115,110 135,112 
-                    M 125,82 C 145,100 170,104 190,105 
-                    M 175,80 C 195,93 220,96 238,97" />
+            <g id="tikz-leaf-shape">
+                <!-- Stelo (ultra thick): \draw (0,0) arc(90:150:1.5cm); -->
+                <path class="tikz-leaf-stem" d="M 45,75 A 45,45 0 0 0 12,110" />
+
+                <!-- Sagoma Foglia TikZ: (0,0)arc(210:30:2cm)arc(210:270:4cm) e ritorno -->
+                <path class="tikz-leaf-body" d="
+                    M 45,75 
+                    A 75,55 0 0 1 165,22 
+                    A 150,110 0 0 0 285,75 
+                    A 150,110 0 0 0 165,128 
+                    A 75,55 0 0 1 45,75 Z" />
             </g>
 
-            <!-- ICONE SVG -->
+            <!-- ICONE SVG INTERNE -->
             <g id="icon-download"><path class="leaf-icon-svg" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" transform="translate(-12, -12)"/></g>
             <g id="icon-materiali"><path class="leaf-icon-svg" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" transform="translate(-12, -12)"/></g>
             <g id="icon-commenti"><path class="leaf-icon-svg" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" transform="translate(-12, -12)"/></g>
@@ -301,93 +290,93 @@
 
             <!-- CENTRO: DOWNLOAD -->
             <div class="leaf-group pos-center" onclick="alert('Sezione Download PDF')">
-                <svg class="leaf-svg" viewBox="0 0 280 140">
-                    <use href="#botanical-leaf" />
-                    <use href="#icon-download" x="145" y="52" />
-                    <text x="145" y="88" class="leaf-text">DOWNLOAD</text>
+                <svg class="leaf-svg" viewBox="0 0 300 150">
+                    <use href="#tikz-leaf-shape" />
+                    <use href="#icon-download" x="160" y="55" />
+                    <text x="160" y="92" class="leaf-text">DOWNLOAD</text>
                 </svg>
             </div>
 
-            <!-- ORE 12: MATERIALI AGGIUNTIVI -->
+            <!-- ORE 12 -->
             <div class="leaf-group pos-12" onclick="alert('Sezione Materiali aggiuntivi')">
-                <svg class="leaf-svg" viewBox="0 0 280 140">
-                    <use href="#botanical-leaf" />
-                    <use href="#icon-materiali" x="145" y="52" />
-                    <text x="145" y="80" class="leaf-text">
-                        <tspan x="145" dy="0">Materiali</tspan>
-                        <tspan x="145" dy="16">aggiuntivi</tspan>
+                <svg class="leaf-svg" viewBox="0 0 300 150">
+                    <use href="#tikz-leaf-shape" />
+                    <use href="#icon-materiali" x="160" y="52" />
+                    <text x="160" y="80" class="leaf-text">
+                        <tspan x="160" dy="0">Materiali</tspan>
+                        <tspan x="160" dy="16">aggiuntivi</tspan>
                     </text>
                 </svg>
             </div>
 
-            <!-- ORE 2: COMMENTI SUL TESTO -->
+            <!-- ORE 2 -->
             <div class="leaf-group pos-2" onclick="alert('Sezione Commenti sul testo')">
-                <svg class="leaf-svg" viewBox="0 0 280 140">
-                    <use href="#botanical-leaf" />
-                    <use href="#icon-commenti" x="145" y="52" />
-                    <text x="145" y="80" class="leaf-text">
-                        <tspan x="145" dy="0">Commenti</tspan>
-                        <tspan x="145" dy="16">sul testo</tspan>
+                <svg class="leaf-svg" viewBox="0 0 300 150">
+                    <use href="#tikz-leaf-shape" />
+                    <use href="#icon-commenti" x="160" y="52" />
+                    <text x="160" y="80" class="leaf-text">
+                        <tspan x="160" dy="0">Commenti</tspan>
+                        <tspan x="160" dy="16">sul testo</tspan>
                     </text>
                 </svg>
             </div>
 
-            <!-- ORE 4: DESCRIZIONE DEL TESTO -->
+            <!-- ORE 4 -->
             <div class="leaf-group pos-4" onclick="alert('Sezione Descrizione del testo')">
-                <svg class="leaf-svg" viewBox="0 0 280 140">
-                    <use href="#botanical-leaf" />
-                    <use href="#icon-descrizione" x="145" y="52" />
-                    <text x="145" y="80" class="leaf-text">
-                        <tspan x="145" dy="0">Descrizione</tspan>
-                        <tspan x="145" dy="16">del testo</tspan>
+                <svg class="leaf-svg" viewBox="0 0 300 150">
+                    <use href="#tikz-leaf-shape" />
+                    <use href="#icon-descrizione" x="160" y="52" />
+                    <text x="160" y="80" class="leaf-text">
+                        <tspan x="160" dy="0">Descrizione</tspan>
+                        <tspan x="160" dy="16">del testo</tspan>
                     </text>
                 </svg>
             </div>
 
-            <!-- ORE 6: DIRITTO D'AUTORE -->
+            <!-- ORE 6 -->
             <div class="leaf-group pos-6" onclick="alert('Sezione Diritto d\'autore')">
-                <svg class="leaf-svg" viewBox="0 0 280 140">
-                    <use href="#botanical-leaf" />
-                    <use href="#icon-diritto" x="145" y="52" />
-                    <text x="145" y="80" class="leaf-text">
-                        <tspan x="145" dy="0">Diritto</tspan>
-                        <tspan x="145" dy="16">d'autore</tspan>
+                <svg class="leaf-svg" viewBox="0 0 300 150">
+                    <use href="#tikz-leaf-shape" />
+                    <use href="#icon-diritto" x="160" y="52" />
+                    <text x="160" y="80" class="leaf-text">
+                        <tspan x="160" dy="0">Diritto</tspan>
+                        <tspan x="160" dy="16">d'autore</tspan>
                     </text>
                 </svg>
             </div>
 
-            <!-- ORE 8: PRESENTAZIONE AUTORE -->
+            <!-- ORE 8 -->
             <div class="leaf-group pos-8" onclick="alert('Sezione Presentazione autore')">
-                <svg class="leaf-svg" viewBox="0 0 280 140">
-                    <use href="#botanical-leaf" />
-                    <use href="#icon-autore" x="145" y="52" />
-                    <text x="145" y="80" class="leaf-text">
-                        <tspan x="145" dy="0">Presentazione</tspan>
-                        <tspan x="145" dy="16">autore</tspan>
+                <svg class="leaf-svg" viewBox="0 0 300 150">
+                    <use href="#tikz-leaf-shape" />
+                    <use href="#icon-autore" x="160" y="52" />
+                    <text x="160" y="80" class="leaf-text">
+                        <tspan x="160" dy="0">Presentazione</tspan>
+                        <tspan x="160" dy="16">autore</tspan>
                     </text>
                 </svg>
             </div>
 
-            <!-- ORE 10: SEGNALAZIONI -->
+            <!-- ORE 10 -->
             <div class="leaf-group pos-10" onclick="alert('Sezione Segnalazioni')">
-                <svg class="leaf-svg" viewBox="0 0 280 140">
-                    <use href="#botanical-leaf" />
-                    <use href="#icon-segnalazioni" x="145" y="52" />
-                    <text x="145" y="86" class="leaf-text">Segnalazioni</text>
+                <svg class="leaf-svg" viewBox="0 0 300 150">
+                    <use href="#tikz-leaf-shape" />
+                    <use href="#icon-segnalazioni" x="160" y="52" />
+                    <text x="160" y="88" class="leaf-text">Segnalazioni</text>
                 </svg>
             </div>
 
         </div>
     </main>
 
-    <!-- FOOTER SAFE -->
+    <!-- FOOTER SAFE CHECK LICENZA -->
     <footer>
         <p>© 2026 Matematica alla Radice. Contenuti distribuiti con licenza 
             <button onclick="toggleLicenseModal(true)">CC BY-NC-ND 4.0</button>.
         </p>
     </footer>
 
-    <!-- POP-UP LICENZA SAFE -->
+    <!-- MODALE LICENZA SAFE -->
     <div id="licenseModal" class="modal-overlay" onclick="if(event.target === this) toggleLicenseModal(false)">
         <div class="modal-card">
             <h2>Licenza CC BY-NC-ND 4.0</h2>
