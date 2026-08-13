@@ -85,9 +85,9 @@
             display: block;
         }
 
-        /* Stili della curva TikZ */
+        /* Stili del tracciato TikZ */
         .tikz-leaf-body {
-            fill: rgba(255, 255, 255, 0.18);
+            fill: rgba(255, 255, 255, 0.20); /* Pieno e senza buchi */
             stroke: #228B22; /* ForestGreen */
             stroke-width: 2.5px;
             backdrop-filter: blur(6px);
@@ -121,18 +121,17 @@
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
         }
 
-        /* EFFETTO MOUSE: INGRANDIMENTO + MAGGIORE TRASPARENZA/LUMINOSITÀ + BAGLIORE (GLOW) */
+        /* EFFETTO MOUSE: INGRANDIMENTO + PIÙ LUMINOSO + BAGLIORE (GLOW) */
         .leaf-group:hover {
             z-index: 50;
-            transform: scale(1.14); /* Ingrandimento generale pulito */
-            /* Triplo strato di bagliore e brillamento */
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)) 
-                    drop-shadow(0 0 28px rgba(74, 222, 128, 0.7))
+            transform: scale(1.14);
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.85)) 
+                    drop-shadow(0 0 28px rgba(74, 222, 128, 0.75))
                     drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
         }
 
         .leaf-group:hover .tikz-leaf-body {
-            fill: rgba(255, 255, 255, 0.45); /* Meno opaco / Molto più brillante */
+            fill: rgba(255, 255, 255, 0.48); /* Più chiaro e brillante al passaggio */
             stroke: #ffffff;
             stroke-width: 3px;
             filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
@@ -144,7 +143,7 @@
             filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
         }
 
-        /* FOGLIA CENTRALE (DOWNLOAD) LEGGERMENTE PIÙ GRANDE */
+        /* FOGLIA CENTRALE (DOWNLOAD) */
         .pos-center { z-index: 10; }
         .pos-center .leaf-svg {
             width: 320px;
@@ -152,7 +151,7 @@
         }
 
         .pos-center .tikz-leaf-body {
-            fill: rgba(255, 255, 255, 0.25);
+            fill: rgba(255, 255, 255, 0.28);
             stroke: #ffffff;
             stroke-width: 3px;
         }
@@ -163,7 +162,7 @@
             letter-spacing: 0.8px;
         }
 
-        /* POSIZIONAMENTO NELLO SPAZIO (TUTTE SENZA ROTAZIONE) */
+        /* POSIZIONAMENTO NELLO SPAZIO (ORIZZONTALI) */
         .pos-12 { top: 10px; }
         .pos-2  { top: 115px; right: 20px; }
         .pos-4  { bottom: 115px; right: 20px; }
@@ -228,7 +227,7 @@
             float: right;
         }
 
-        /* RESPONSIVE PER SMARTPHONE */
+        /* RESPONSIVE SMARTPHONE */
         @media (max-width: 768px) {
             .leaf-grid {
                 width: 100%;
@@ -254,39 +253,34 @@
 </head>
 <body>
 
-    <!-- DEFINIZIONE VETTORIALE DELLA FOGLIA E DELLE ICONE -->
+    <!-- DEFINIZIONE VETTORIALE SOLIDA DELLA FOGLIA E DELLE ICONE -->
     <svg style="display: none;">
         <defs>
             <!-- 
-                TRADUZIONE MATEMATICA DELLA NUOVA CURVA TIKZ (xscale=1.3):
-                - Inizio corpo foglia: (-1.7, 0)
-                - Centro geometrico del corpo: (0, 0)
-                - Punta destra: (+3.46, 0)
-                - Stelo a sinistra: arc(90:150:1.5cm)
-                
-                Con l'origine (0,0) esattamente al CENTRO del corpo della foglia, 
-                ogni testo inserito a x=0, y=0 risulterà PERFETTAMENTE CENTRATO.
+                TRACCIATO UNICO E CONTINUO SENSE BUCHI
+                Corpo foglia: ciclo unico P_base -> P_sopra -> P_punta -> P_sotto -> P_base -> Z
+                Origine (0,0) esattamente al centro geometrico del corpo della foglia.
             -->
             <g id="tikz-leaf-shape">
-                <!-- Stelo che parte dalla base sinistra del corpo -->
-                <path class="tikz-leaf-stem" d="M -157.6,0 A 68.25,52.5 0 0 0 -215.2,26.25" />
+                <!-- Stelo che parte dalla base della foglia (-135.1, 0) -->
+                <path class="tikz-leaf-stem" d="M -135.1,0 A 58.5,45 0 0 0 -185.8,22.5" />
 
-                <!-- Corpo Foglia TikZ simmetrico rispetto a (0,0) -->
+                <!-- Corpo Foglia Unico Solido -->
                 <path class="tikz-leaf-body" d="
-                    M -157.6,0 
-                    A 91,70 0 0 1 0,-70 
-                    A 182,140 0 0 0 157.6,0 
-                    A 182,140 0 0 1 0,70 
-                    A 91,70 0 0 0 -157.6,0 Z" />
+                    M -135.1,0 
+                    A 78,60 0 0,1 0,-60 
+                    A 156,120 0 0,1 135.1,0 
+                    A 156,120 0 0,1 0,60 
+                    A 78,60 0 0,1 -135.1,0 Z" />
             </g>
 
-            <!-- ICONE SVG CENTRATE SUL LORO ORIGINE (-12, -12) -->
+            <!-- ICONE SVG CENTRATE SULLA LORO ORIGINE (-12, -12) -->
             <g id="icon-download"><path class="leaf-icon-svg" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" transform="translate(-12, -12)"/></g>
             <g id="icon-materiali"><path class="leaf-icon-svg" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" transform="translate(-12, -12)"/></g>
             <g id="icon-commenti"><path class="leaf-icon-svg" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" transform="translate(-12, -12)"/></g>
             <g id="icon-descrizione"><path class="leaf-icon-svg" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" transform="translate(-12, -12)"/></g>
             <g id="icon-diritto"><path class="leaf-icon-svg" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" transform="translate(-12, -12)"/></g>
-            <g id="icon-autore"><path class="leaf-icon-svg" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" transform="translate(-12, -12)"/></g>
+            <g id="icon-autore"><path class="leaf-icon-svg" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" transform="translate(-12, -12)"/></g>
             <g id="icon-segnalazioni"><path class="leaf-icon-svg" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" transform="translate(-12, -12)"/></g>
         </defs>
     </svg>
@@ -301,7 +295,7 @@
 
             <!-- CENTRO: DOWNLOAD -->
             <div class="leaf-group pos-center" onclick="alert('Sezione Download PDF')">
-                <svg class="leaf-svg" viewBox="-230 -80 400 160">
+                <svg class="leaf-svg" viewBox="-200 -70 350 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-download" x="0" y="-18" />
@@ -312,7 +306,7 @@
 
             <!-- ORE 12: MATERIALI AGGIUNTIVI -->
             <div class="leaf-group pos-12" onclick="alert('Sezione Materiali aggiuntivi')">
-                <svg class="leaf-svg" viewBox="-230 -80 400 160">
+                <svg class="leaf-svg" viewBox="-200 -70 350 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-materiali" x="0" y="-20" />
@@ -326,7 +320,7 @@
 
             <!-- ORE 2: COMMENTI SUL TESTO -->
             <div class="leaf-group pos-2" onclick="alert('Sezione Commenti sul testo')">
-                <svg class="leaf-svg" viewBox="-230 -80 400 160">
+                <svg class="leaf-svg" viewBox="-200 -70 350 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-commenti" x="0" y="-20" />
@@ -340,7 +334,7 @@
 
             <!-- ORE 4: DESCRIZIONE DEL TESTO -->
             <div class="leaf-group pos-4" onclick="alert('Sezione Descrizione del testo')">
-                <svg class="leaf-svg" viewBox="-230 -80 400 160">
+                <svg class="leaf-svg" viewBox="-200 -70 350 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-descrizione" x="0" y="-20" />
@@ -354,7 +348,7 @@
 
             <!-- ORE 6: DIRITTO D'AUTORE -->
             <div class="leaf-group pos-6" onclick="alert('Sezione Diritto d\'autore')">
-                <svg class="leaf-svg" viewBox="-230 -80 400 160">
+                <svg class="leaf-svg" viewBox="-200 -70 350 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-diritto" x="0" y="-20" />
@@ -368,7 +362,7 @@
 
             <!-- ORE 8: PRESENTAZIONE AUTORE -->
             <div class="leaf-group pos-8" onclick="alert('Sezione Presentazione autore')">
-                <svg class="leaf-svg" viewBox="-230 -80 400 160">
+                <svg class="leaf-svg" viewBox="-200 -70 350 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-autore" x="0" y="-20" />
@@ -382,7 +376,7 @@
 
             <!-- ORE 10: SEGNALAZIONI -->
             <div class="leaf-group pos-10" onclick="alert('Sezione Segnalazioni')">
-                <svg class="leaf-svg" viewBox="-230 -80 400 160">
+                <svg class="leaf-svg" viewBox="-200 -70 350 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-segnalazioni" x="0" y="-18" />
