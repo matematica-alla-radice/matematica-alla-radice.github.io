@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matematica alla Radice</title>
     <style>
-        /* Reset e impostazioni generali */
+        /* Reset generale */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -22,9 +22,10 @@
             align-items: center;
             padding: 2rem 1rem;
             
-            /* SFUMATURA VERTICALE: ForestGreen (#1E7D32) sopra -> Brown (#793802) sotto */
+            /* SFUMATURA VERTICALE: ForestGreen (#1E7D32) -> Brown (#793802) */
             background: linear-gradient(to bottom, #1E7D32 0%, #793802 100%);
             background-attachment: fixed;
+            overflow-x: hidden;
         }
 
         /* Testata */
@@ -32,105 +33,154 @@
             text-align: center;
             max-width: 850px;
             width: 100%;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
             margin-bottom: 1.5rem;
         }
 
         header h1 {
-            font-size: clamp(2.3rem, 5.5vw, 4rem);
+            font-size: clamp(2.3rem, 5.5vw, 3.8rem);
             font-weight: 800;
             letter-spacing: -1px;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             line-height: 1.1;
         }
 
         header p {
-            font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+            font-size: clamp(1.05rem, 2.2vw, 1.3rem);
             color: #f0fdf4;
             font-weight: 300;
             opacity: 0.95;
         }
 
-        /* Contenitore principale del Bersaglio SVG */
+        /* DISPOSIZIONE CIRCOLARE (DESKTOP) */
         main {
+            width: 100%;
+            max-width: 650px;
+            margin: auto 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            max-width: 620px;
-            margin: auto 0;
         }
 
-        .wheel-svg {
-            width: 100%;
-            height: auto;
-            max-width: 580px;
-            filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.35));
+        .leaf-orbit {
+            position: relative;
+            width: 580px;
+            height: 580px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Stili e Animazioni per gli Spicchi del Bersaglio */
-        .sector-group {
+        /* Stile base dei bottoni FOGLIA */
+        .leaf-btn {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 12px 18px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            transform-origin: 300px 300px;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            
+            /* FORMA A FOGLIA (Angoli opposti arrotondati) */
+            border-radius: 0px 75% 0px 75%;
+            width: 155px;
+            height: 105px;
         }
 
-        .sector-path {
-            fill: rgba(255, 255, 255, 0.12);
-            stroke: rgba(255, 255, 255, 0.35);
-            stroke-width: 3.5px;
-            transition: all 0.3s ease;
+        /* Effetto al passaggio del mouse */
+        .leaf-btn:hover {
+            background: rgba(255, 255, 255, 0.28);
+            border-color: #ffffff;
+            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.3);
+            transform: scale(1.1) rotate(0deg) !important;
+            z-index: 10;
         }
 
-        .center-circle {
-            fill: rgba(255, 255, 255, 0.22);
-            stroke: #ffffff;
-            stroke-width: 4px;
-            transition: all 0.3s ease;
-        }
-
-        /* Effetto Hover sui settori */
-        .sector-group:hover {
-            transform: scale(1.035);
-        }
-
-        .sector-group:hover .sector-path {
-            fill: rgba(255, 255, 255, 0.28);
-            stroke: #ffffff;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-        }
-
-        .sector-group:hover .center-circle {
-            fill: rgba(255, 255, 255, 0.38);
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.7));
-        }
-
-        /* Testi e Icone dentro il bersaglio */
-        .sector-text {
-            fill: #ffffff;
-            font-size: 14px;
-            font-weight: 600;
-            text-anchor: middle;
-            pointer-events: none;
-            letter-spacing: 0.3px;
+        .leaf-btn h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-top: 4px;
+            line-height: 1.2;
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        .center-text {
+        .leaf-icon {
+            width: 26px;
+            height: 26px;
             fill: #ffffff;
-            font-size: 17px;
-            font-weight: 800;
-            text-anchor: middle;
-            pointer-events: none;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
         }
 
-        .icon {
-            fill: #ffffff;
-            pointer-events: none;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+        /* POSIZIONAMENTO SPECIFICO DELLE FOGLIE SUL CERCHIO */
+
+        /* Centro: Download */
+        .pos-center {
+            width: 175px;
+            height: 125px;
+            border-radius: 80% 0px 80% 0px;
+            background: rgba(255, 255, 255, 0.22);
+            border: 2px solid #ffffff;
+            z-index: 5;
+        }
+
+        .pos-center h3 {
+            font-size: 1.15rem;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+
+        .pos-center .leaf-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Ore 12: Materiali Aggiuntivi */
+        .pos-12 {
+            top: 15px;
+            transform: rotate(-10deg);
+        }
+
+        /* Ore 2: Commenti sul testo */
+        .pos-2 {
+            top: 100px;
+            right: 25px;
+            transform: rotate(20deg);
+        }
+
+        /* Ore 4: Descrizione del testo */
+        .pos-4 {
+            bottom: 100px;
+            right: 25px;
+            transform: rotate(-15deg);
+        }
+
+        /* Ore 6: Diritto d'autore */
+        .pos-6 {
+            bottom: 15px;
+            transform: rotate(10deg);
+        }
+
+        /* Ore 8: Presentazione autore */
+        .pos-8 {
+            bottom: 100px;
+            left: 25px;
+            transform: rotate(20deg);
+        }
+
+        /* Ore 10: Segnalazioni */
+        .pos-10 {
+            top: 100px;
+            left: 25px;
+            transform: rotate(-20deg);
         }
 
         /* Piè di pagina */
@@ -147,6 +197,46 @@
             color: #ffffff;
             text-decoration: underline;
         }
+
+        /* LAYOUT ADATTIVO PER SMARTPHONE (< 650px) */
+        @media (max-width: 650px) {
+            .leaf-orbit {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 1.2rem;
+                align-items: center;
+            }
+
+            .leaf-btn {
+                position: relative !important;
+                top: auto !important;
+                bottom: auto !important;
+                left: auto !important;
+                right: auto !important;
+                transform: none !important;
+                width: 90% !important;
+                max-width: 320px;
+                height: 85px !important;
+                border-radius: 0px 50px 0px 50px !important;
+                flex-direction: row;
+                justify-content: flex-start;
+                gap: 15px;
+                padding: 0 25px;
+            }
+
+            .pos-center {
+                order: -1; /* Download sempre al primo posto su mobile */
+                height: 95px !important;
+                background: rgba(255, 255, 255, 0.25);
+            }
+
+            .leaf-btn h3 {
+                font-size: 1.1rem;
+                text-align: left;
+            }
+        }
     </style>
 </head>
 <body>
@@ -157,109 +247,53 @@
         <p>Un libro di testo di matematica per i licei scientifici</p>
     </header>
 
-    <!-- BERSAGLIO INTERATTIVO (SVG) -->
+    <!-- STRUTTURA A FOGLIE SUL CERCHIO -->
     <main>
-        <svg class="wheel-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-            
-            <!-- DEFINIZIONE ICONE -->
-            <defs>
-                <!-- Icona Download -->
-                <g id="icon-download">
-                    <path class="icon" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" transform="translate(-12, -12) scale(1.1)"/>
-                </g>
-                <!-- Icona Materiali (Cartella) -->
-                <g id="icon-materiali">
-                    <path class="icon" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" transform="translate(-12, -12) scale(0.95)"/>
-                </g>
-                <!-- Icona Commenti (Chat) -->
-                <g id="icon-commenti">
-                    <path class="icon" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" transform="translate(-12, -12) scale(0.95)"/>
-                </g>
-                <!-- Icona Descrizione Testo (Libro) -->
-                <g id="icon-descrizione">
-                    <path class="icon" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" transform="translate(-12, -12) scale(0.95)"/>
-                </g>
-                <!-- Icona Diritto d'Autore (Bilancia/Scudo) -->
-                <g id="icon-diritto">
-                    <path class="icon" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" transform="translate(-12, -12) scale(0.95)"/>
-                </g>
-                <!-- Icona Presentazione Autore (Profilo) -->
-                <g id="icon-autore">
-                    <path class="icon" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" transform="translate(-12, -12) scale(0.95)"/>
-                </g>
-                <!-- Icona Segnalazioni (Busta/Messaggio) -->
-                <g id="icon-segnalazioni">
-                    <path class="icon" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" transform="translate(-12, -12) scale(0.95)"/>
-                </g>
-            </defs>
+        <div class="leaf-orbit">
 
-            <!-- 1. ORE 12: MATERIALI AGGIUNTIVI -->
-            <g class="sector-group" onclick="alert('Sezione Materiali Aggiuntivi')">
-                <path class="sector-path" d="M 165 66.2 A 270 270 0 0 1 435 66.2 L 350 213.4 A 100 100 0 0 0 250 213.4 Z"/>
-                <use href="#icon-materiali" x="300" y="115"/>
-                <text x="300" y="145" class="sector-text">
-                    <tspan x="300" dy="0">Materiali</tspan>
-                    <tspan x="300" dy="16">aggiuntivi</tspan>
-                </text>
-            </g>
+            <!-- CENTRO: DOWNLOAD -->
+            <div class="leaf-btn pos-center" onclick="alert('Sezione Download PDF')">
+                <svg class="leaf-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                <h3>DOWNLOAD</h3>
+            </div>
 
-            <!-- 2. ORE 2: COMMENTI SUL TESTO -->
-            <g class="sector-group" onclick="alert('Sezione Commenti sul testo')">
-                <path class="sector-path" d="M 435 66.2 A 270 270 0 0 1 570 300 L 400 300 A 100 100 0 0 0 350 213.4 Z"/>
-                <use href="#icon-commenti" x="430" y="190"/>
-                <text x="430" y="220" class="sector-text">
-                    <tspan x="430" dy="0">Commenti</tspan>
-                    <tspan x="430" dy="16">sul testo</tspan>
-                </text>
-            </g>
+            <!-- ORE 12: MATERIALI AGGIUNTIVI -->
+            <div class="leaf-btn pos-12" onclick="alert('Sezione Materiali Aggiuntivi')">
+                <svg class="leaf-icon" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                <h3>Materiali aggiuntivi</h3>
+            </div>
 
-            <!-- 3. ORE 4: DESCRIZIONE DEL TESTO -->
-            <g class="sector-group" onclick="alert('Sezione Descrizione del testo')">
-                <path class="sector-path" d="M 570 300 A 270 270 0 0 1 435 533.8 L 350 386.6 A 100 100 0 0 0 400 300 Z"/>
-                <use href="#icon-descrizione" x="430" y="380"/>
-                <text x="430" y="410" class="sector-text">
-                    <tspan x="430" dy="0">Descrizione</tspan>
-                    <tspan x="430" dy="16">del testo</tspan>
-                </text>
-            </g>
+            <!-- ORE 2: COMMENTI SUL TESTO -->
+            <div class="leaf-btn pos-2" onclick="alert('Sezione Commenti sul testo')">
+                <svg class="leaf-icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                <h3>Commenti sul testo</h3>
+            </div>
 
-            <!-- 4. ORE 6: DIRITTO D'AUTORE -->
-            <g class="sector-group" onclick="alert('Sezione Diritto d\'autore')">
-                <path class="sector-path" d="M 435 533.8 A 270 270 0 0 1 165 533.8 L 250 386.6 A 100 100 0 0 0 350 386.6 Z"/>
-                <use href="#icon-diritto" x="300" y="450"/>
-                <text x="300" y="480" class="sector-text">
-                    <tspan x="300" dy="0">Diritto</tspan>
-                    <tspan x="300" dy="16">d'autore</tspan>
-                </text>
-            </g>
+            <!-- ORE 4: DESCRIZIONE DEL TESTO -->
+            <div class="leaf-btn pos-4" onclick="alert('Sezione Descrizione del testo')">
+                <svg class="leaf-icon" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+                <h3>Descrizione del testo</h3>
+            </div>
 
-            <!-- 5. ORE 8: PRESENTAZIONE AUTORE -->
-            <g class="sector-group" onclick="alert('Sezione Presentazione autore')">
-                <path class="sector-path" d="M 165 533.8 A 270 270 0 0 1 30 300 L 200 300 A 100 100 0 0 0 250 386.6 Z"/>
-                <use href="#icon-autore" x="170" y="380"/>
-                <text x="170" y="410" class="sector-text">
-                    <tspan x="170" dy="0">Presentazione</tspan>
-                    <tspan x="170" dy="16">autore</tspan>
-                </text>
-            </g>
+            <!-- ORE 6: DIRITTO D'AUTORE -->
+            <div class="leaf-btn pos-6" onclick="alert('Sezione Diritto d\'autore')">
+                <svg class="leaf-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                <h3>Diritto d'autore</h3>
+            </div>
 
-            <!-- 6. ORE 10: SEGNALAZIONI -->
-            <g class="sector-group" onclick="alert('Sezione Segnalazioni')">
-                <path class="sector-path" d="M 30 300 A 270 270 0 0 1 165 66.2 L 250 213.4 A 100 100 0 0 0 200 300 Z"/>
-                <use href="#icon-segnalazioni" x="170" y="190"/>
-                <text x="170" y="220" class="sector-text">
-                    <tspan x="170" dy="0">Segnalazioni</tspan>
-                </text>
-            </g>
+            <!-- ORE 8: PRESENTAZIONE AUTORE -->
+            <div class="leaf-btn pos-8" onclick="alert('Sezione Presentazione autore')">
+                <svg class="leaf-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <h3>Presentazione autore</h3>
+            </div>
 
-            <!-- 7. CENTRO: BOTTONE DOWNLOAD -->
-            <g class="sector-group" onclick="alert('Sezione Download PDF')">
-                <circle cx="300" cy="300" r="92" class="center-circle"/>
-                <use href="#icon-download" x="300" y="272"/>
-                <text x="300" y="312" class="center-text">DOWNLOAD</text>
-            </g>
+            <!-- ORE 10: SEGNALAZIONI -->
+            <div class="leaf-btn pos-10" onclick="alert('Sezione Segnalazioni')">
+                <svg class="leaf-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <h3>Segnalazioni</h3>
+            </div>
 
-        </svg>
+        </div>
     </main>
 
     <!-- FOOTER -->
