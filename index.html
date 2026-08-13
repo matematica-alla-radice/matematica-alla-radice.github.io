@@ -128,9 +128,21 @@
             filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
         }
 
-        /* Correzione specifica per centrare l'hover delle foglie a ore 12 e 6 */
+        /* Correzioni specifiche per centrare l'hover e mantenere le rotazioni */
         .pos-12:hover, .pos-6:hover {
             transform: translateX(-50%) scale(1.14);
+        }
+
+        .pos-2:hover, .pos-8:hover {
+            z-index: 50;
+            transform: rotate(30deg) scale(1.14);
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+
+        .pos-4:hover, .pos-10:hover {
+            z-index: 50;
+            transform: rotate(-30deg) scale(1.14);
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
         }
 
         .leaf-group:hover .tikz-leaf-body {
@@ -171,13 +183,13 @@
             letter-spacing: 0.8px;
         }
 
-        /* POSIZIONAMENTO NELLO SPAZIO (Lateralmente esterne e verticalmente centrate) */
+        /* POSIZIONAMENTO E ROTAZIONI NELLO SPAZIO */
         .pos-12 { top: 10px; left: 50%; transform: translateX(-50%); }
-        .pos-2  { top: 140px; right: -25px; }
-        .pos-4  { bottom: 140px; right: -25px; }
+        .pos-2  { top: 140px; right: -25px; transform: rotate(30deg); }
+        .pos-4  { bottom: 140px; right: -25px; transform: rotate(-30deg); }
         .pos-6  { bottom: 10px; left: 50%; transform: translateX(-50%); }
-        .pos-8  { bottom: 140px; left: -25px; }
-        .pos-10 { top: 140px; left: -25px; }
+        .pos-8  { bottom: 140px; left: -25px; transform: rotate(30deg); }
+        .pos-10 { top: 140px; left: -25px; transform: rotate(-30deg); }
 
         /* FOOTER & MODALE */
         footer {
@@ -268,15 +280,15 @@
         <defs>
             <g id="tikz-leaf-shape">
                 <!-- Stelo -->
-                <path class="tikz-leaf-stem" d="M -66.3,0 A 58.5,45 0 0,1 -117.0,-22.5" />
+                <path class="tikz-leaf-stem" d="M -71.5,0 A 58.5,45 0 0,1 -117.0,-22.5" />
             
                 <!-- Corpo foglia -->
                 <path class="tikz-leaf-body" transform="scale(1.3, 1)" d="
-                    M -51,0 
+                    M -55,0 
                     A 60,60 0 0,0 52.9,60 
                     A 120,120 0 0,1 156.8,0 
                     A 120,120 0 0,1 52.9,-60 
-                    A 60,60 0 0,0 -51,0 Z" />
+                    A 60,60 0 0,0 -55,0 Z" />
             </g>
 
             <!-- ICONE SVG CENTRATE SULLA LORO ORIGINE (-12, -12) -->
