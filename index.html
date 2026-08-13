@@ -54,7 +54,7 @@
         /* Layout Principale */
         main {
             width: 100%;
-            max-width: 920px;
+            max-width: 950px;
             margin: auto 0;
             display: flex;
             justify-content: center;
@@ -63,7 +63,7 @@
 
         .leaf-grid {
             position: relative;
-            width: 860px;
+            width: 880px;
             height: 580px;
             display: flex;
             justify-content: center;
@@ -79,15 +79,15 @@
         }
 
         .leaf-svg {
-            width: 280px;
-            height: 120px;
+            width: 300px;
+            height: 124px;
             overflow: visible;
             display: block;
         }
 
         /* Stili del tracciato TikZ */
         .tikz-leaf-body {
-            fill: rgba(255, 255, 255, 0.20); /* Pieno e senza buchi */
+            fill: rgba(255, 255, 255, 0.20);
             stroke: #228B22; /* ForestGreen */
             stroke-width: 2.5px;
             backdrop-filter: blur(6px);
@@ -102,7 +102,7 @@
             transition: stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
         }
 
-        /* CONTENUTO CENTRATO A (0,0) */
+        /* CONTENUTO CENTRATO ESATTAMENTE A (0,0) */
         .leaf-content {
             pointer-events: none;
         }
@@ -131,7 +131,7 @@
         }
 
         .leaf-group:hover .tikz-leaf-body {
-            fill: rgba(255, 255, 255, 0.48); /* Più chiaro e brillante al passaggio */
+            fill: rgba(255, 255, 255, 0.48);
             stroke: #ffffff;
             stroke-width: 3px;
             filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
@@ -146,8 +146,8 @@
         /* FOGLIA CENTRALE (DOWNLOAD) */
         .pos-center { z-index: 10; }
         .pos-center .leaf-svg {
-            width: 320px;
-            height: 135px;
+            width: 330px;
+            height: 136px;
         }
 
         .pos-center .tikz-leaf-body {
@@ -164,11 +164,11 @@
 
         /* POSIZIONAMENTO NELLO SPAZIO (ORIZZONTALI) */
         .pos-12 { top: 10px; }
-        .pos-2  { top: 115px; right: 20px; }
-        .pos-4  { bottom: 115px; right: 20px; }
+        .pos-2  { top: 115px; right: 10px; }
+        .pos-4  { bottom: 115px; right: 10px; }
         .pos-6  { bottom: 10px; }
-        .pos-8  { bottom: 115px; left: 20px; }
-        .pos-10 { top: 115px; left: 20px; }
+        .pos-8  { bottom: 115px; left: 10px; }
+        .pos-10 { top: 115px; left: 10px; }
 
         /* FOOTER & MODALE */
         footer {
@@ -245,33 +245,35 @@
             .pos-center { order: -1; }
 
             .leaf-svg {
-                width: 300px !important;
-                height: 125px !important;
+                width: 310px !important;
+                height: 128px !important;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- DEFINIZIONE VETTORIALE SOLIDA DELLA FOGLIA E DELLE ICONE -->
+    <!-- DEFINIZIONE VETTORIALE MATEMATICAMENTE ESATTA DELLA FOGLIA E ICONE -->
     <svg style="display: none;">
         <defs>
             <!-- 
-                TRACCIATO UNICO E CONTINUO SENSE BUCHI
-                Corpo foglia: ciclo unico P_base -> P_sopra -> P_punta -> P_sotto -> P_base -> Z
-                Origine (0,0) esattamente al centro geometrico del corpo della foglia.
+                TRADUZIONE GEOMETRICA PERFETTA TIKZ (xscale=1.3):
+                - Stelo: arc(90:150:1.5cm) da (-1.7, 0)
+                - Corpo superiore: arc(210:30:2cm) poi arc(210:270:4cm) fino a Punta (+5.23, 0)
+                - Corpo inferiore: ritornante simmetrico
+                - Punto (0,0): centro esatto del testo nel corpo principale della foglia.
             -->
             <g id="tikz-leaf-shape">
-                <!-- Stelo che parte dalla base della foglia (-135.1, 0) -->
-                <path class="tikz-leaf-stem" d="M -135.1,0 A 58.5,45 0 0 0 -185.8,22.5" />
+                <!-- Stelo da (-66.3, 0) a (-117.0, 22.5) -->
+                <path class="tikz-leaf-stem" d="M -66.3,0 A 58.5,45 0 0 0 -117.0,22.5" />
 
-                <!-- Corpo Foglia Unico Solido -->
+                <!-- Corpo Foglia Solido e Fluido -->
                 <path class="tikz-leaf-body" d="
-                    M -135.1,0 
-                    A 78,60 0 0,1 0,-60 
-                    A 156,120 0 0,1 135.1,0 
-                    A 156,120 0 0,1 0,60 
-                    A 78,60 0 0,1 -135.1,0 Z" />
+                    M -66.3,0 
+                    A 78,60 0 0 0 68.8,-60 
+                    A 156,120 0 0 0 203.9,0 
+                    A 156,120 0 0 0 68.8,60 
+                    A 78,60 0 0 0 -66.3,0 Z" />
             </g>
 
             <!-- ICONE SVG CENTRATE SULLA LORO ORIGINE (-12, -12) -->
@@ -295,8 +297,9 @@
 
             <!-- CENTRO: DOWNLOAD -->
             <div class="leaf-group pos-center" onclick="alert('Sezione Download PDF')">
-                <svg class="leaf-svg" viewBox="-200 -70 350 140">
+                <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
+                    <!-- Testo posizionato esattamente a (0,0) -->
                     <g class="leaf-content">
                         <use href="#icon-download" x="0" y="-18" />
                         <text x="0" y="16" class="leaf-text">DOWNLOAD</text>
@@ -306,7 +309,7 @@
 
             <!-- ORE 12: MATERIALI AGGIUNTIVI -->
             <div class="leaf-group pos-12" onclick="alert('Sezione Materiali aggiuntivi')">
-                <svg class="leaf-svg" viewBox="-200 -70 350 140">
+                <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-materiali" x="0" y="-20" />
@@ -320,7 +323,7 @@
 
             <!-- ORE 2: COMMENTI SUL TESTO -->
             <div class="leaf-group pos-2" onclick="alert('Sezione Commenti sul testo')">
-                <svg class="leaf-svg" viewBox="-200 -70 350 140">
+                <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-commenti" x="0" y="-20" />
@@ -334,7 +337,7 @@
 
             <!-- ORE 4: DESCRIZIONE DEL TESTO -->
             <div class="leaf-group pos-4" onclick="alert('Sezione Descrizione del testo')">
-                <svg class="leaf-svg" viewBox="-200 -70 350 140">
+                <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-descrizione" x="0" y="-20" />
@@ -348,7 +351,7 @@
 
             <!-- ORE 6: DIRITTO D'AUTORE -->
             <div class="leaf-group pos-6" onclick="alert('Sezione Diritto d\'autore')">
-                <svg class="leaf-svg" viewBox="-200 -70 350 140">
+                <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-diritto" x="0" y="-20" />
@@ -362,7 +365,7 @@
 
             <!-- ORE 8: PRESENTAZIONE AUTORE -->
             <div class="leaf-group pos-8" onclick="alert('Sezione Presentazione autore')">
-                <svg class="leaf-svg" viewBox="-200 -70 350 140">
+                <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-autore" x="0" y="-20" />
@@ -376,7 +379,7 @@
 
             <!-- ORE 10: SEGNALAZIONI -->
             <div class="leaf-group pos-10" onclick="alert('Sezione Segnalazioni')">
-                <svg class="leaf-svg" viewBox="-200 -70 350 140">
+                <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
                         <use href="#icon-segnalazioni" x="0" y="-18" />
