@@ -1245,6 +1245,19 @@
             if(matMenu) matMenu.classList.remove('hidden');
         }
 
+        // Ascolta la pressione dei tasti sulla tastiera
+        document.addEventListener('keydown', function(event) {
+            // Controlla se il tasto premuto è "Escape"
+            if (event.key === 'Escape') {
+                const backBtn = document.getElementById('back-btn');
+                
+                // Verifica che il pulsante "Back" esista e sia visibile/attivo nella pagina corrente
+                if (backBtn && window.getComputedStyle(backBtn).display !== 'none' && window.getComputedStyle(backBtn).visibility !== 'hidden') {
+                    backBtn.click(); // Simula il click sul pulsante Indietro
+                }
+            }
+        });
+
         // Gestione del Tooltip dinamico che segue il mouse
         const tooltip = document.getElementById('custom-tooltip');
 
