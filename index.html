@@ -535,6 +535,93 @@
           border-radius: 6px;
           color: #2e6b2e;
         }
+
+        /* Stili per la sezione Materiali Aggiuntivi */
+        .volumes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .volume-btn {
+            background-color: #2e5a39; /* Verde in tema col sito */
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        
+        .volume-btn:hover {
+            background-color: #1a3822; /* Verde più scuro al passaggio del mouse */
+            transform: translateY(-2px);
+        }
+        
+        .back-materials-btn {
+            background: none;
+            border: none;
+            color: #ffd700; /* Giallo dorato in tema */
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-bottom: 1rem;
+            padding: 0;
+            display: inline-block;
+        }
+        
+        .back-materials-btn:hover {
+            color: #ffffff;
+        }
+        
+        .material-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .material-card {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-left: 5px solid #6666cc; /* Viola tipico di GeoGebra */
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #1a2e22;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .material-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .material-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+        
+        .material-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .material-info strong {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .material-info span {
+            font-size: 0.9rem;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -675,8 +762,55 @@
             </div>
             
             <div id="section-materiali" class="section-content hidden">
-                <h2>Materiali aggiuntivi</h2>
-                <p>Esercizi integrativi, schede di approfondimento e collegamenti tra matematica e fisica.</p>
+                <h2>Materiali Aggiuntivi</h2>
+                
+                <!-- Menu dei 5 Volumi -->
+                <div id="materiali-menu">
+                    <p>Seleziona un volume per visualizzare i file GeoGebra, gli approfondimenti e i materiali interattivi disponibili.</p>
+                    <div class="volumes-list">
+                        <button class="volume-btn" onclick="openMateriali('vol1')">Materiali Volume 1</button>
+                        <button class="volume-btn" onclick="openMateriali('vol2')">Materiali Volume 2</button>
+                        <button class="volume-btn" onclick="openMateriali('vol3')">Materiali Volume 3</button>
+                        <button class="volume-btn" onclick="openMateriali('vol4')">Materiali Volume 4</button>
+                        <button class="volume-btn" onclick="openMateriali('vol5')">Materiali Volume 5</button>
+                    </div>
+                </div>
+
+                <!-- Contenuto Volume 1 -->
+                <div id="materiali-vol1" class="hidden">
+                    <button class="back-materials-btn" onclick="backToMaterialiMenu()">← Torna ai volumi</button>
+                    <h3>Materiali Volume 1</h3>
+                    
+                    <div class="material-links">
+                        <a href="https://www.geogebra.org/m/t2tkpxke" target="_blank" rel="noopener" class="material-card">
+                            <span class="material-icon">📐</span>
+                            <div class="material-info">
+                                <strong>File GeoGebra per il volume della piramide</strong>
+                                <span>Clicca per aprire la simulazione su GeoGebra</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.geogebra.org/m/bzfwccmw" target="_blank" rel="noopener" class="material-card">
+                            <span class="material-icon">🧊</span>
+                            <div class="material-info">
+                                <strong>File GeoGebra per il cubo di binomio</strong>
+                                <span>Clicca per aprire la simulazione su GeoGebra</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contenuto Vuoto (Volumi 2-5) -->
+                <div id="materiali-empty" class="hidden">
+                    <button class="back-materials-btn" onclick="backToMaterialiMenu()">← Torna ai volumi</button>
+                    <h3 id="empty-title">Materiali Volume</h3>
+                    <div style="background-color: rgba(255,255,255,0.05); padding: 2rem; border-radius: 8px; text-align: center; margin-top: 1.5rem;">
+                        <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">⏳</span>
+                        <p style="font-style: italic; color: #dddddd; font-size: 1.1rem; margin: 0;">
+                            Non sono ancora stati caricati materiali per questo volume.
+                        </p>
+                    </div>
+                </div>
             </div>
             
             <!-- SEZIONE COMMENTI E RECENSIONI CON GISCUS -->
@@ -782,7 +916,7 @@
                         <li><strong>Correzione proposta:</strong> (Opzionale) La correzione suggerita o il passaggio da sostituire.</li>
                     </ul>
             
-                    <p style="margin-top: 1.5rem; font-style: italic; text-align: center; color: #2e5a39; font-weight: 600;">
+                    <p style="margin-top: 1.8rem; font-style: italic; text-align: center; color: #ffffff; font-weight: 600;">
                         L'autore vi ringrazia sinceramente per ogni segnalazione costruttiva.
                     </p>
                 </div>
@@ -864,6 +998,9 @@
             document.getElementById('main-subtitle').innerHTML = originalSubtitle;
             document.querySelector('main').style.alignItems = 'center';
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Aggiungi questa riga per resettare il sottomenu dei materiali:
+            backToMaterialiMenu();
         }
 
         // Gestione del Tooltip dinamico che segue il mouse
@@ -887,6 +1024,34 @@
                 tooltip.classList.add('hidden');
             });
         });
+
+        function openMateriali(vol) {
+            // Nascondi la lista dei bottoni
+            document.getElementById('materiali-menu').classList.add('hidden');
+            
+            // Mostra il volume corretto
+            if (vol === 'vol1') {
+                document.getElementById('materiali-vol1').classList.remove('hidden');
+                document.getElementById('materiali-empty').classList.add('hidden');
+            } else {
+                document.getElementById('materiali-vol1').classList.add('hidden');
+                document.getElementById('materiali-empty').classList.remove('hidden');
+                
+                // Estrai il numero dal nome (es. 'vol2' -> '2') e aggiorna il titolo
+                const num = vol.replace('vol', '');
+                document.getElementById('empty-title').textContent = 'Materiali Volume ' + num;
+            }
+            
+            // Riporta la visuale all'inizio della scheda
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function backToMaterialiMenu() {
+            // Nascondi i sottomenu e mostra di nuovo la lista dei bottoni
+            document.getElementById('materiali-vol1').classList.add('hidden');
+            document.getElementById('materiali-empty').classList.add('hidden');
+            document.getElementById('materiali-menu').classList.remove('hidden');
+        }
     </script>
 </body>
 </html>
