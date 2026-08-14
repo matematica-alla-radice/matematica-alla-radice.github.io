@@ -501,7 +501,7 @@
         .email-box {
           background-color: #ffffff;
           padding: 1rem 1.5rem;
-          border-left: 4px solid #0066cc;
+          border-left: 4px solid #0645ad;
           margin: 1.5rem 0;
           border-radius: 4px;
         }
@@ -509,8 +509,9 @@
         .email-link {
           font-size: 1.1rem;
           font-weight: bold;
-          color: #0066cc;
-          text-decoration: none;
+          color: #0645ad;
+          text-decoration: underline;
+          cursor: pointer;
         }
         
         .email-link:hover {
@@ -760,26 +761,30 @@
                 <h2>Segnalazioni e Suggerimenti</h2>
                 <p>Hai trovato un refuso, un errore di stampa o desideri proporre un miglioramento per i prossimi aggiornamenti del testo? Il tuo contributo è fondamentale per la revisione dei volumi.</p>
                 
-                <div class="giscus-guide" style="margin-bottom: 1.5rem;">
-                    <h3>📍 Opzione 1: GitHub Issues (Consigliato)</h3>
-                    <p>La gestione delle segnalazioni è aperta e tracciata in modo trasparente tramite <strong>GitHub Issues</strong>. Cliccando sul pulsante sottostante potrai aprire direttamente una nuova segnalazione (è necessario un account GitHub gratuito):</p>
-                    <div style="margin: 1.5rem 0; text-align: center;">
-                        <a href="https://github.com/matematica-alla-radice/matematica-alla-radice.github.io/issues/new" target="_blank" rel="noopener" style="display: inline-block; background: #FFD700; color: #193822; padding: 12px 24px; border-radius: 8px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s ease, filter 0.2s ease;">
-                            Apri una Segnalazione su GitHub
-                        </a>
-                    </div>
-                </div>
-
                 <div class="giscus-guide">
-                    <h3>✉️ Opzione 2: Invio via Email</h3>
-                    <p>Se preferisci non utilizzare GitHub, puoi inviare una mail direttamente all'autore all'indirizzo <a href="mailto:matematica.alla.radice@gmail.com" style="color: #1a2e22; font-weight: bold;">matematica.alla.radice@gmail.com</a>.</p>
-                    <p style="margin-top: 0.8rem;">Per aiutare l'autore a individuare e correggere rapidamente il problema, ti chiediamo gentilmente di specificare nella mail:</p>
+                    <p>⚠️ <strong>Prima di inviare una segnalazione:</strong> ti chiedo di verificare di aver scaricato la versione più recente del PDF dalla sezione <strong>Download</strong>, così da evitare la segnalazione di refusi già corretti nelle ultime revisioni.</p>
+                    
+                    <p style="margin-top: 1.2rem;">
+                        Puoi inviarmi la tua segnalazione via email direttamente all'indirizzo mail: 
+                        <a href="javascript:void(0)" 
+                           onclick="copyEmail(event)" 
+                           style="color: #0645ad !important; font-weight: bold; text-decoration: underline; cursor: pointer;" 
+                           title="Clicca per copiare l'indirizzo">
+                           matematica.alla.radice@gmail.com
+                        </a>.
+                    </p>
+                    
+                    <p style="margin-top: 1rem;">Per aiutarmi a individuare e correggere rapidamente il problema, ti chiedo gentilmente di indicare nella mail:</p>
                     <ul>
-                        <li><strong>Volume e Capitolo:</strong> (es. <em>Volume 1 - Capitolo 3: Equazioni</em>)</li>
-                        <li><strong>Pagina / Sezione:</strong> Il numero della pagina o il paragrafo interessato.</li>
+                        <li><strong>Oggetto dell'email:</strong> Indica chiaramente volume e capitolo (es. <code>Segnalazione Volume 1 - Capitolo 3</code>).</li>
+                        <li><strong>Pagina / Sezione:</strong> Il numero di pagina o il paragrafo interessato.</li>
                         <li><strong>Descrizione del refuso:</strong> Il testo o la formula errata riscontrata.</li>
-                        <li><strong>Correzione proposta:</strong> (Opzionale) Il testo o il passaggio corretto da sostituire.</li>
+                        <li><strong>Correzione proposta:</strong> (Opzionale) La correzione suggerita o il passaggio da sostituire.</li>
                     </ul>
+            
+                    <p style="margin-top: 1.5rem; font-style: italic; text-align: center; color: #2e5a39; font-weight: 600;">
+                        L'autore vi ringrazia sinceramente per ogni segnalazione costruttiva.
+                    </p>
                 </div>
             </div>
 
@@ -815,6 +820,24 @@
         }
 
         const originalSubtitle = "Una collana di libri di testo di matematica per i licei scientifici";
+
+        function copyEmail(event) {
+            event.preventDefault();
+            const email = "matematica.alla.radice@gmail.com";
+            
+            navigator.clipboard.writeText(email).then(() => {
+                const tooltip = document.getElementById('custom-tooltip');
+                tooltip.textContent = "Indirizzo mail copiato!";
+                tooltip.style.left = (event.clientX + 15) + 'px';
+                tooltip.style.top = (event.clientY + 15) + 'px';
+                tooltip.classList.remove('hidden');
+        
+                // Nasconde il tooltip dopo 2 secondi
+                setTimeout(() => {
+                    tooltip.classList.add('hidden');
+                }, 2000);
+            });
+        }
 
         function openSection(sectionId, title) {
             // Nascondi il tooltip se aperto mentre si clicca
