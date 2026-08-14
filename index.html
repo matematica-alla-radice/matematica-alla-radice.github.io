@@ -563,22 +563,6 @@
             transform: translateY(-2px);
         }
         
-        .back-materials-btn {
-            background: none;
-            border: none;
-            color: #ffd700; /* Giallo dorato in tema */
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: underline;
-            margin-bottom: 1rem;
-            padding: 0;
-            display: inline-block;
-        }
-        
-        .back-materials-btn:hover {
-            color: #ffffff;
-        }
-        
         .material-links {
             display: flex;
             flex-direction: column;
@@ -604,8 +588,10 @@
         }
         
         .material-icon {
-            font-size: 2rem;
+            width: 36px;
+            height: 36px;
             margin-right: 1rem;
+            flex-shrink: 0;
         }
         
         .material-info {
@@ -778,12 +764,13 @@
 
                 <!-- Contenuto Volume 1 -->
                 <div id="materiali-vol1" class="hidden">
-                    <button class="back-materials-btn" onclick="backToMaterialiMenu()">← Torna ai volumi</button>
                     <h3>Materiali Volume 1</h3>
                     
                     <div class="material-links">
                         <a href="https://www.geogebra.org/m/t2tkpxke" target="_blank" rel="noopener" class="material-card">
-                            <span class="material-icon">📐</span>
+                            <svg class="material-icon" viewBox="0 0 24 24" fill="#6666cc">
+                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.268 4.095c1.626 0 2.946 1.32 2.946 2.946 0 1.626-1.32 2.946-2.946 2.946-1.626 0-2.946-1.32-2.946-2.946 0-1.626 1.32-2.946 2.946-2.946zM6.55 7.15c1.196 0 2.167.971 2.167 2.167 0 1.196-.971 2.167-2.167 2.167-1.196 0-2.167-.971-2.167-2.167 0-1.196.971-2.167 2.167-2.167zm10.73 3.99c1.077 0 1.951.874 1.951 1.951 0 1.077-.874 1.951-1.951 1.951-1.077 0-1.951-.874-1.951-1.951 0-1.077.874-1.951 1.951-1.951zM6.624 13.91c1.233 0 2.234 1.001 2.234 2.234 0 1.233-1.001 2.234-2.234 2.234-1.233 0-2.234-1.001-2.234-2.234 0-1.233 1.001-2.234 2.234-2.234zm5.556 2.067c1.474 0 2.668 1.194 2.668 2.668 0 1.474-1.194 2.668-2.668 2.668-1.474 0-2.668-1.194-2.668-2.668 0-1.474 1.194-2.668 2.668-2.668z"/>
+                            </svg>
                             <div class="material-info">
                                 <strong>File GeoGebra per il volume della piramide</strong>
                                 <span>Clicca per aprire la simulazione su GeoGebra</span>
@@ -791,7 +778,9 @@
                         </a>
                         
                         <a href="https://www.geogebra.org/m/bzfwccmw" target="_blank" rel="noopener" class="material-card">
-                            <span class="material-icon">🧊</span>
+                            <svg class="material-icon" viewBox="0 0 24 24" fill="#6666cc">
+                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.268 4.095c1.626 0 2.946 1.32 2.946 2.946 0 1.626-1.32 2.946-2.946 2.946-1.626 0-2.946-1.32-2.946-2.946 0-1.626 1.32-2.946 2.946-2.946zM6.55 7.15c1.196 0 2.167.971 2.167 2.167 0 1.196-.971 2.167-2.167 2.167-1.196 0-2.167-.971-2.167-2.167 0-1.196.971-2.167 2.167-2.167zm10.73 3.99c1.077 0 1.951.874 1.951 1.951 0 1.077-.874 1.951-1.951 1.951-1.077 0-1.951-.874-1.951-1.951 0-1.077.874-1.951 1.951-1.951zM6.624 13.91c1.233 0 2.234 1.001 2.234 2.234 0 1.233-1.001 2.234-2.234 2.234-1.233 0-2.234-1.001-2.234-2.234 0-1.233 1.001-2.234 2.234-2.234zm5.556 2.067c1.474 0 2.668 1.194 2.668 2.668 0 1.474-1.194 2.668-2.668 2.668-1.474 0-2.668-1.194-2.668-2.668 0-1.474 1.194-2.668 2.668-2.668z"/>
+                            </svg>
                             <div class="material-info">
                                 <strong>File GeoGebra per il cubo di binomio</strong>
                                 <span>Clicca per aprire la simulazione su GeoGebra</span>
@@ -802,7 +791,6 @@
 
                 <!-- Contenuto Vuoto (Volumi 2-5) -->
                 <div id="materiali-empty" class="hidden">
-                    <button class="back-materials-btn" onclick="backToMaterialiMenu()">← Torna ai volumi</button>
                     <h3 id="empty-title">Materiali Volume</h3>
                     <div style="background-color: rgba(255,255,255,0.05); padding: 2rem; border-radius: 8px; text-align: center; margin-top: 1.5rem;">
                         <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">⏳</span>
@@ -992,6 +980,21 @@
         }
 
         function goBack() {
+            const matMenu = document.getElementById('materiali-menu');
+            const matVol1 = document.getElementById('materiali-vol1');
+            const matEmpty = document.getElementById('materiali-empty');
+        
+            // 1. Controlla se siamo in un sottomenu (dentro a un volume specifico)
+            if (!matVol1.classList.contains('hidden') || !matEmpty.classList.contains('hidden')) {
+                // Nascondi i dettagli e mostra la lista dei bottoni volumi
+                matVol1.classList.add('hidden');
+                matEmpty.classList.add('hidden');
+                matMenu.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return; // Interrompe qui, così la freccia non chiude tutto
+            }
+        
+            // 2. Altrimenti (comportamento standard), torna al menu principale
             document.getElementById('menu-view').classList.remove('hidden');
             document.getElementById('content-view').classList.add('hidden');
             document.getElementById('back-btn').classList.add('hidden');
@@ -999,8 +1002,10 @@
             document.querySelector('main').style.alignItems = 'center';
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Aggiungi questa riga per resettare il sottomenu dei materiali:
-            backToMaterialiMenu();
+            // Resetta lo stato dei materiali per la prossima volta che si aprirà la sezione
+            if(matVol1) matVol1.classList.add('hidden');
+            if(matEmpty) matEmpty.classList.add('hidden');
+            if(matMenu) matMenu.classList.remove('hidden');
         }
 
         // Gestione del Tooltip dinamico che segue il mouse
@@ -1044,13 +1049,6 @@
             
             // Riporta la visuale all'inizio della scheda
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        function backToMaterialiMenu() {
-            // Nascondi i sottomenu e mostra di nuovo la lista dei bottoni
-            document.getElementById('materiali-vol1').classList.add('hidden');
-            document.getElementById('materiali-empty').classList.add('hidden');
-            document.getElementById('materiali-menu').classList.remove('hidden');
         }
     </script>
 </body>
