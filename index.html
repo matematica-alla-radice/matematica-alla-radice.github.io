@@ -25,6 +25,37 @@
             overflow-x: hidden;
         }
 
+        /* CLASSE DI SUPPORTO PER NASCONDERE ELEMENTI */
+        .hidden {
+            display: none !important;
+        }
+
+        /* BOTTONE INDIETRO (Freccia) */
+        #back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: none;
+            border: none;
+            color: #FFD700;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            z-index: 100;
+        }
+
+        #back-btn:hover {
+            transform: translateX(-5px) scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
+        }
+
+        #back-btn svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+
         /* Testata */
         header {
             text-align: center;
@@ -49,6 +80,7 @@
             font-weight: 300;
             font-style: italic;
             opacity: 0.95;
+            transition: opacity 0.3s ease;
         }
 
         /* Layout Principale */
@@ -58,9 +90,11 @@
             margin: auto 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: center; /* Verrà modificato via JS quando si apre una sezione */
+            min-height: 50vh;
         }
 
+        /* GRIGLIA FOGLIE */
         .leaf-grid {
             position: relative;
             width: 1050px;
@@ -131,7 +165,7 @@
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
         }
 
-        /* EFFETTO MOUSE: INGRANDIMENTO + PIÙ LUMINOSO + BAGLIORE (GLOW) */
+        /* EFFETTO MOUSE */
         .leaf-group:hover {
             z-index: 50;
             filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
@@ -189,13 +223,44 @@
             letter-spacing: 0.8px;
         }
 
-        /* POSIZIONAMENTO E ROTAZIONI NELLO SPAZIO (Spostate le diagonali 10px più all'esterno) */
+        /* POSIZIONAMENTO E ROTAZIONI NELLO SPAZIO */
         .pos-12 { top: 10px; left: 50%; transform: translateX(-50%) rotate(-6deg); }
         .pos-2  { top: 140px; right: -35px; transform: rotate(37deg); }
         .pos-4  { bottom: 140px; right: -35px; transform: rotate(-18deg); }
         .pos-6  { bottom: 10px; left: 50%; transform: translateX(-50%) rotate(19deg); }
         .pos-8  { bottom: 140px; left: -35px; transform: rotate(-39deg); }
         .pos-10 { top: 140px; left: -35px; transform: rotate(20deg); }
+
+        /* CONTENITORE DELLE PAGINE INTERNE */
+        #content-view {
+            width: 100%;
+            max-width: 850px;
+            color: #ffffff;
+            background: rgba(25, 56, 34, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .section-content h2 {
+            margin-bottom: 1.5rem;
+            color: #FFD700;
+            border-bottom: 1px solid rgba(255,215,0,0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .section-content p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* FOOTER & MODALE */
         footer {
@@ -238,7 +303,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
 
-        .modal-card h2 { margin-bottom: 1rem; font-size: 1.5rem; }
+        .modal-card h2 { margin-bottom: 1rem; font-size: 1.5rem; color: #FFD700; border-bottom: none;}
         .modal-card p { margin-bottom: 1rem; font-size: 0.95rem; line-height: 1.5; color: #d1e7dd; }
         .modal-card ul { margin-bottom: 1.5rem; padding-left: 1.2rem; font-size: 0.9rem; color: #d1e7dd; }
         .modal-card li { margin-bottom: 0.4rem; }
@@ -280,6 +345,13 @@
                 width: 310px !important;
                 height: 128px !important;
             }
+
+            #back-btn {
+                top: 1rem;
+                left: 1rem;
+                width: 35px;
+                height: 35px;
+            }
         }
     </style>
 </head>
@@ -291,7 +363,6 @@
             <g id="tikz-leaf-shape">
                 <!-- Stelo -->
                 <path class="tikz-leaf-stem" d="M -71.5,0 A 58.5,45 0 0,1 -117.0,-22.5" />
-            
                 <!-- Corpo foglia -->
                 <path class="tikz-leaf-body" transform="scale(1.3, 1)" d="
                     M -55,0 
@@ -313,15 +384,20 @@
     </svg>
 
     <header>
+        <!-- Bottone Indietro (Freccia a sinistra), nascosto all'avvio -->
+        <button id="back-btn" class="hidden" onclick="goBack()" aria-label="Torna al menu principale">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+
         <h1>Matematica alla Radice</h1>
-        <p>Una collana di libri di testo di matematica per i licei scientifici</p>
+        <p id="main-subtitle">Una collana di libri di testo di matematica per i licei scientifici</p>
     </header>
 
     <main>
-        <div class="leaf-grid">
-
+        <!-- MENU A FOGLIE -->
+        <div id="menu-view" class="leaf-grid">
             <!-- CENTRO: DOWNLOAD -->
-            <div class="leaf-group pos-center" onclick="alert('Sezione Download PDF')">
+            <div class="leaf-group pos-center" onclick="openSection('download', 'Download dei Volumi')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -332,7 +408,7 @@
             </div>
 
             <!-- ORE 12: MATERIALI AGGIUNTIVI -->
-            <div class="leaf-group pos-12" onclick="alert('Sezione Materiali aggiuntivi')">
+            <div class="leaf-group pos-12" onclick="openSection('materiali', 'Materiali Aggiuntivi')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -346,7 +422,7 @@
             </div>
 
             <!-- ORE 2: COMMENTI DEGLI STUDENTI -->
-            <div class="leaf-group pos-2" onclick="alert('Sezione Commenti degli studenti')">
+            <div class="leaf-group pos-2" onclick="openSection('commenti', 'Commenti degli Studenti')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -360,7 +436,7 @@
             </div>
 
             <!-- ORE 4: DESCRIZIONE DEL TESTO -->
-            <div class="leaf-group pos-4" onclick="alert('Sezione Descrizione del testo')">
+            <div class="leaf-group pos-4" onclick="openSection('descrizione', 'Descrizione del Testo')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -374,7 +450,7 @@
             </div>
 
             <!-- ORE 6: DIRITTO D'AUTORE -->
-            <div class="leaf-group pos-6" onclick="alert('Sezione Diritto d\'autore')">
+            <div class="leaf-group pos-6" onclick="openSection('diritto', 'Diritto d\'Autore e Licenza')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -388,7 +464,7 @@
             </div>
 
             <!-- ORE 8: PRESENTAZIONE AUTORE -->
-            <div class="leaf-group pos-8" onclick="alert('Sezione Presentazione autore')">
+            <div class="leaf-group pos-8" onclick="openSection('autore', 'Presentazione dell\'Autore')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -402,7 +478,7 @@
             </div>
 
             <!-- ORE 10: SEGNALAZIONI -->
-            <div class="leaf-group pos-10" onclick="alert('Sezione Segnalazioni')">
+            <div class="leaf-group pos-10" onclick="openSection('segnalazioni', 'Segnalazioni per l\'Autore')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -413,6 +489,45 @@
                         </text>
                     </g>
                 </svg>
+            </div>
+        </div>
+
+        <!-- CONTENITORE DELLE 7 SEZIONI (Nascosto all'avvio) -->
+        <div id="content-view" class="hidden">
+            
+            <div id="section-download" class="section-content hidden">
+                <h2>Sezione Download</h2>
+                <p>In questa area saranno disponibili i PDF completi dei volumi per il biennio e il triennio.</p>
+            </div>
+            
+            <div id="section-materiali" class="section-content hidden">
+                <h2>Materiali aggiuntivi</h2>
+                <p>Esercizi integrativi, schede di approfondimento e collegamenti tra matematica e fisica.</p>
+            </div>
+            
+            <div id="section-commenti" class="section-content hidden">
+                <h2>Commenti degli studenti</h2>
+                <p>Raccoglieremo qui i feedback e le esperienze di chi sta studiando su questa collana.</p>
+            </div>
+            
+            <div id="section-descrizione" class="section-content hidden">
+                <h2>Descrizione del testo</h2>
+                <p>Metodologia didattica, indice degli argomenti e struttura dei volumi pensati dal prof. Miceli.</p>
+            </div>
+            
+            <div id="section-diritto" class="section-content hidden">
+                <h2>Diritto d'autore</h2>
+                <p>Dettagli estesi sulla licenza CC BY-NC-ND 4.0 e sulle regole di distribuzione dell'opera.</p>
+            </div>
+            
+            <div id="section-autore" class="section-content hidden">
+                <h2>Presentazione dell'autore</h2>
+                <p>Note biografiche e visione pedagogica del prof. Federico Miceli, docente presso il Liceo Scientifico F. Vercelli di Asti.</p>
+            </div>
+            
+            <div id="section-segnalazioni" class="section-content hidden">
+                <h2>Segnalazioni</h2>
+                <p>Modulo per contattare l'autore, segnalare refusi, errori o suggerire miglioramenti per le prossime edizioni.</p>
             </div>
 
         </div>
@@ -443,11 +558,54 @@
         </div>
     </div>
 
+    <!-- SCRIPT LOGICA E TRANSIZIONI -->
     <script>
+        // Logica per mostrare/nascondere la modale della licenza
         function toggleLicenseModal(show) {
             document.getElementById('licenseModal').style.display = show ? 'flex' : 'none';
         }
-    </script>
 
+        // Memoria del sottotitolo originale
+        const originalSubtitle = "Una collana di libri di testo di matematica per i licei scientifici";
+
+        // Funzione per aprire una specifica sezione
+        function openSection(sectionId, title) {
+            // 1. Nasconde la griglia delle foglie
+            document.getElementById('menu-view').classList.add('hidden');
+            
+            // 2. Mostra il contenitore delle pagine e la freccia indietro
+            document.getElementById('content-view').classList.remove('hidden');
+            document.getElementById('back-btn').classList.remove('hidden');
+            
+            // 3. Sostituisce il sottotitolo dell'header
+            document.getElementById('main-subtitle').innerHTML = title;
+            
+            // 4. Nasconde tutte le sezioni interne...
+            document.querySelectorAll('.section-content').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+            // ...e mostra solo quella selezionata
+            document.getElementById('section-' + sectionId).classList.remove('hidden');
+
+            // 5. Riallinea in alto il contenitore nel caso di testi molto lunghi
+            document.querySelector('main').style.alignItems = 'flex-start';
+        }
+
+        // Funzione per tornare alla home (menu a foglie)
+        function goBack() {
+            // 1. Ripristina la griglia delle foglie
+            document.getElementById('menu-view').classList.remove('hidden');
+            
+            // 2. Nasconde il contenuto e la freccia indietro
+            document.getElementById('content-view').classList.add('hidden');
+            document.getElementById('back-btn').classList.add('hidden');
+            
+            // 3. Ripristina il sottotitolo originale
+            document.getElementById('main-subtitle').innerHTML = originalSubtitle;
+
+            // 4. Ri-centra verticalmente la griglia a foglie
+            document.querySelector('main').style.alignItems = 'center';
+        }
+    </script>
 </body>
 </html>
