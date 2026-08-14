@@ -554,7 +554,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #3b2513; /* Sfondo marrone */
+            background-color: #3b2513;
             padding: 1.5rem;
             border-radius: 8px;
             margin-bottom: 1rem;
@@ -571,7 +571,7 @@
         }
         
         .download-card.available {
-            border-left: 5px solid #ffd700; /* Bordo dorato */
+            border-left: 5px solid #ffd700;
         }
         
         .download-card.available:hover {
@@ -581,7 +581,7 @@
         
         .download-card.missing {
             border-left: 5px solid #888888;
-            cursor: default; /* Cursore del mouse normale (punta) */
+            cursor: default;
         }
         
         .dl-details {
@@ -592,19 +592,19 @@
         .dl-title {
             font-size: 1.3rem;
             font-weight: bold;
-            color: #ffd700; /* Caratteri dorati per "Volume X" */
+            color: #ffd700;
         }
         
         .dl-meta {
             font-size: 0.9rem;
-            color: #ffffff; /* Testo in bianco per la data e i download */
+            color: #ffffff;
             margin-top: 0.4rem;
         }
         
         .dl-missing-text {
             font-size: 1rem;
             font-weight: normal;
-            color: #ffffff; /* Testo in bianco per "file mancante" */
+            color: #ffffff;
             font-style: italic;
             margin-left: 0.5rem;
         }
@@ -753,7 +753,7 @@
         <p class="feedback-cta">
             Hai utilizzato il libro? Sarei felice di conoscere la tua esperienza. 
             Se ti va, inviami un'opinione personale all'indirizzo 
-            <a href="mailto:matematica.alla.radice@gmail.com" style="color: #ffd700; font-weight: bold;">matematica.alla.radice@gmail.com</a>.
+            <a href="javascript:void(0)" class="email-link" onclick="copyEmail(event)" style="color: #0645ad !important;" title="Clicca per copiare l'indirizzo">matematica.alla.radice@gmail.com</a>.
         </p>
     </header>
 
@@ -1221,13 +1221,13 @@
             }
         }
         
-        // Funzione di supporto per creare il layout del file mancante
+        // Funzione di supporto per creare il layout del volume mancante
         function setMissingLayout(card, volNumber) {
             card.className = "download-card missing";
             card.setAttribute('title', 'Questo libro non è ancora stato caricato');
             card.innerHTML = `
                 <div class="dl-details">
-                    <span class="dl-title" style="color: #ffd700;">Volume ${volNumber} <span class="dl-missing-text">(file mancante)</span></span>
+                    <span class="dl-title" style="color: #ffd700;">Volume ${volNumber} <span class="dl-missing-text">(Volume mancante)</span></span>
                 </div>
                 <a href="javascript:void(0)" class="dl-btn disabled">Non disponibile</a>
             `;
@@ -1238,13 +1238,13 @@
             checkDownloadsAvailability();
         });
         
-        // Funzione di supporto per creare il layout del file mancante
+        // Funzione di supporto per creare il layout del volume mancante
         function setMissingLayout(card, volNumber) {
             card.className = "download-card missing";
             card.setAttribute('title', 'Questo libro non è ancora stato caricato');
             card.innerHTML = `
                 <div class="dl-details">
-                    <span class="dl-title" style="color: #888;">Volume ${volNumber} <span class="dl-missing-text">(file mancante)</span></span>
+                    <span class="dl-title" style="color: #888;">Volume ${volNumber} <span class="dl-missing-text">(Volume mancante)</span></span>
                 </div>
                 <a href="javascript:void(0)" class="dl-btn disabled">Non disponibile</a>
             `;
