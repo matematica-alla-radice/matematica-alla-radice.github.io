@@ -30,6 +30,22 @@
             display: none !important;
         }
 
+        /* TOOLTIP DINAMICO (FINESTRELLA BIANCA) */
+        #custom-tooltip {
+            position: fixed;
+            background: #ffffff;
+            color: #193822;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            pointer-events: none;
+            z-index: 10000;
+            white-space: nowrap;
+            transition: opacity 0.15s ease;
+        }
+
         /* BOTTONE INDIETRO (Freccia) */
         #back-btn {
             position: absolute;
@@ -427,6 +443,9 @@
 </head>
 <body>
 
+    <!-- Finestrella tooltip dinamica -->
+    <div id="custom-tooltip" class="hidden"></div>
+
     <svg style="display: none;">
         <defs>
             <g id="tikz-leaf-shape">
@@ -463,7 +482,7 @@
     <main>
         <div id="menu-view" class="leaf-grid">
             
-            <div class="leaf-group pos-center" onclick="openSection('download', 'Download dei Volumi')">
+            <div class="leaf-group pos-center" onclick="openSection('download', 'Download dei Volumi')" data-tooltip="Scarica i PDF dei volumi">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -473,7 +492,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-12" onclick="openSection('materiali', 'Materiali Aggiuntivi')">
+            <div class="leaf-group pos-12" onclick="openSection('materiali', 'Materiali Aggiuntivi')" data-tooltip="Esercizi e approfondimenti">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -486,7 +505,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-2" onclick="openSection('commenti', 'Commenti degli Studenti')">
+            <div class="leaf-group pos-2" onclick="openSection('commenti', 'Commenti degli Studenti')" data-tooltip="Feedback ed esperienze">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -499,7 +518,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-4" onclick="openSection('descrizione', 'Descrizione del Testo')">
+            <div class="leaf-group pos-4" onclick="openSection('descrizione', 'Descrizione del Testo')" data-tooltip="Metodologia e struttura dei volumi">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -512,7 +531,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-6" onclick="openSection('diritto', 'Diritto d\'Autore e Licenza')">
+            <div class="leaf-group pos-6" onclick="openSection('diritto', 'Diritto d\'Autore e Licenza')" data-tooltip="Licenza d'uso e Note legali">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -525,7 +544,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-8" onclick="openSection('autore', 'Presentazione dell\'Autore')">
+            <div class="leaf-group pos-8" onclick="openSection('autore', 'Presentazione dell\'Autore')" data-tooltip="Biografia e percorso professionale">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -538,7 +557,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-10" onclick="openSection('segnalazioni', 'Segnalazioni per l\'Autore')">
+            <div class="leaf-group pos-10" onclick="openSection('segnalazioni', 'Segnalazioni per l\'Autore')" data-tooltip="Segnala refusi o suggerimenti">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -652,6 +671,9 @@
         const originalSubtitle = "Una collana di libri di testo di matematica per i licei scientifici";
 
         function openSection(sectionId, title) {
+            // Nascondi il tooltip se aperto mentre si clicca
+            document.getElementById('custom-tooltip').classList.add('hidden');
+
             document.getElementById('menu-view').classList.add('hidden');
             document.getElementById('content-view').classList.remove('hidden');
             document.getElementById('back-btn').classList.remove('hidden');
@@ -672,6 +694,28 @@
             document.getElementById('main-subtitle').innerHTML = originalSubtitle;
             document.querySelector('main').style.alignItems = 'center';
         }
+
+        // Gestione del Tooltip dinamico che segue il mouse
+        const tooltip = document.getElementById('custom-tooltip');
+
+        document.querySelectorAll('.leaf-group').forEach(leaf => {
+            leaf.addEventListener('mouseenter', (e) => {
+                const text = leaf.getAttribute('data-tooltip');
+                if (text) {
+                    tooltip.textContent = text;
+                    tooltip.classList.remove('hidden');
+                }
+            });
+
+            leaf.addEventListener('mousemove', (e) => {
+                tooltip.style.left = (e.clientX + 15) + 'px';
+                tooltip.style.top = (e.clientY + 15) + 'px';
+            });
+
+            leaf.addEventListener('mouseleave', () => {
+                tooltip.classList.add('hidden');
+            });
+        });
     </script>
 </body>
 </html>
