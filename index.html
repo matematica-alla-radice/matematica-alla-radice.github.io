@@ -51,7 +51,7 @@
             opacity: 0.95;
         }
 
-        /* Layout Principale (scala 1.2) */
+        /* Layout Principale */
         main {
             width: 100%;
             max-width: 950px;
@@ -138,12 +138,13 @@
         }
 
         /* Trasformazioni specifiche per gli hover di ciascuna foglia */
-        .pos-12:hover { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
-        .pos-2:hover  { transform: rotate(37deg) scale(1.14); }
-        .pos-4:hover  { transform: rotate(-18deg) scale(1.14); }
-        .pos-6:hover  { transform: translateX(-50%) rotate(19deg) scale(1.14); }
-        .pos-8:hover  { transform: rotate(-39deg) scale(1.14); }
-        .pos-10:hover { transform: rotate(20deg) scale(1.14); }
+        .pos-center:hover { transform: translate(-50%, -50%) scale(1.14); }
+        .pos-12:hover     { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
+        .pos-2:hover      { transform: rotate(37deg) scale(1.14); }
+        .pos-4:hover      { transform: rotate(-18deg) scale(1.14); }
+        .pos-6:hover      { transform: translateX(-50%) rotate(19deg) scale(1.14); }
+        .pos-8:hover      { transform: rotate(-39deg) scale(1.14); }
+        .pos-10:hover     { transform: rotate(20deg) scale(1.14); }
 
         .leaf-group:hover .tikz-leaf-body {
             fill: rgba(255, 255, 255, 0.22);
@@ -165,7 +166,12 @@
         }
 
         /* FOGLIA CENTRALE (DOWNLOAD) */
-        .pos-center { z-index: 10; }
+        .pos-center { 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 10; 
+        }
         .pos-center .leaf-svg {
             width: 400px;
             height: 165px;
@@ -183,13 +189,13 @@
             letter-spacing: 0.8px;
         }
 
-        /* POSIZIONAMENTO E ROTAZIONI NELLO SPAZIO */
+        /* POSIZIONAMENTO E ROTAZIONI NELLO SPAZIO (Spostate le diagonali 10px più all'esterno) */
         .pos-12 { top: 10px; left: 50%; transform: translateX(-50%) rotate(-6deg); }
-        .pos-2  { top: 140px; right: -25px; transform: rotate(37deg); }
-        .pos-4  { bottom: 140px; right: -25px; transform: rotate(-18deg); }
+        .pos-2  { top: 140px; right: -35px; transform: rotate(37deg); }
+        .pos-4  { bottom: 140px; right: -35px; transform: rotate(-18deg); }
         .pos-6  { bottom: 10px; left: 50%; transform: translateX(-50%) rotate(19deg); }
-        .pos-8  { bottom: 140px; left: -25px; transform: rotate(-39deg); }
-        .pos-10 { top: 140px; left: -25px; transform: rotate(20deg); }
+        .pos-8  { bottom: 140px; left: -35px; transform: rotate(-39deg); }
+        .pos-10 { top: 140px; left: -35px; transform: rotate(20deg); }
 
         /* FOOTER & MODALE */
         footer {
@@ -318,7 +324,6 @@
             <div class="leaf-group pos-center" onclick="alert('Sezione Download PDF')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
-                    <!-- Testo posizionato esattamente a (0,0) -->
                     <g class="leaf-content">
                         <use href="#icon-download" x="0" y="-18" />
                         <text x="0" y="16" class="leaf-text">DOWNLOAD</text>
