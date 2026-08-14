@@ -536,39 +536,39 @@
           color: #2e6b2e;
         }
 
-        
         /* Stili per la sezione Download */
         .download-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #ffffff;
+            background-color: #3b2513; /* Sfondo marrone */
             padding: 1.5rem;
             border-radius: 8px;
             margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
         }
         
         .download-card.loading {
             justify-content: center;
-            border-left: 5px solid #ffcc00;
-            color: #666;
+            border-left: 5px solid #ffd700;
+            color: #ffffff;
             font-style: italic;
+            background-color: #3b2513;
         }
         
         .download-card.available {
-            border-left: 5px solid #2e5a39;
+            border-left: 5px solid #ffd700; /* Bordo dorato */
         }
         
         .download-card.available:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
         }
         
         .download-card.missing {
-            border-left: 5px solid #cccccc;
-            cursor: help;
+            border-left: 5px solid #888888;
+            cursor: default; /* Cursore del mouse normale (punta) */
         }
         
         .dl-details {
@@ -579,19 +579,19 @@
         .dl-title {
             font-size: 1.3rem;
             font-weight: bold;
-            color: #1a2e22;
+            color: #ffd700; /* Caratteri dorati per "Volume X" */
         }
         
         .dl-meta {
             font-size: 0.9rem;
-            color: #555;
+            color: #ffffff; /* Testo in bianco per la data e i download */
             margin-top: 0.4rem;
         }
         
         .dl-missing-text {
             font-size: 1rem;
             font-weight: normal;
-            color: #999;
+            color: #ffffff; /* Testo in bianco per "file mancante" */
             font-style: italic;
             margin-left: 0.5rem;
         }
@@ -613,8 +613,8 @@
         }
         
         .dl-btn.disabled {
-            background-color: #e0e0e0;
-            color: #999;
+            background-color: #555555;
+            color: #aaaaaa;
             cursor: not-allowed;
             pointer-events: none;
         }
@@ -1175,7 +1175,7 @@
                         card.innerHTML = `
                             <div class="dl-details">
                                 <span class="dl-title">Volume ${i}</span>
-                                <span class="dl-meta">Aggiornato il: ${dateStr} | Download: N/D</span>
+                                <span class="dl-meta">Aggiornato il: ${dateStr} | Download: 0</span>
                             </div>
                             <a href="${filePath}" download class="dl-btn">Scarica Volume</a>
                         `;
