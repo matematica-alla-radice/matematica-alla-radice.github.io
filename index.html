@@ -5,21 +5,310 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matematica alla Radice</title>
     <style>
-        /* ==========================================
-           1. CLASSE DI SUPPORTO & ANIMAZIONI
-           ========================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #FFD700;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 1rem;
+            background: linear-gradient(180deg, #165b26 0%, #4a280e 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+        
+        .feedback-cta {
+            text-align: center;
+            background-color: #fff9c4; /* Giallo tenue */
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            max-width: 600px;
+            font-size: 0.95rem;
+            color: #2e5a39; /* Verde scuro per il testo */
+            border: 1px solid #ffd700; /* Bordo oro per richiamare il titolo */
+            font-style: italic;
+        }
+
+        /* CLASSE DI SUPPORTO PER NASCONDERE ELEMENTI */
         .hidden {
             display: none !important;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* TOOLTIP DINAMICO (FINESTRELLA BIANCA) */
+        #custom-tooltip {
+            position: fixed;
+            background: #ffffff;
+            color: #193822;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            pointer-events: none;
+            z-index: 10000;
+            white-space: nowrap;
+            transition: opacity 0.15s ease;
         }
 
-        /* ==========================================
-           2. GISCUS E COMMENTI
-           ========================================== */
+        /* BOTTONE INDIETRO (Freccia) */
+        #back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: none;
+            border: none;
+            color: #FFD700;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            z-index: 100;
+        }
+
+        #back-btn:hover {
+            transform: translateX(-5px) scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
+        }
+
+        #back-btn svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+
+        /* Testata */
+        header {
+            text-align: center;
+            max-width: 850px;
+            width: 100%;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-size: clamp(2.3rem, 5.5vw, 3.8rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.4rem;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            line-height: 1.1;
+        }
+
+        header p {
+            font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+            color: #FFD700;
+            font-weight: 300;
+            font-style: italic;
+            opacity: 0.95;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Layout Principale */
+        main {
+            width: 100%;
+            max-width: 950px;
+            margin: auto 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+        }
+
+        /* GRIGLIA FOGLIE */
+        .leaf-grid {
+            position: relative;
+            width: min(100%, 1050px, calc((100vh - 240px) * 1.5));
+            aspect-ratio: 1050 / 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* GRUPPO FOGLIA INTERATTIVA */
+        .leaf-group {
+            position: absolute;
+            cursor: pointer;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+            transition: filter 0.35s ease, transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .leaf-group:not(.pos-center) {
+            width: 34.285%;
+            height: 21.285%;
+        }
+
+        .leaf-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            display: block;
+        }
+
+        /* Stili del tracciato TikZ */
+        .tikz-leaf-body {
+            fill: rgba(255, 255, 255, 0.20);
+            stroke: #228B22;
+            stroke-width: 2.5px;
+            backdrop-filter: blur(6px);
+            transition: fill 0.35s ease, stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
+        }
+
+        .tikz-leaf-stem {
+            fill: none;
+            stroke: #228B22;
+            stroke-width: 3.5px;
+            stroke-linecap: round;
+            transition: stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
+        }
+
+        /* CONTENUTO CENTRATO E CONTRO-RUOTATO */
+        .leaf-content {
+            pointer-events: none;
+            transform-origin: 0px 0px;
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .pos-12 .leaf-content { transform: rotate(6deg); }
+        .pos-2  .leaf-content { transform: rotate(-37deg); }
+        .pos-4  .leaf-content { transform: rotate(18deg); }
+        .pos-6  .leaf-content { transform: rotate(-19deg); }
+        .pos-8  .leaf-content { transform: rotate(39deg); }
+        .pos-10 .leaf-content { transform: rotate(-20deg); }
+
+        .leaf-text {
+            fill: #FFD700;
+            font-size: 16px;
+            font-weight: 700;
+            text-anchor: middle;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .leaf-icon-svg {
+            fill: #FFD700;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+        }
+
+        /* EFFETTO MOUSE */
+        .leaf-group:hover {
+            z-index: 50;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+
+        .pos-center:hover { transform: translate(-50%, -50%) scale(1.14); }
+        .pos-12:hover        { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
+        .pos-2:hover         { transform: rotate(37deg) scale(1.14); }
+        .pos-4:hover         { transform: rotate(-18deg) scale(1.14); }
+        .pos-6:hover         { transform: translateX(-50%) rotate(19deg) scale(1.14); }
+        .pos-8:hover         { transform: rotate(-39deg) scale(1.14); }
+        .pos-10:hover        { transform: rotate(20deg) scale(1.14); }
+
+        .leaf-group:hover .tikz-leaf-body {
+            fill: rgba(255, 255, 255, 0.22);
+            stroke: #FFD700;
+            stroke-width: 3.2px;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.75));
+        }
+
+        .leaf-group:hover .tikz-leaf-stem {
+            stroke: #FFD700;
+            stroke-width: 4px;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.75));
+        }
+
+        .leaf-group:hover .leaf-text,
+        .leaf-group:hover .leaf-icon-svg {
+            fill: #FFD700;
+            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.9));
+        }
+
+        /* FOGLIA CENTRALE (DOWNLOAD) */
+        .pos-center {
+            width: 38.095%;
+            height: 23.571%;
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 10; 
+        }
+
+        .pos-center .tikz-leaf-body {
+            fill: rgba(255, 255, 255, 0.28);
+            stroke: #ffffff;
+            stroke-width: 3px;
+        }
+
+        .pos-center .leaf-text {
+            font-size: 18.5px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+        }
+
+        /* POSIZIONAMENTO E ROTAZIONI IN PERCENTUALE */
+        .pos-12 { top: 1.428%; left: 50%; transform: translateX(-50%) rotate(-6deg); }
+        .pos-2  { top: 20%; right: -3.333%; transform: rotate(37deg); }
+        .pos-4  { bottom: 20%; right: -3.333%; transform: rotate(-18deg); }
+        .pos-6  { bottom: 1.428%; left: 50%; transform: translateX(-50%) rotate(19deg); }
+        .pos-8  { bottom: 20%; left: -3.333%; transform: rotate(-39deg); }
+        .pos-10 { top: 20%; left: -3.333%; transform: rotate(20deg); }
+
+        /* CONTENITORE DELLE PAGINE INTERNE */
+        #content-view {
+            width: 100%;
+            max-width: 850px;
+            color: #ffffff;
+            background: rgba(25, 56, 34, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: fadeIn 0.4s ease forwards;
+            text-align: left;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .section-content h2 {
+            margin-bottom: 1.2rem;
+            color: #FFD700;
+            border-bottom: 1px solid rgba(255,215,0,0.3);
+            padding-bottom: 0.5rem;
+            font-size: 1.6rem;
+        }
+
+        .section-content p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #e2f1e7;
+        }
+
+        .section-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            color: #e2f1e7;
+        }
+
+        .section-content li {
+            margin-bottom: 0.6rem;
+        }
+
+        .section-content a {
+            color: #FFD700;
+            text-decoration: underline;
+        }
+
+        /* STILI SPECIFICI PER GISCUS E COMMENTI */
         .giscus-container {
             margin-top: 1.5rem;
             background: rgba(255, 255, 255, 0.95);
@@ -49,9 +338,7 @@
             margin-bottom: 0;
         }
 
-        /* ==========================================
-           3. PRESENTAZIONE DELL'AUTORE
-           ========================================== */
+        /* STILI SPECIFICI PER LA PRESENTAZIONE DELL'AUTORE */
         .author-container {
             display: flex;
             gap: 1.8rem;
@@ -86,9 +373,12 @@
             flex-grow: 1;
         }
 
-        /* ==========================================
-           4. FOOTER
-           ========================================== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FOOTER & MODALE */
         footer {
             margin-top: 2rem;
             text-align: center;
@@ -106,11 +396,8 @@
             font-weight: 600;
         }
 
-        /* ==========================================
-           5. MODALE (UNIFICATO E CORRETTO)
-           ========================================== */
         .modal-overlay {
-            display: none; /* CORRETTO: parte nascosto di default */
+            display: none; /* Inizia nascosto */
             position: fixed;
             top: 0;
             left: 0;
@@ -122,305 +409,54 @@
             justify-content: center;
             align-items: center;
             padding: 1rem;
-            box-sizing: border-box;
         }
-
+        
+        /* Questa classe serve a JS per mostrare il modale */
+        .modal-overlay.active {
+            display: flex !important;
+        }
+        
+        /* Questa classe serve per forzare l'invisibilità se necessario */
         .modal-overlay.hidden {
             display: none !important;
         }
 
-        .modal-card, 
-        .modal-content {
+        .modal-card {
             position: relative;
-            background: #3b2513; /* Sfondo marrone coordinato */
-            border: 1.5px solid #ffd700;
+            background: #193822;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
             border-radius: 16px;
             padding: 2rem;
             max-width: 550px;
             width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
             color: #ffffff;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             text-align: left;
         }
 
-        .modal-card h2, 
-        .modal-content h3 {
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
-            color: #FFD700;
-            border-bottom: none;
-        }
+        .modal-card h2 { margin-bottom: 1rem; font-size: 1.5rem; color: #FFD700; border-bottom: none;}
+        .modal-card p { margin-bottom: 1rem; font-size: 0.95rem; line-height: 1.5; color: #d1e7dd; }
+        .modal-card ul { margin-bottom: 1.5rem; padding-left: 1.2rem; font-size: 0.9rem; color: #d1e7dd; }
+        .modal-card li { margin-bottom: 0.4rem; }
 
-        .modal-card p, 
-        .modal-content .modal-text {
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #d1e7dd;
-        }
-
-        .modal-card ul, 
-        .modal-content ul {
-            margin: 0.5rem 0 1.5rem 1.2rem;
-            padding: 0;
-            font-size: 0.9rem;
-            color: #d1e7dd;
-        }
-
-        .modal-card li, 
-        .modal-content li {
-            margin-bottom: 0.4rem;
-        }
-
-        .close-btn, 
-        .modal-close {
+        .close-btn {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: none;
+            background: #ffffff;
+            color: #193822;
             border: none;
-            color: #ffd700;
-            font-size: 1.8rem;
-            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-weight: 700;
-            line-height: 1;
-        }
-
-        .close-btn:hover, 
-        .modal-close:hover {
-            color: #ffffff;
-        }
-
-        .modal-checkbox-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-            background-color: rgba(0, 0, 0, 0.25);
-            padding: 1rem;
-            border-radius: 6px;
-        }
-
-        .modal-checkbox-container input[type="checkbox"] {
-            margin-top: 0.3rem;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #2e5a39;
-        }
-
-        .modal-checkbox-container label {
-            cursor: pointer;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            color: #ffffff;
-        }
-
-        .modal-actions {
-            text-align: right;
-        }
-
-        /* ==========================================
-           6. SEZIONE REPORT & EMAIL
-           ========================================== */
-        .report-section {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background-color: #f9fbfd;
-            border-radius: 8px;
-            border: 1px solid #e1e8ed;
-            font-family: inherit;
-            color: #1a2e22;
-        }
-        
-        .report-section p, 
-        .report-section li {
-            color: #2c3e50;
-        }
-        
-        .report-section h2, 
-        .report-section h3 {
-            color: #165b26;
-        }
-        
-        .email-box {
-            background-color: #ffffff;
-            padding: 1rem 1.5rem;
-            border-left: 4px solid #0645ad;
-            margin: 1.5rem 0;
-            border-radius: 4px;
-        }
-        
-        .email-link {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #0645ad;
-            text-decoration: underline;
             cursor: pointer;
         }
         
-        .subject-hint {
-            font-size: 0.9rem;
-            color: #555;
-            margin-top: 0.5rem;
-        }
-        
-        .report-details ol > li {
-            margin-bottom: 0.8rem;
-        }
-        
-        .thank-you-card {
-            margin-top: 2rem;
-            padding: 1rem;
-            background-color: #eef7ee;
-            border-radius: 6px;
-            color: #2e6b2e;
+        .close-btn:hover {
+            background: #FFD700;
         }
 
-        /* ==========================================
-           7. SEZIONE DOWNLOAD & MATERIALI
-           ========================================== */
-        .download-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #3b2513;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .download-card.loading {
-            justify-content: center;
-            border-left: 5px solid #ffd700;
-            color: #ffffff;
-            font-style: italic;
-        }
-        
-        .download-card.available {
-            border-left: 5px solid #ffd700;
-        }
-        
-        .download-card.available:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-        
-        .download-card.missing {
-            border-left: 5px solid #888888;
-            cursor: default;
-        }
-        
-        .dl-details {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .dl-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ffd700;
-        }
-        
-        .dl-meta {
-            font-size: 0.9rem;
-            color: #ffffff;
-            margin-top: 0.4rem;
-        }
-        
-        .dl-missing-text {
-            font-size: 1rem;
-            font-weight: normal;
-            color: #ffffff;
-            font-style: italic;
-            margin-left: 0.5rem;
-        }
-        
-        .dl-btn, 
-        .volume-btn {
-            background-color: #2e5a39;
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .dl-btn:hover, 
-        .volume-btn:hover {
-            background-color: #1a3822;
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        .dl-btn.disabled {
-            background-color: #555555;
-            color: #aaaaaa;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .volumes-list, 
-        .material-links {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .material-card {
-            display: flex;
-            align-items: center;
-            background-color: #ffffff;
-            border-left: 5px solid #6666cc;
-            padding: 1rem 1.5rem;
-            border-radius: 6px;
-            text-decoration: none;
-            color: #1a2e22;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .material-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .material-icon {
-            width: 36px;
-            height: 36px;
-            margin-right: 1rem;
-            flex-shrink: 0;
-            object-fit: contain;
-        }
-        
-        .material-info {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .material-info strong {
-            font-size: 1.1rem;
-            margin-bottom: 0.2rem;
-        }
-        
-        .material-info span {
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        /* ==========================================
-           8. RESPONSIVE SMARTPHONE
-           ========================================== */
+        /* RESPONSIVE SMARTPHONE */
         @media (max-width: 768px) {
             .leaf-grid {
                 width: 100%;
@@ -466,7 +502,312 @@
                 margin: 0 auto 1rem auto;
             }
         }
-</style>
+
+        .report-section {
+          max-width: 800px;
+          margin: 2rem auto;
+          padding: 1.5rem;
+          background-color: #f9fbfd;
+          border-radius: 8px;
+          border: 1px solid #e1e8ed;
+          font-family: inherit;
+          color: #1a2e22;
+        }
+        
+        .report-section p, 
+        .report-section li {
+            color: #2c3e50;
+        }
+        
+        .report-section h2, 
+        .report-section h3 {
+            color: #165b26;
+        }
+        
+        .email-box {
+          background-color: #ffffff;
+          padding: 1rem 1.5rem;
+          border-left: 4px solid #0645ad;
+          margin: 1.5rem 0;
+          border-radius: 4px;
+        }
+        
+        .email-link {
+          font-size: 1.1rem;
+          font-weight: bold;
+          color: #0645ad;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+        
+        .email-link:hover {
+          text-decoration: underline;
+        }
+        
+        .subject-hint {
+          font-size: 0.9rem;
+          color: #555;
+          margin-top: 0.5rem;
+        }
+        
+        .report-details ol > li {
+          margin-bottom: 0.8rem;
+        }
+        
+        .thank-you-card {
+          margin-top: 2rem;
+          padding: 1rem;
+          background-color: #eef7ee;
+          border-radius: 6px;
+          color: #2e6b2e;
+        }
+
+        /* Stili per la sezione Download */
+        .download-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #3b2513;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .download-card.loading {
+            justify-content: center;
+            border-left: 5px solid #ffd700;
+            color: #ffffff;
+            font-style: italic;
+            background-color: #3b2513;
+        }
+        
+        .download-card.available {
+            border-left: 5px solid #ffd700;
+        }
+        
+        .download-card.available:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        .download-card.missing {
+            border-left: 5px solid #888888;
+            cursor: default;
+        }
+        
+        .dl-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dl-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .dl-meta {
+            font-size: 0.9rem;
+            color: #ffffff;
+            margin-top: 0.4rem;
+        }
+        
+        .dl-missing-text {
+            font-size: 1rem;
+            font-weight: normal;
+            color: #ffffff;
+            font-style: italic;
+            margin-left: 0.5rem;
+        }
+        
+        .dl-btn {
+            background-color: #2e5a39;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+            text-align: center;
+        }
+        
+        .dl-btn:hover {
+            background-color: #1a3822;
+            color: white;
+        }
+        
+        .dl-btn.disabled {
+            background-color: #555555;
+            color: #aaaaaa;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        .modal-content {
+            background-color: #3b2513; /* Sfondo marrone coordinato */
+            color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            border: 1px solid #ffd700;
+        }
+        
+        .modal-content h3 {
+            color: #ffd700;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .modal-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            color: #f0f0f0;
+        }
+        
+        .modal-text ul {
+            margin: 0.5rem 0 1rem 1.2rem;
+            padding: 0;
+        }
+        
+        .modal-text li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #ffd700;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .modal-close:hover {
+            color: #ffffff;
+        }
+        
+        .modal-checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            background-color: rgba(0, 0, 0, 0.25);
+            padding: 1rem;
+            border-radius: 6px;
+        }
+        
+        .modal-checkbox-container input[type="checkbox"] {
+            margin-top: 0.3rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2e5a39;
+        }
+        
+        .modal-checkbox-container label {
+            cursor: pointer;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #ffffff;
+        }
+        
+        .modal-actions {
+            text-align: right;
+        }
+
+        /* Stili per la sezione Materiali Aggiuntivi */
+        .volumes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .volume-btn {
+            background-color: #2e5a39;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        
+        .volume-btn:hover {
+            background-color: #1a3822;
+            transform: translateY(-2px);
+        }
+        
+        .material-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .material-card {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-left: 5px solid #6666cc;
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #1a2e22;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .material-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .material-icon {
+            width: 36px;
+            height: 36px;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .material-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .material-info strong {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .material-info span {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .material-icon {
+            width: 36px;
+            height: 36px;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+    </style>
 </head>
 <body>
 
