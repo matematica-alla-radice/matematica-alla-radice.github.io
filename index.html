@@ -90,15 +90,16 @@
             margin: auto 0;
             display: flex;
             justify-content: center;
-            align-items: center; /* Verrà modificato via JS quando si apre una sezione */
+            align-items: center;
             min-height: 50vh;
         }
 
-        /* GRIGLIA FOGLIE */
+        /* GRIGLIA FOGLIE: ORA TOTALMENTE RESPONSIVA (Si adatta all'altezza e alla larghezza dello schermo) */
         .leaf-grid {
             position: relative;
-            width: 1050px;
-            height: 700px;
+            /* Seleziona la larghezza minore tra: il 100% dello schermo, 1050px, oppure una larghezza calcolata sull'altezza disponibile per non generare scroll verticale */
+            width: min(100%, 1050px, calc((100vh - 240px) * 1.5));
+            aspect-ratio: 1050 / 700; /* Mantiene le proporzioni 1.5 perfette */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -112,9 +113,15 @@
             transition: filter 0.35s ease, transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        /* Dimensioni delle foglie esterne calcolate in percentuale sul contenitore */
+        .leaf-group:not(.pos-center) {
+            width: 34.285%;
+            height: 21.285%;
+        }
+
         .leaf-svg {
-            width: 360px;
-            height: 149px;
+            width: 100%;
+            height: 100%;
             overflow: visible;
             display: block;
         }
@@ -136,7 +143,7 @@
             transition: stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
         }
 
-        /* CONTENUTO CENTRATO ESATTAMENTE A (0,0) E CONTRO-RUOTATO */
+        /* CONTENUTO CENTRATO E CONTRO-RUOTATO */
         .leaf-content {
             pointer-events: none;
             transform-origin: 0px 0px;
@@ -171,7 +178,7 @@
             filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
         }
 
-        /* Trasformazioni specifiche per gli hover di ciascuna foglia */
+        /* Trasformazioni specifiche per gli hover */
         .pos-center:hover { transform: translate(-50%, -50%) scale(1.14); }
         .pos-12:hover     { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
         .pos-2:hover      { transform: rotate(37deg) scale(1.14); }
@@ -200,15 +207,13 @@
         }
 
         /* FOGLIA CENTRALE (DOWNLOAD) */
-        .pos-center { 
+        .pos-center {
+            width: 38.095%;
+            height: 23.571%;
             top: 50%; 
             left: 50%; 
             transform: translate(-50%, -50%); 
             z-index: 10; 
-        }
-        .pos-center .leaf-svg {
-            width: 400px;
-            height: 165px;
         }
 
         .pos-center .tikz-leaf-body {
@@ -223,13 +228,13 @@
             letter-spacing: 0.8px;
         }
 
-        /* POSIZIONAMENTO E ROTAZIONI NELLO SPAZIO */
-        .pos-12 { top: 10px; left: 50%; transform: translateX(-50%) rotate(-6deg); }
-        .pos-2  { top: 140px; right: -35px; transform: rotate(37deg); }
-        .pos-4  { bottom: 140px; right: -35px; transform: rotate(-18deg); }
-        .pos-6  { bottom: 10px; left: 50%; transform: translateX(-50%) rotate(19deg); }
-        .pos-8  { bottom: 140px; left: -35px; transform: rotate(-39deg); }
-        .pos-10 { top: 140px; left: -35px; transform: rotate(20deg); }
+        /* POSIZIONAMENTO E ROTAZIONI IN PERCENTUALE */
+        .pos-12 { top: 1.428%; left: 50%; transform: translateX(-50%) rotate(-6deg); }
+        .pos-2  { top: 20%; right: -3.333%; transform: rotate(37deg); }
+        .pos-4  { bottom: 20%; right: -3.333%; transform: rotate(-18deg); }
+        .pos-6  { bottom: 1.428%; left: 50%; transform: translateX(-50%) rotate(19deg); }
+        .pos-8  { bottom: 20%; left: -3.333%; transform: rotate(-39deg); }
+        .pos-10 { top: 20%; left: -3.333%; transform: rotate(20deg); }
 
         /* CONTENITORE DELLE PAGINE INTERNE */
         #content-view {
@@ -319,17 +324,20 @@
             float: right;
         }
 
-        /* RESPONSIVE SMARTPHONE */
+        /* RESPONSIVE SMARTPHONE (Forza la visualizzazione a colonna disabilitando i posizionamenti assoluti) */
         @media (max-width: 768px) {
             .leaf-grid {
                 width: 100%;
                 height: auto;
+                aspect-ratio: auto; /* Disattiva le proporzioni fisse su mobile */
                 flex-direction: column;
                 gap: 1.2rem;
             }
 
-            .leaf-group {
+            .leaf-group, .pos-center {
                 position: relative !important;
+                width: 310px !important;
+                height: 128px !important;
                 top: auto !important; bottom: auto !important;
                 left: auto !important; right: auto !important;
                 transform: none !important;
@@ -341,9 +349,9 @@
 
             .pos-center { order: -1; }
 
-            .leaf-svg {
-                width: 310px !important;
-                height: 128px !important;
+            /* Sovrascrive gli hover per evitare salti strani su mobile */
+            .leaf-group:hover, .pos-center:hover {
+                transform: scale(1.05) !important;
             }
 
             #back-btn {
@@ -357,7 +365,6 @@
 </head>
 <body>
 
-    <!-- DEFINIZIONE VETTORIALE MATEMATICAMENTE ESATTA DELLA FOGLIA E ICONE -->
     <svg style="display: none;">
         <defs>
             <g id="tikz-leaf-shape">
@@ -372,7 +379,6 @@
                     A 60,60 0 0,0 -55,0 Z" />
             </g>
 
-            <!-- ICONE SVG CENTRATE SULLA LORO ORIGINE (-12, -12) -->
             <g id="icon-download"><path class="leaf-icon-svg" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" transform="translate(-12, -12)"/></g>
             <g id="icon-materiali"><path class="leaf-icon-svg" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" transform="translate(-12, -12)"/></g>
             <g id="icon-commenti"><path class="leaf-icon-svg" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" transform="translate(-12, -12)"/></g>
@@ -384,7 +390,6 @@
     </svg>
 
     <header>
-        <!-- Bottone Indietro (Freccia a sinistra), nascosto all'avvio -->
         <button id="back-btn" class="hidden" onclick="goBack()" aria-label="Torna al menu principale">
             <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         </button>
@@ -394,9 +399,8 @@
     </header>
 
     <main>
-        <!-- MENU A FOGLIE -->
         <div id="menu-view" class="leaf-grid">
-            <!-- CENTRO: DOWNLOAD -->
+            
             <div class="leaf-group pos-center" onclick="openSection('download', 'Download dei Volumi')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
@@ -407,7 +411,6 @@
                 </svg>
             </div>
 
-            <!-- ORE 12: MATERIALI AGGIUNTIVI -->
             <div class="leaf-group pos-12" onclick="openSection('materiali', 'Materiali Aggiuntivi')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
@@ -421,7 +424,6 @@
                 </svg>
             </div>
 
-            <!-- ORE 2: COMMENTI DEGLI STUDENTI -->
             <div class="leaf-group pos-2" onclick="openSection('commenti', 'Commenti degli Studenti')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
@@ -435,7 +437,6 @@
                 </svg>
             </div>
 
-            <!-- ORE 4: DESCRIZIONE DEL TESTO -->
             <div class="leaf-group pos-4" onclick="openSection('descrizione', 'Descrizione del Testo')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
@@ -449,7 +450,6 @@
                 </svg>
             </div>
 
-            <!-- ORE 6: DIRITTO D'AUTORE -->
             <div class="leaf-group pos-6" onclick="openSection('diritto', 'Diritto d\'Autore e Licenza')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
@@ -463,7 +463,6 @@
                 </svg>
             </div>
 
-            <!-- ORE 8: PRESENTAZIONE AUTORE -->
             <div class="leaf-group pos-8" onclick="openSection('autore', 'Presentazione dell\'Autore')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
@@ -477,7 +476,6 @@
                 </svg>
             </div>
 
-            <!-- ORE 10: SEGNALAZIONI -->
             <div class="leaf-group pos-10" onclick="openSection('segnalazioni', 'Segnalazioni per l\'Autore')">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
@@ -492,7 +490,6 @@
             </div>
         </div>
 
-        <!-- CONTENITORE DELLE 7 SEZIONI (Nascosto all'avvio) -->
         <div id="content-view" class="hidden">
             
             <div id="section-download" class="section-content hidden">
@@ -533,14 +530,12 @@
         </div>
     </main>
 
-    <!-- FOOTER LICENZA -->
     <footer>
         <p>© 2026 Matematica alla Radice. Contenuti distribuiti con licenza 
             <button onclick="toggleLicenseModal(true)">CC BY-NC-ND 4.0</button>.
         </p>
     </footer>
 
-    <!-- MODALE LICENZA -->
     <div id="licenseModal" class="modal-overlay" onclick="if(event.target === this) toggleLicenseModal(false)">
         <div class="modal-card">
             <h2>Licenza CC BY-NC-ND 4.0</h2>
@@ -558,52 +553,32 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGICA E TRANSIZIONI -->
     <script>
-        // Logica per mostrare/nascondere la modale della licenza
         function toggleLicenseModal(show) {
             document.getElementById('licenseModal').style.display = show ? 'flex' : 'none';
         }
 
-        // Memoria del sottotitolo originale
         const originalSubtitle = "Una collana di libri di testo di matematica per i licei scientifici";
 
-        // Funzione per aprire una specifica sezione
         function openSection(sectionId, title) {
-            // 1. Nasconde la griglia delle foglie
             document.getElementById('menu-view').classList.add('hidden');
-            
-            // 2. Mostra il contenitore delle pagine e la freccia indietro
             document.getElementById('content-view').classList.remove('hidden');
             document.getElementById('back-btn').classList.remove('hidden');
-            
-            // 3. Sostituisce il sottotitolo dell'header
             document.getElementById('main-subtitle').innerHTML = title;
             
-            // 4. Nasconde tutte le sezioni interne...
             document.querySelectorAll('.section-content').forEach(sec => {
                 sec.classList.add('hidden');
             });
-            // ...e mostra solo quella selezionata
             document.getElementById('section-' + sectionId).classList.remove('hidden');
 
-            // 5. Riallinea in alto il contenitore nel caso di testi molto lunghi
             document.querySelector('main').style.alignItems = 'flex-start';
         }
 
-        // Funzione per tornare alla home (menu a foglie)
         function goBack() {
-            // 1. Ripristina la griglia delle foglie
             document.getElementById('menu-view').classList.remove('hidden');
-            
-            // 2. Nasconde il contenuto e la freccia indietro
             document.getElementById('content-view').classList.add('hidden');
             document.getElementById('back-btn').classList.add('hidden');
-            
-            // 3. Ripristina il sottotitolo originale
             document.getElementById('main-subtitle').innerHTML = originalSubtitle;
-
-            // 4. Ri-centra verticalmente la griglia a foglie
             document.querySelector('main').style.alignItems = 'center';
         }
     </script>
