@@ -1149,46 +1149,94 @@
         }
 
         // Funzione per verificare l'esistenza dei PDF e costruire i rettangoli
+        // Funzione per verificare l'esistenza dei PDF e recuperare i contatori di download reali
         async function checkDownloadsAvailability() {
+            // Scegli un nome univoco per il tuo namespace (es. il nome del tuo sito o repo)
+            const namespace = "matematica-alla-radice";
+        
             for (let i = 1; i <= 5; i++) {
                 const card = document.getElementById(`download-vol-${i}`);
                 const fileName = `Matematica_alla_Radice-${i}.pdf`;
                 const filePath = `./assets/Libri/${fileName}`;
+                const counterKey = `vol-${i}`;
         
                 try {
-                    // Usa 'HEAD' per leggere le info del file senza scaricarlo interamente
+                    // 1. Verifica se il file esiste sul server
                     const response = await fetch(filePath, { method: 'HEAD', cache: 'no-cache' });
                     
                     if (response.ok) {
-                        // IL FILE ESISTE: Estrai la data di modifica dal server
+                        // Estrai la data di modifica del file
                         const lastModified = response.headers.get('Last-Modified');
                         let dateStr = "Data non disponibile";
                         if (lastModified) {
-                            const dateObj = new Date(lastModified);
-                            // Formatta la data in stile italiano (es: 14/08/2026)
-                            dateStr = dateObj.toLocaleDateString('it-IT');
+                            dateStr = new Date(lastModified).toLocaleDateString('it-IT');
+                        }
+        
+                        // 2. Recupera il numero attuale di download dal contatore esterno (senza incrementarlo)
+                        let downloadCount = 0;
+                        try {
+                            const countRes = await fetch(`https://api.counterapi.dev/v1/${namespace}/${counterKey}/`);
+                            if (countRes.ok) {
+                                const countData = await countRes.json();
+                                downloadCount = countData.count;
+                            }
+                        } catch (e) {
+                            console.log("Impossibile leggere il contatore iniziale, uso 0.");
                         }
         
                         // Costruisci il layout del rettangolo "Disponibile"
                         card.className = "download-card available";
-                        card.removeAttribute('title'); // Rimuove tooltip (se presente)
+                        card.removeAttribute('title');
                         card.innerHTML = `
                             <div class="dl-details">
                                 <span class="dl-title">Volume ${i}</span>
-                                <span class="dl-meta">Aggiornato il: ${dateStr} | Download: 0</span>
+                                <span class="dl-meta" id="meta-vol-${i}">Aggiornato il: ${dateStr} | Download: <span id="count-vol-${i}">${downloadCount}</span></span>
                             </div>
-                            <a href="${filePath}" download class="dl-btn">Scarica Volume</a>
+                            <a href="${filePath}" download class="dl-btn" onclick="incrementDownload('${namespace}', '${counterKey}', ${i})">Scarica Volume</a>
                         `;
                     } else {
-                        // IL FILE MANCA (Errore 404)
                         setMissingLayout(card, i);
                     }
                 } catch (error) {
-                    // IL FILE MANCA (Errore di rete o percorso inesistente)
                     setMissingLayout(card, i);
                 }
             }
         }
+        
+        // Funzione che incrementa il contatore sul server quando l'utente clicca su "Scarica"
+        async function incrementDownload(namespace, key, volNum) {
+            try {
+                // Chiama l'API per incrementare di 1 il valore
+                const res = await fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`);
+                if (res.ok) {
+                    const data = await res.json();
+                    // Aggiorna subito il numero a schermo senza ricaricare la pagina
+                    const counterSpan = document.getElementById(`count-vol-${volNum}`);
+                    if (counterSpan) {
+                        counterSpan.textContent = data.count;
+                    }
+                }
+            } catch (e) {
+                console.error("Errore durante l'aggiornamento del contatore di download:", e);
+            }
+        }
+        
+        // Funzione di supporto per creare il layout del file mancante
+        function setMissingLayout(card, volNumber) {
+            card.className = "download-card missing";
+            card.setAttribute('title', 'Questo libro non è ancora stato caricato');
+            card.innerHTML = `
+                <div class="dl-details">
+                    <span class="dl-title" style="color: #ffd700;">Volume ${volNumber} <span class="dl-missing-text">(file mancante)</span></span>
+                </div>
+                <a href="javascript:void(0)" class="dl-btn disabled">Non disponibile</a>
+            `;
+        }
+        
+        // Lancia il controllo in background non appena la pagina web si è caricata
+        window.addEventListener('DOMContentLoaded', () => {
+            checkDownloadsAvailability();
+        });
         
         // Funzione di supporto per creare il layout del file mancante
         function setMissingLayout(card, volNumber) {
