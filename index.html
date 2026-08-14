@@ -192,12 +192,12 @@
         }
 
         .pos-center:hover { transform: translate(-50%, -50%) scale(1.14); }
-        .pos-12:hover       { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
-        .pos-2:hover        { transform: rotate(37deg) scale(1.14); }
-        .pos-4:hover        { transform: rotate(-18deg) scale(1.14); }
-        .pos-6:hover        { transform: translateX(-50%) rotate(19deg) scale(1.14); }
-        .pos-8:hover        { transform: rotate(-39deg) scale(1.14); }
-        .pos-10:hover       { transform: rotate(20deg) scale(1.14); }
+        .pos-12:hover        { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
+        .pos-2:hover         { transform: rotate(37deg) scale(1.14); }
+        .pos-4:hover         { transform: rotate(-18deg) scale(1.14); }
+        .pos-6:hover         { transform: translateX(-50%) rotate(19deg) scale(1.14); }
+        .pos-8:hover         { transform: rotate(-39deg) scale(1.14); }
+        .pos-10:hover        { transform: rotate(20deg) scale(1.14); }
 
         .leaf-group:hover .tikz-leaf-body {
             fill: rgba(255, 255, 255, 0.22);
@@ -293,6 +293,36 @@
         .section-content a {
             color: #FFD700;
             text-decoration: underline;
+        }
+
+        /* STILI SPECIFICI PER GISCUS E COMMENTI */
+        .giscus-container {
+            margin-top: 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .giscus-guide {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid #FFD700;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.93rem;
+            color: #ffffff;
+        }
+
+        .giscus-guide h3 {
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .giscus-guide ul {
+            margin-left: 1.2rem;
+            margin-bottom: 0;
         }
 
         /* STILI SPECIFICI PER LA PRESENTAZIONE DELL'AUTORE */
@@ -505,8 +535,7 @@
                 </svg>
             </div>
 
-            <!-- FOGLIA AGGIORNATA: Commenti e recensioni -->
-            <div class="leaf-group pos-2" onclick="openSection('commenti', 'Commenti e recensioni')" data-tooltip="Pareri, recensioni e feedback">
+            <div class="leaf-group pos-2" onclick="openSection('commenti', 'Commenti e Recensioni')" data-tooltip="Pareri, recensioni e feedback">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -532,7 +561,6 @@
                 </svg>
             </div>
 
-            <!-- FOGLIA AGGIORNATA: Diritto d'autore con nuovo tooltip -->
             <div class="leaf-group pos-6" onclick="openSection('diritto', 'Diritto d\'Autore e Licenza')" data-tooltip="Licenze, note legali e condivisione">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
@@ -585,10 +613,38 @@
                 <p>Esercizi integrativi, schede di approfondimento e collegamenti tra matematica e fisica.</p>
             </div>
             
-            <!-- SEZIONE AGGIORNATA: Commenti e recensioni -->
+            <!-- SEZIONE COMMENTI E RECENSIONI CON GISCUS -->
             <div id="section-commenti" class="section-content hidden">
-                <h2>Commenti e recensioni</h2>
-                <p>Raccoglieremo qui i pareri, le recensioni e i feedback di chi sta studiando o insegnando su questa collana.</p>
+                <h2>Commenti e Recensioni</h2>
+                <p>In questa sezione puoi leggere i commenti della community, lasciare una tua recensione o scambiare pareri sulla collana.</p>
+
+                <div class="giscus-guide">
+                    <h3>💡 Come lasciare un commento:</h3>
+                    <ul>
+                        <li>I commenti sono alimentati da <strong>GitHub Discussions</strong>: per commentare o lasciare reazioni occorre accedere con un account GitHub gratuito.</li>
+                        <li><strong>Indica il tuo ruolo:</strong> Per aiutare gli altri lettori, inserisci all'inizio del tuo commento l'etichetta del tuo ruolo: <code>[Docente]</code>, <code>[Studente]</code> oppure <code>[Altro]</code>.</li>
+                        <li>Puoi reagire ai commenti altrui (👍, ❤️, ecc.) o modificare i tuoi interventi in qualsiasi momento.</li>
+                    </ul>
+                </div>
+
+                <!-- CONTENITORE WIDGET GISCUS -->
+                <div class="giscus-container">
+                    <script src="https://giscus.app/client.js"
+                            data-repo="matematica-alla-radice/matematica-alla-radice.github.io"
+                            data-repo-id="R_kgDOT3Y1IA"
+                            data-category="Announcements"
+                            data-category-id="DIC_kwDOT3Y1IM4DDXiA"
+                            data-mapping="pathname"
+                            data-strict="0"
+                            data-reactions-enabled="1"
+                            data-emit-metadata="0"
+                            data-input-position="top"
+                            data-theme="light"
+                            data-lang="it"
+                            crossorigin="anonymous"
+                            async>
+                    </script>
+                </div>
             </div>
             
             <div id="section-descrizione" class="section-content hidden">
@@ -596,7 +652,7 @@
                 <p>La collana <em>Matematica alla Radice</em> nasce dall'esigenza di affiancare ai manuali tradizionali dei volumi di accompagnamento, più in linea con lo stile didattico dell'autore.</p>
                 <p>Questi libri non sono dunque pensati per <em>sostituire</em> i testi classici, bensì per supportarli. Per scelta editoriale non contengono esercizi: si presuppone infatti che gli studenti facciano riferimento al libro tradizionale come principale fonte per la pratica e la risoluzione dei problemi.</p>
                 <p>I volumi affrontano i contenuti canonici del percorso di matematica per il liceo scientifico, riorganizzati secondo l'impostazione didattica sviluppata dall'autore nelle sue classi. L'approccio privilegia l'intuizione e la comprensione intuitiva dei concetti prima di introdurre il rigore formale.</p>
-                <p>Il testo presenta inoltre continui riferimenti alla fisica, così da mantenere vivo il dialogo tra le due discipline, oltre a occasionali e stimolanti collegamenti con le scienze naturali e dell'informatica.</p>
+                <p>Il testo presenta inoltre continui riferimenti alla fisica, così da mantenere vivo il dialogo tra le due discipline, oltre a occasionali e stimolanti collegamenti con las scienze naturali e dell'informatica.</p>
             </div>
             
             <div id="section-diritto" class="section-content hidden">
@@ -636,8 +692,17 @@
             </div>
             
             <div id="section-segnalazioni" class="section-content hidden">
-                <h2>Segnalazioni</h2>
-                <p>Modulo per contattare l'autore, segnalare refusi, errori o suggerire miglioramenti per le prossime edizioni.</p>
+                <h2>Segnalazioni e Suggerimenti</h2>
+                <p>Hai trovato un refuso, un errore di stampa o desideri proporre un miglioramento per i prossimi aggiornamenti?</p>
+                <p>La gestione delle segnalazioni è aperta e tracciata tramite la piattaforma <strong>GitHub Issues</strong>. Cliccando sul pulsante sottostante potrai aprire direttamente una nuova segnalazione (ti servirà un account GitHub gratuito).</p>
+                
+                <div style="margin: 2rem 0; text-align: center;">
+                    <a href="https://github.com/matematica-alla-radice/matematica-alla-radice.github.io/issues/new" target="_blank" rel="noopener" style="display: inline-block; background: #FFD700; color: #193822; padding: 14px 28px; border-radius: 10px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s ease, filter 0.2s ease;">
+                        Apri una Segnalazione su GitHub
+                    </a>
+                </div>
+
+                <p style="font-size: 0.9rem; opacity: 0.85; text-align: center;">In alternativa, puoi sempre contattare direttamente l'autore via email all'indirizzo <a href="mailto:matematica.alla.radice@gmail.com">matematica.alla.radice@gmail.com</a>.</p>
             </div>
 
         </div>
