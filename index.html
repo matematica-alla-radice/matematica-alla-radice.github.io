@@ -94,12 +94,11 @@
             min-height: 50vh;
         }
 
-        /* GRIGLIA FOGLIE: ORA TOTALMENTE RESPONSIVA (Si adatta all'altezza e alla larghezza dello schermo) */
+        /* GRIGLIA FOGLIE */
         .leaf-grid {
             position: relative;
-            /* Seleziona la larghezza minore tra: il 100% dello schermo, 1050px, oppure una larghezza calcolata sull'altezza disponibile per non generare scroll verticale */
             width: min(100%, 1050px, calc((100vh - 240px) * 1.5));
-            aspect-ratio: 1050 / 700; /* Mantiene le proporzioni 1.5 perfette */
+            aspect-ratio: 1050 / 700;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -113,7 +112,6 @@
             transition: filter 0.35s ease, transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Dimensioni delle foglie esterne calcolate in percentuale sul contenitore */
         .leaf-group:not(.pos-center) {
             width: 34.285%;
             height: 21.285%;
@@ -150,7 +148,6 @@
             transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Contro-rotazioni per mantenere il testo sempre orizzontale */
         .pos-12 .leaf-content { transform: rotate(6deg); }
         .pos-2  .leaf-content { transform: rotate(-37deg); }
         .pos-4  .leaf-content { transform: rotate(18deg); }
@@ -178,7 +175,6 @@
             filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
         }
 
-        /* Trasformazioni specifiche per gli hover */
         .pos-center:hover { transform: translate(-50%, -50%) scale(1.14); }
         .pos-12:hover     { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
         .pos-2:hover      { transform: rotate(37deg) scale(1.14); }
@@ -233,6 +229,7 @@
         .pos-2  { top: 20%; right: -3.333%; transform: rotate(37deg); }
         .pos-4  { bottom: 20%; right: -3.333%; transform: rotate(-18deg); }
         .pos-6  { bottom: 1.428%; left: 50%; transform: translateX(-50%) rotate(19deg); }
+        .pos-8  { bottom: 140px; left: -35px; } /* Valori normalizzati sotto in % */
         .pos-8  { bottom: 20%; left: -3.333%; transform: rotate(-39deg); }
         .pos-10 { top: 20%; left: -3.333%; transform: rotate(20deg); }
 
@@ -241,25 +238,44 @@
             width: 100%;
             max-width: 850px;
             color: #ffffff;
-            background: rgba(25, 56, 34, 0.6);
+            background: rgba(25, 56, 34, 0.75);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 16px;
             padding: 2.5rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             animation: fadeIn 0.4s ease forwards;
+            text-align: left;
         }
 
         .section-content h2 {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             color: #FFD700;
             border-bottom: 1px solid rgba(255,215,0,0.3);
             padding-bottom: 0.5rem;
+            font-size: 1.6rem;
         }
 
         .section-content p {
             line-height: 1.6;
             margin-bottom: 1rem;
+            color: #e2f1e7;
+        }
+
+        .section-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            color: #e2f1e7;
+        }
+
+        .section-content li {
+            margin-bottom: 0.6rem;
+        }
+
+        .section-content a {
+            color: #FFD700;
+            text-decoration: underline;
         }
 
         @keyframes fadeIn {
@@ -306,6 +322,7 @@
             width: 100%;
             color: #ffffff;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            text-align: left;
         }
 
         .modal-card h2 { margin-bottom: 1rem; font-size: 1.5rem; color: #FFD700; border-bottom: none;}
@@ -324,12 +341,12 @@
             float: right;
         }
 
-        /* RESPONSIVE SMARTPHONE (Forza la visualizzazione a colonna disabilitando i posizionamenti assoluti) */
+        /* RESPONSIVE SMARTPHONE */
         @media (max-width: 768px) {
             .leaf-grid {
                 width: 100%;
                 height: auto;
-                aspect-ratio: auto; /* Disattiva le proporzioni fisse su mobile */
+                aspect-ratio: auto;
                 flex-direction: column;
                 gap: 1.2rem;
             }
@@ -349,7 +366,6 @@
 
             .pos-center { order: -1; }
 
-            /* Sovrascrive gli hover per evitare salti strani su mobile */
             .leaf-group:hover, .pos-center:hover {
                 transform: scale(1.05) !important;
             }
@@ -512,9 +528,24 @@
                 <p>Metodologia didattica, indice degli argomenti e struttura dei volumi pensati dal prof. Miceli.</p>
             </div>
             
+            <!-- SEZIONE DIRITTO D'AUTORE AGGIORNATA -->
             <div id="section-diritto" class="section-content hidden">
-                <h2>Diritto d'autore</h2>
-                <p>Dettagli estesi sulla licenza CC BY-NC-ND 4.0 e sulle regole di distribuzione dell'opera.</p>
+                <h2>Licenza d'uso e note legali</h2>
+                <p>Quest'opera è distribuita con licenza <em>Creative Commons Attribuzione - Non commerciale - Non opere derivate 4.0 Internazionale</em> (CC BY-NC-ND 4.0).</p>
+                
+                <p>Ciò significa che sei libero di:</p>
+                <ul>
+                    <li><strong>Condividere</strong>: riprodurre e ridistribuire il materiale in qualsiasi formato o supporto, a condizione di rispettare i termini della licenza.</li>
+                </ul>
+                
+                <p>Alle seguenti condizioni:</p>
+                <ul>
+                    <li><strong>Attribuzione</strong>: devi riconoscere una menzione di paternità adeguata, fornire un link alla licenza e indicare se sono state effettuate delle modifiche. Non puoi farlo in modo tale da suggerire che l'autore approvi te o il tuo utilizzo del materiale.</li>
+                    <li><strong>Non commerciale</strong>: non è consentito utilizzare il materiale per scopi commerciali. La vendita di questo volume, in tutto o in parte, è severamente vietata.</li>
+                    <li><strong>Non opere derivate</strong>: se remixi, trasformi o ti basi sul materiale, non puoi distribuire il materiale modificato. È fatto divieto di alterare, modificare o distorcere i contenuti senza esplicita autorizzazione scritta dell'autore.</li>
+                </ul>
+                
+                <p>Qualsiasi utilizzo del presente volume che non rispetti le condizioni sopra elencate costituisce violazione del diritto d'autore. Per autorizzazioni specifiche, usi didattici particolari o richieste di modifica, si prega di contattare direttamente l'autore all'indirizzo mail <a href="mailto:matematica.alla.radice@gmail.com">matematica.alla.radice@gmail.com</a>.</p>
             </div>
             
             <div id="section-autore" class="section-content hidden">
