@@ -495,7 +495,7 @@
         
         .report-section h2, 
         .report-section h3 {
-            color: #165b26; /* Titoli in verde scuro coerenti con il tema */
+            color: #165b26;
         }
         
         .email-box {
@@ -536,6 +536,89 @@
           color: #2e6b2e;
         }
 
+        
+        /* Stili per la sezione Download */
+        .download-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .download-card.loading {
+            justify-content: center;
+            border-left: 5px solid #ffcc00;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .download-card.available {
+            border-left: 5px solid #2e5a39;
+        }
+        
+        .download-card.available:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .download-card.missing {
+            border-left: 5px solid #cccccc;
+            cursor: help;
+        }
+        
+        .dl-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dl-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1a2e22;
+        }
+        
+        .dl-meta {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 0.4rem;
+        }
+        
+        .dl-missing-text {
+            font-size: 1rem;
+            font-weight: normal;
+            color: #999;
+            font-style: italic;
+            margin-left: 0.5rem;
+        }
+        
+        .dl-btn {
+            background-color: #2e5a39;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+            text-align: center;
+        }
+        
+        .dl-btn:hover {
+            background-color: #1a3822;
+            color: white;
+        }
+        
+        .dl-btn.disabled {
+            background-color: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
         /* Stili per la sezione Materiali Aggiuntivi */
         .volumes-list {
             display: flex;
@@ -545,7 +628,7 @@
         }
         
         .volume-btn {
-            background-color: #2e5a39; /* Verde in tema col sito */
+            background-color: #2e5a39;
             color: white;
             border: none;
             padding: 15px 20px;
@@ -559,7 +642,7 @@
         }
         
         .volume-btn:hover {
-            background-color: #1a3822; /* Verde più scuro al passaggio del mouse */
+            background-color: #1a3822;
             transform: translateY(-2px);
         }
         
@@ -574,7 +657,7 @@
             display: flex;
             align-items: center;
             background-color: #ffffff;
-            border-left: 5px solid #6666cc; /* Viola tipico di GeoGebra */
+            border-left: 5px solid #6666cc;
             padding: 1rem 1.5rem;
             border-radius: 6px;
             text-decoration: none;
@@ -614,7 +697,7 @@
             height: 36px;
             margin-right: 1rem;
             flex-shrink: 0;
-            object-fit: contain; /* Mantiene le proporzioni corrette del logo */
+            object-fit: contain;
         }
     </style>
 </head>
@@ -750,9 +833,19 @@
 
         <div id="content-view" class="hidden">
             
+            <!-- Sezione Download -->
             <div id="section-download" class="section-content hidden">
-                <h2>Sezione Download</h2>
-                <p>In questa area saranno disponibili i PDF completi dei volumi per il biennio e il triennio.</p>
+                <h2>Download Volumi</h2>
+                <p>Scarica i volumi in formato PDF. I file vengono aggiornati costantemente con le ultime revisioni.</p>
+
+                <div class="volumes-list" id="download-list">
+                    <!-- I 5 rettangoli verranno inizializzati e popolati dal JavaScript -->
+                    <div id="download-vol-1" class="download-card loading"><p>Verifica disponibilità Volume 1...</p></div>
+                    <div id="download-vol-2" class="download-card loading"><p>Verifica disponibilità Volume 2...</p></div>
+                    <div id="download-vol-3" class="download-card loading"><p>Verifica disponibilità Volume 3...</p></div>
+                    <div id="download-vol-4" class="download-card loading"><p>Verifica disponibilità Volume 4...</p></div>
+                    <div id="download-vol-5" class="download-card loading"><p>Verifica disponibilità Volume 5...</p></div>
+                </div>
             </div>
             
             <div id="section-materiali" class="section-content hidden">
@@ -1054,6 +1147,65 @@
             // Riporta la visuale all'inizio della scheda
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Funzione per verificare l'esistenza dei PDF e costruire i rettangoli
+        async function checkDownloadsAvailability() {
+            for (let i = 1; i <= 5; i++) {
+                const card = document.getElementById(`download-vol-${i}`);
+                const fileName = `Matematica_alla_Radice-${i}.pdf`;
+                const filePath = `./assets/Libri/${fileName}`;
+        
+                try {
+                    // Usa 'HEAD' per leggere le info del file senza scaricarlo interamente
+                    const response = await fetch(filePath, { method: 'HEAD', cache: 'no-cache' });
+                    
+                    if (response.ok) {
+                        // IL FILE ESISTE: Estrai la data di modifica dal server
+                        const lastModified = response.headers.get('Last-Modified');
+                        let dateStr = "Data non disponibile";
+                        if (lastModified) {
+                            const dateObj = new Date(lastModified);
+                            // Formatta la data in stile italiano (es: 14/08/2026)
+                            dateStr = dateObj.toLocaleDateString('it-IT');
+                        }
+        
+                        // Costruisci il layout del rettangolo "Disponibile"
+                        card.className = "download-card available";
+                        card.removeAttribute('title'); // Rimuove tooltip (se presente)
+                        card.innerHTML = `
+                            <div class="dl-details">
+                                <span class="dl-title">Volume ${i}</span>
+                                <span class="dl-meta">Aggiornato il: ${dateStr} | Download: N/D</span>
+                            </div>
+                            <a href="${filePath}" download class="dl-btn">Scarica Volume</a>
+                        `;
+                    } else {
+                        // IL FILE MANCA (Errore 404)
+                        setMissingLayout(card, i);
+                    }
+                } catch (error) {
+                    // IL FILE MANCA (Errore di rete o percorso inesistente)
+                    setMissingLayout(card, i);
+                }
+            }
+        }
+        
+        // Funzione di supporto per creare il layout del file mancante
+        function setMissingLayout(card, volNumber) {
+            card.className = "download-card missing";
+            card.setAttribute('title', 'Questo libro non è ancora stato caricato');
+            card.innerHTML = `
+                <div class="dl-details">
+                    <span class="dl-title" style="color: #888;">Volume ${volNumber} <span class="dl-missing-text">(file mancante)</span></span>
+                </div>
+                <a href="javascript:void(0)" class="dl-btn disabled">Non disponibile</a>
+            `;
+        }
+        
+        // Lancia il controllo in background non appena la pagina web si è caricata
+        window.addEventListener('DOMContentLoaded', () => {
+            checkDownloadsAvailability();
+        });
     </script>
 </body>
 </html>
