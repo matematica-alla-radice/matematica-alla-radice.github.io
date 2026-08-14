@@ -229,7 +229,6 @@
         .pos-2  { top: 20%; right: -3.333%; transform: rotate(37deg); }
         .pos-4  { bottom: 20%; right: -3.333%; transform: rotate(-18deg); }
         .pos-6  { bottom: 1.428%; left: 50%; transform: translateX(-50%) rotate(19deg); }
-        .pos-8  { bottom: 140px; left: -35px; } /* Valori normalizzati sotto in % */
         .pos-8  { bottom: 20%; left: -3.333%; transform: rotate(-39deg); }
         .pos-10 { top: 20%; left: -3.333%; transform: rotate(20deg); }
 
@@ -246,6 +245,8 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             animation: fadeIn 0.4s ease forwards;
             text-align: left;
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         .section-content h2 {
@@ -276,6 +277,41 @@
         .section-content a {
             color: #FFD700;
             text-decoration: underline;
+        }
+
+        /* STILI SPECIFICI PER LA PRESENTAZIONE DELL'AUTORE */
+        .author-container {
+            display: flex;
+            gap: 1.8rem;
+            align-items: flex-start;
+        }
+
+        .author-photo-placeholder {
+            flex-shrink: 0;
+            width: 160px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 215, 0, 0.5);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFD700;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .author-photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-bio {
+            flex-grow: 1;
         }
 
         @keyframes fadeIn {
@@ -375,6 +411,16 @@
                 left: 1rem;
                 width: 35px;
                 height: 35px;
+            }
+
+            .author-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: left;
+            }
+
+            .author-photo-placeholder {
+                margin: 0 auto 1rem auto;
             }
         }
     </style>
@@ -528,7 +574,6 @@
                 <p>Metodologia didattica, indice degli argomenti e struttura dei volumi pensati dal prof. Miceli.</p>
             </div>
             
-            <!-- SEZIONE DIRITTO D'AUTORE AGGIORNATA -->
             <div id="section-diritto" class="section-content hidden">
                 <h2>Licenza d'uso e note legali</h2>
                 <p>Quest'opera è distribuita con licenza <em>Creative Commons Attribuzione - Non commerciale - Non opere derivate 4.0 Internazionale</em> (CC BY-NC-ND 4.0).</p>
@@ -548,9 +593,22 @@
                 <p>Qualsiasi utilizzo del presente volume che non rispetti le condizioni sopra elencate costituisce violazione del diritto d'autore. Per autorizzazioni specifiche, usi didattici particolari o richieste di modifica, si prega di contattare direttamente l'autore all'indirizzo mail <a href="mailto:matematica.alla.radice@gmail.com">matematica.alla.radice@gmail.com</a>.</p>
             </div>
             
+            <!-- SEZIONE PRESENTAZIONE DELL'AUTORE -->
             <div id="section-autore" class="section-content hidden">
                 <h2>Presentazione dell'autore</h2>
-                <p>Note biografiche e visione pedagogica del prof. Federico Miceli, docente presso il Liceo Scientifico F. Vercelli di Asti.</p>
+                <div class="author-container">
+                    <div class="author-photo-placeholder">
+                        <img src="assets/Author/Author_Picture.jpeg" alt="Federico Miceli">
+                    </div>
+                    <div class="author-bio">
+                        <p>Mi chiamo <strong>Federico Miceli</strong>. Sono un professore di Matematica e Fisica del Liceo Scientifico F. Vercelli di Asti. Questa è la mia storia.</p>
+                        <p>Sono nato ad Asti, dove ho vissuto per la maggior parte della mia vita. La mia adolescenza si è retta su due pilastri per me fondamentali: il basket, a cui ho giocato per 9 anni (dall'ultimo anno di elementari all'ultimo di liceo) e la matematica, che è sempre stata per me una grande passione.</p>
+                        <p>Dopo essermi diplomato nel 2014 al liceo scientifico dove ora insegno, mi sono iscritto alla facoltà di matematica di Udine, dove ho conseguito la laurea triennale all'interno della Scuola d'Eccellenza Toppo Wassermann. Successivamente, nell'estate del 2017, mi sono iscritto alla facoltà di matematica dell'Università di Bonn, in Germania, dove a febbraio del 2020 ho conseguito la laurea magistrale. Durante i miei studi ho anche collaborato con il gruppo di ricerca di Matematica Discreta di Bonn in un progetto di implementazione software di algoritmi per l'ottimizzazione di microchip.</p>
+                        <p>Successivamente, a partire dall'anno scolastico 2020-2021 ho iniziato la mia carriera da docente. Al mio primo anno di insegnamento ho prestato servizio all'itis Artom di Asti, con una cattedra di potenziamento in matematica. Successivamente, nell'estate del 2021, ho superato un concorso di immissione in ruolo sulla classe Matematica e Fisica, e ho preso servizio presso il Liceo Scientifico C. Cattaneo di Torino, dove ho insegnato per tre anni scolastici. Infine, nell'estate del 2024, ho ottenuto il trasferimento al Liceo Scientifico F. Vercelli di Asti, dove insegno tuttora.</p>
+                        <p>Da studente di liceo avevo partecipato al progetto Olimpiadi di Matematica, conquistando anche una medaglia d'oro alle gare nazionali di Cesenatico nel 2014. Da insegnante mi sono sempre occupato del progetto Olimpiadi di Matematica.</p>
+                        <p>Inoltre, dopo il mio ingresso in ruolo, ho sempre insegnato anche in classi aderenti al progetto Liceo Matematico, di cui sono uno dei referenti d'istituto al Liceo Scientifico F. Vercelli.</p>
+                    </div>
+                </div>
             </div>
             
             <div id="section-segnalazioni" class="section-content hidden">
