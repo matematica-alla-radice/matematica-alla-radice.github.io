@@ -24,6 +24,19 @@
             background-attachment: fixed;
             overflow-x: hidden;
         }
+        
+        .feedback-cta {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            max-width: 600px;
+            font-size: 0.95rem;
+            color: #ffffff;
+            font-style: italic;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
 
         /* CLASSE DI SUPPORTO PER NASCONDERE ELEMENTI */
         .hidden {
@@ -737,6 +750,11 @@
 
         <h1>Matematica alla Radice</h1>
         <p id="main-subtitle">Una collana di libri di testo di matematica per i licei scientifici</p>
+        <p class="feedback-cta">
+            Hai utilizzato il libro? Sarei felice di conoscere la tua esperienza. 
+            Se ti va, inviami un'opinione personale all'indirizzo 
+            <a href="mailto:matematica.alla.radice@gmail.com" style="color: #ffd700; font-weight: bold;">matematica.alla.radice@gmail.com</a>.
+        </p>
     </header>
 
     <main>
@@ -1151,48 +1169,30 @@
         // Funzione per verificare l'esistenza dei PDF e costruire i rettangoli
         // Funzione per verificare l'esistenza dei PDF e recuperare i contatori di download reali
         async function checkDownloadsAvailability() {
-            // Scegli un nome univoco per il tuo namespace (es. il nome del tuo sito o repo)
-            const namespace = "matematica-alla-radice";
-        
             for (let i = 1; i <= 5; i++) {
                 const card = document.getElementById(`download-vol-${i}`);
                 const fileName = `Matematica_alla_Radice-${i}.pdf`;
                 const filePath = `./assets/Libri/${fileName}`;
-                const counterKey = `vol-${i}`;
         
                 try {
-                    // 1. Verifica se il file esiste sul server
                     const response = await fetch(filePath, { method: 'HEAD', cache: 'no-cache' });
                     
                     if (response.ok) {
-                        // Estrai la data di modifica del file
                         const lastModified = response.headers.get('Last-Modified');
                         let dateStr = "Data non disponibile";
                         if (lastModified) {
                             dateStr = new Date(lastModified).toLocaleDateString('it-IT');
                         }
         
-                        // 2. Recupera il numero attuale di download dal contatore esterno (senza incrementarlo)
-                        let downloadCount = 0;
-                        try {
-                            const countRes = await fetch(`https://api.counterapi.dev/v1/${namespace}/${counterKey}/`);
-                            if (countRes.ok) {
-                                const countData = await countRes.json();
-                                downloadCount = countData.count;
-                            }
-                        } catch (e) {
-                            console.log("Impossibile leggere il contatore iniziale, uso 0.");
-                        }
-        
-                        // Costruisci il layout del rettangolo "Disponibile"
+                        // Layout pulito senza contatore
                         card.className = "download-card available";
                         card.removeAttribute('title');
                         card.innerHTML = `
                             <div class="dl-details">
                                 <span class="dl-title">Volume ${i}</span>
-                                <span class="dl-meta" id="meta-vol-${i}">Aggiornato il: ${dateStr} | Download: <span id="count-vol-${i}">${downloadCount}</span></span>
+                                <span class="dl-meta">Ultimo aggiornamento: ${dateStr}</span>
                             </div>
-                            <a href="${filePath}" download class="dl-btn" onclick="incrementDownload('${namespace}', '${counterKey}', ${i})">Scarica Volume</a>
+                            <a href="${filePath}" download class="dl-btn">Scarica Volume</a>
                         `;
                     } else {
                         setMissingLayout(card, i);
