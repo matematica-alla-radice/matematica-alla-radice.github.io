@@ -439,6 +439,16 @@
                 margin: 0 auto 1rem auto;
             }
         }
+
+        /* STILE PER COMMENTI DELL'UTENTE */
+        .comment-form { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; background: rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .comment-form input, .comment-form textarea { padding: 0.8rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3); width: 100%; background: #193822; color: #fff; font-family: inherit; }
+        .comment-form input:focus, .comment-form textarea:focus { outline: none; border-color: #FFD700; }
+        .comment-form button { background: #FFD700; color: #193822; border: none; padding: 0.8rem; cursor: pointer; font-weight: bold; border-radius: 6px; transition: background 0.2s; }
+        .comment-form button:hover { background: #e6c200; }
+        .comment-item { background: rgba(255,255,255,0.08); padding: 1rem; margin-bottom: 1rem; border-radius: 8px; border-left: 3px solid #FFD700; }
+        .comment-item strong { color: #FFD700; font-size: 1rem; }
+        .comment-item p { margin-top: 0.4rem; margin-bottom: 0; color: #f0f0f0; word-break: break-word; }
     </style>
 </head>
 <body>
@@ -588,7 +598,14 @@
             <!-- SEZIONE AGGIORNATA: Commenti e recensioni -->
             <div id="section-commenti" class="section-content hidden">
                 <h2>Commenti e recensioni</h2>
-                <p>Raccoglieremo qui i pareri, le recensioni e i feedback di chi sta studiando o insegnando su questa collana.</p>
+                <form id="comment-form" class="comment-form">
+                    <input type="text" id="user-name" placeholder="Il tuo nome" required>
+                    <textarea id="user-message" rows="3" placeholder="Scrivi qui il tuo commento o la tua recensione..." required></textarea>
+                    <button type="submit">Invia Commento</button>
+                </form>
+                <div id="comments-list">
+                    <p>Caricamento commenti in corso...</p>
+                </div>
             </div>
             
             <div id="section-descrizione" class="section-content hidden">
@@ -719,6 +736,78 @@
                 tooltip.classList.add('hidden');
             });
         });
+    </script>
+
+    <!-- Script per i commenti degli utenti -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMC0sI1te9ESannsn7m1yw_CPYrBFZ51s",
+            authDomain: "matematica-alla-radice-pareri.firebaseapp.com",
+            projectId: "matematica-alla-radice-pareri",
+            storageBucket: "matematica-alla-radice-pareri.firebasestorage.app",
+            messagingSenderId: "1022159270928",
+            appId: "1:1022159270928:web:fb3022ca5eb470e2bcc695"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+    
+        // Gestione invio commento
+        const commentForm = document.getElementById('comment-form');
+        if (commentForm) {
+            commentForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('user-name').value.trim();
+                const message = document.getElementById('user-message').value.trim();
+                if (!name || !message) return;
+    
+                try {
+                    await addDoc(collection(db, "comments"), {
+                        name: name,
+                        message: message,
+                        createdAt: serverTimestamp()
+                    });
+                    commentForm.reset();
+                } catch (error) {
+                    console.error("Errore durante l'invio:", error);
+                    alert("Si è verificato un errore nell'invio del commento.");
+                }
+            });
+        }
+    
+        // Lettura in tempo reale dei commenti
+        const listContainer = document.getElementById('comments-list');
+        if (listContainer) {
+            const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                listContainer.innerHTML = '';
+                if (snapshot.empty) {
+                    listContainer.innerHTML = '<p>Ancora nessun commento. Sii il primo a scriverne uno!</p>';
+                    return;
+                }
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const div = document.createElement('div');
+                    div.className = 'comment-item';
+                    div.innerHTML = `
+                        <strong>${escapeHtml(data.name || '')}</strong>
+                        <p>${escapeHtml(data.message || '')}</p>
+                    `;
+                    listContainer.appendChild(div);
+                });
+            }, (error) => {
+                console.error("Errore di lettura:", error);
+                listContainer.innerHTML = '<p>Impossibile caricare i commenti al momento.</p>';
+            });
+        }
+    
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
     </script>
 </body>
 </html>
