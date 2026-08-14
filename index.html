@@ -396,6 +396,7 @@
         }
 
         .modal-card {
+            position: relative;
             background: #193822;
             border: 1.5px solid rgba(255, 255, 255, 0.3);
             border-radius: 16px;
@@ -413,6 +414,9 @@
         .modal-card li { margin-bottom: 0.4rem; }
 
         .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
             background: #ffffff;
             color: #193822;
             border: none;
@@ -420,7 +424,10 @@
             border-radius: 8px;
             font-weight: 700;
             cursor: pointer;
-            float: right;
+        }
+        
+        .close-btn:hover {
+            background: #FFD700;
         }
 
         /* RESPONSIVE SMARTPHONE */
@@ -469,6 +476,64 @@
                 margin: 0 auto 1rem auto;
             }
         }
+
+        .report-section {
+          max-width: 800px;
+          margin: 2rem auto;
+          padding: 1.5rem;
+          background-color: #f9fbfd;
+          border-radius: 8px;
+          border: 1px solid #e1e8ed;
+          font-family: inherit;
+          color: #1a2e22;
+        }
+        
+        .report-section p, 
+        .report-section li {
+            color: #2c3e50;
+        }
+        
+        .report-section h2, 
+        .report-section h3 {
+            color: #165b26; /* Titoli in verde scuro coerenti con il tema */
+        }
+        
+        .email-box {
+          background-color: #ffffff;
+          padding: 1rem 1.5rem;
+          border-left: 4px solid #0066cc;
+          margin: 1.5rem 0;
+          border-radius: 4px;
+        }
+        
+        .email-link {
+          font-size: 1.1rem;
+          font-weight: bold;
+          color: #0066cc;
+          text-decoration: none;
+        }
+        
+        .email-link:hover {
+          text-decoration: underline;
+        }
+        
+        .subject-hint {
+          font-size: 0.9rem;
+          color: #555;
+          margin-top: 0.5rem;
+        }
+        
+        .report-details ol > li {
+          margin-bottom: 0.8rem;
+        }
+        
+        .thank-you-card {
+          margin-top: 2rem;
+          padding: 1rem;
+          background-color: #eef7ee;
+          border-radius: 6px;
+          color: #2e6b2e;
+        }
     </style>
 </head>
 <body>
@@ -512,7 +577,7 @@
     <main>
         <div id="menu-view" class="leaf-grid">
             
-            <div class="leaf-group pos-center" onclick="openSection('download', 'Download dei Volumi')" data-tooltip="Scarica i PDF dei volumi">
+            <div class="leaf-group pos-center" role="button" tabindex="0" onclick="openSection('download', 'Download dei Volumi')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('download', 'Download dei Volumi'); }" data-tooltip="Scarica i PDF dei volumi">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -522,7 +587,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-12" onclick="openSection('materiali', 'Materiali Aggiuntivi')" data-tooltip="File GeoGebra e altri allegati">
+            <div class="leaf-group pos-12" role="button" tabindex="0" onclick="openSection('materiali', 'Materiali Aggiuntivi')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('materiali', 'Materiali Aggiuntivi'); }" data-tooltip="File GeoGebra e altri allegati">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -535,7 +600,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-2" onclick="openSection('commenti', 'Commenti e Recensioni')" data-tooltip="Pareri, recensioni e feedback">
+            <div class="leaf-group pos-2" role="button" tabindex="0" onclick="openSection('commenti', 'Commenti e Recensioni')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('commenti', 'Commenti e Recensioni'); }" data-tooltip="Pareri, recensioni e feedback">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -548,7 +613,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-4" onclick="openSection('descrizione', 'Descrizione del Testo')" data-tooltip="Perché esistono questi volumi?">
+            <div class="leaf-group pos-4" role="button" tabindex="0" onclick="openSection('descrizione', 'Descrizione del Testo')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('descrizione', 'Descrizione del Testo'); }" data-tooltip="Perché esistono questi volumi?">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -561,7 +626,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-6" onclick="openSection('diritto', 'Diritto d\'Autore e Licenza')" data-tooltip="Licenze, note legali e condivisione">
+            <div class="leaf-group pos-6" role="button" tabindex="0" onclick="openSection('diritto', 'Diritto d\'Autore e Licenza')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('diritto', 'Diritto d\'Autore e Licenza'); }" data-tooltip="Licenze, note legali e condivisione">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -574,7 +639,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-8" onclick="openSection('autore', 'Presentazione dell\'Autore')" data-tooltip="Biografia e percorso professionale dell'autore">
+            <div class="leaf-group pos-8" role="button" tabindex="0" onclick="openSection('autore', 'Presentazione dell\'Autore')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('autore', 'Presentazione dell\'Autore'); }" data-tooltip="Biografia e percorso professionale dell'autore">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -587,7 +652,7 @@
                 </svg>
             </div>
 
-            <div class="leaf-group pos-10" onclick="openSection('segnalazioni', 'Segnalazioni per l\'Autore')" data-tooltip="Segnala refusi o suggerimenti">
+            <div class="leaf-group pos-10" role="button" tabindex="0" onclick="openSection('segnalazioni', 'Segnalazioni per l\'Autore')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('segnalazioni', 'Segnalazioni per l\'Autore'); }" data-tooltip="Segnala refusi o suggerimenti">
                 <svg class="leaf-svg" viewBox="-125 -70 340 140">
                     <use href="#tikz-leaf-shape" />
                     <g class="leaf-content">
@@ -621,9 +686,9 @@
                 <div class="giscus-guide">
                     <h3>💡 Come lasciare un commento:</h3>
                     <ul>
-                        <li>I commenti sono alimentati da <strong>GitHub Discussions</strong>: per commentare o lasciare reazioni occorre accedere con un account GitHub gratuito.</li>
-                        <li><strong>Indica il tuo ruolo:</strong> Per aiutare gli altri lettori, inserisci all'inizio del tuo commento l'etichetta del tuo ruolo: <code>[Docente]</code>, <code>[Studente]</code> oppure <code>[Altro]</code>.</li>
-                        <li>Puoi reagire ai commenti altrui (👍, ❤️, ecc.) o modificare i tuoi interventi in qualsiasi momento.</li>
+                        <li>I commenti sono alimentati da <strong>GitHub Discussions</strong>: per commentare occorre accedere con un account GitHub gratuito.</li>
+                        <li><strong>Indica il tuo ruolo:</strong> Inserisci all'inizio del commento il tuo ruolo: <code>[Docente]</code>, <code>[Studente]</code> o <code>[Altro]</code>.</li>
+                        <li>Puoi anche lasciare reazioni (👍, ❤️, ecc.) ai commenti degli altri lettori.</li>
                     </ul>
                 </div>
 
@@ -652,7 +717,7 @@
                 <p>La collana <em>Matematica alla Radice</em> nasce dall'esigenza di affiancare ai manuali tradizionali dei volumi di accompagnamento, più in linea con lo stile didattico dell'autore.</p>
                 <p>Questi libri non sono dunque pensati per <em>sostituire</em> i testi classici, bensì per supportarli. Per scelta editoriale non contengono esercizi: si presuppone infatti che gli studenti facciano riferimento al libro tradizionale come principale fonte per la pratica e la risoluzione dei problemi.</p>
                 <p>I volumi affrontano i contenuti canonici del percorso di matematica per il liceo scientifico, riorganizzati secondo l'impostazione didattica sviluppata dall'autore nelle sue classi. L'approccio privilegia l'intuizione e la comprensione intuitiva dei concetti prima di introdurre il rigore formale.</p>
-                <p>Il testo presenta inoltre continui riferimenti alla fisica, così da mantenere vivo il dialogo tra le due discipline, oltre a occasionali e stimolanti collegamenti con las scienze naturali e dell'informatica.</p>
+                <p>Il testo presenta inoltre continui riferimenti alla fisica, così da mantenere vivo il dialogo tra le due discipline, oltre a occasionali e stimolanti collegamenti con le scienze naturali e dell'informatica.</p>
             </div>
             
             <div id="section-diritto" class="section-content hidden">
@@ -693,16 +758,29 @@
             
             <div id="section-segnalazioni" class="section-content hidden">
                 <h2>Segnalazioni e Suggerimenti</h2>
-                <p>Hai trovato un refuso, un errore di stampa o desideri proporre un miglioramento per i prossimi aggiornamenti?</p>
-                <p>La gestione delle segnalazioni è aperta e tracciata tramite la piattaforma <strong>GitHub Issues</strong>. Cliccando sul pulsante sottostante potrai aprire direttamente una nuova segnalazione (ti servirà un account GitHub gratuito).</p>
+                <p>Hai trovato un refuso, un errore di stampa o desideri proporre un miglioramento per i prossimi aggiornamenti del testo? Il tuo contributo è fondamentale per la revisione dei volumi.</p>
                 
-                <div style="margin: 2rem 0; text-align: center;">
-                    <a href="https://github.com/matematica-alla-radice/matematica-alla-radice.github.io/issues/new" target="_blank" rel="noopener" style="display: inline-block; background: #FFD700; color: #193822; padding: 14px 28px; border-radius: 10px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s ease, filter 0.2s ease;">
-                        Apri una Segnalazione su GitHub
-                    </a>
+                <div class="giscus-guide" style="margin-bottom: 1.5rem;">
+                    <h3>📍 Opzione 1: GitHub Issues (Consigliato)</h3>
+                    <p>La gestione delle segnalazioni è aperta e tracciata in modo trasparente tramite <strong>GitHub Issues</strong>. Cliccando sul pulsante sottostante potrai aprire direttamente una nuova segnalazione (è necessario un account GitHub gratuito):</p>
+                    <div style="margin: 1.5rem 0; text-align: center;">
+                        <a href="https://github.com/matematica-alla-radice/matematica-alla-radice.github.io/issues/new" target="_blank" rel="noopener" style="display: inline-block; background: #FFD700; color: #193822; padding: 12px 24px; border-radius: 8px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s ease, filter 0.2s ease;">
+                            Apri una Segnalazione su GitHub
+                        </a>
+                    </div>
                 </div>
 
-                <p style="font-size: 0.9rem; opacity: 0.85; text-align: center;">In alternativa, puoi sempre contattare direttamente l'autore via email all'indirizzo <a href="mailto:matematica.alla.radice@gmail.com">matematica.alla.radice@gmail.com</a>.</p>
+                <div class="giscus-guide">
+                    <h3>✉️ Opzione 2: Invio via Email</h3>
+                    <p>Se preferisci non utilizzare GitHub, puoi inviare una mail direttamente all'autore all'indirizzo <a href="mailto:matematica.alla.radice@gmail.com" style="color: #1a2e22; font-weight: bold;">matematica.alla.radice@gmail.com</a>.</p>
+                    <p style="margin-top: 0.8rem;">Per aiutare l'autore a individuare e correggere rapidamente il problema, ti chiediamo gentilmente di specificare nella mail:</p>
+                    <ul>
+                        <li><strong>Volume e Capitolo:</strong> (es. <em>Volume 1 - Capitolo 3: Equazioni</em>)</li>
+                        <li><strong>Pagina / Sezione:</strong> Il numero della pagina o il paragrafo interessato.</li>
+                        <li><strong>Descrizione del refuso:</strong> Il testo o la formula errata riscontrata.</li>
+                        <li><strong>Correzione proposta:</strong> (Opzionale) Il testo o il passaggio corretto da sostituire.</li>
+                    </ul>
+                </div>
             </div>
 
         </div>
@@ -753,6 +831,7 @@
             document.getElementById('section-' + sectionId).classList.remove('hidden');
 
             document.querySelector('main').style.alignItems = 'flex-start';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function goBack() {
@@ -761,6 +840,7 @@
             document.getElementById('back-btn').classList.add('hidden');
             document.getElementById('main-subtitle').innerHTML = originalSubtitle;
             document.querySelector('main').style.alignItems = 'center';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Gestione del Tooltip dinamico che segue il mouse
