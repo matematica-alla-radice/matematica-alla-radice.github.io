@@ -128,22 +128,13 @@
             filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
         }
 
-        /* Correzioni specifiche per centrare l'hover e mantenere le rotazioni */
-        .pos-12:hover, .pos-6:hover {
-            transform: translateX(-50%) scale(1.14);
-        }
-
-        .pos-2:hover, .pos-8:hover {
-            z-index: 50;
-            transform: rotate(30deg) scale(1.14);
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
-        }
-
-        .pos-4:hover, .pos-10:hover {
-            z-index: 50;
-            transform: rotate(-30deg) scale(1.14);
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
-        }
+        /* Trasformazioni specifiche per gli hover di ciascuna foglia */
+        .pos-12:hover { transform: translateX(-50%) rotate(19deg) scale(1.14); }
+        .pos-2:hover  { transform: rotate(37deg) scale(1.14); }
+        .pos-4:hover  { transform: rotate(-18deg) scale(1.14); }
+        .pos-6:hover  { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
+        .pos-8:hover  { transform: rotate(-39deg) scale(1.14); }
+        .pos-10:hover { transform: rotate(20deg) scale(1.14); }
 
         .leaf-group:hover .tikz-leaf-body {
             fill: rgba(255, 255, 255, 0.22);
@@ -184,10 +175,10 @@
         }
 
         /* POSIZIONAMENTO E ROTAZIONI NELLO SPAZIO */
-        .pos-12 { top: 10px; left: 50%; transform: translateX(-50%); }
+        .pos-12 { top: 10px; left: 50%; transform: translateX(-50%) rotate(19deg); }
         .pos-2  { top: 140px; right: -25px; transform: rotate(37deg); }
         .pos-4  { bottom: 140px; right: -25px; transform: rotate(-18deg); }
-        .pos-6  { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        .pos-6  { bottom: 10px; left: 50%; transform: translateX(-50%) rotate(-6deg); }
         .pos-8  { bottom: 140px; left: -25px; transform: rotate(-39deg); }
         .pos-10 { top: 140px; left: -25px; transform: rotate(20deg); }
 
