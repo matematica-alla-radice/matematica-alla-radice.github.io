@@ -5,37 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matematica alla Radice</title>
     <style>
+        /* DEFINIZIONI DEI COLORI */
+        :root {
+            --White: rgb(255, 255, 255);
+            --Gold: rgb(255, 215, 0);
+            --GreenTxt: rgb(25, 56, 34);
+            --BrownBox: rgba(110, 65, 30, 0.95);
+            --LightBrownBox: rgb(59, 37, 19);
+            --LeafFill: rgba(95, 130, 75, 0.85);
+            --LeafFillHover: rgba(115, 150, 95, 0.95);
+            --PaleGreen: rgb(226, 241, 231);
+            --ModalGreen: rgb(46, 90, 57);
+            --EmailBlue: rgb(6, 69, 173);
+        }
+        
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        /* STILE PRINCIPALE */
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: #FFD700;
+            color: var(--Gold);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
             padding: 2rem 1rem;
-            background: linear-gradient(180deg, #165b26 0%, #4a280e 100%);
+            background: linear-gradient(180deg, #165b26 0%, #4a280e 100%); /* shading sfondo schermata principale */
             background-attachment: fixed;
             overflow-x: hidden;
-        }
-        
-        .feedback-cta {
-            text-align: center;
-            background-color: #f7dc6f;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin: 1.5rem auto;
-            max-width: 600px;
-            font-size: 0.95rem;
-            color: #1b4332;
-            border: 1px solid #ffd700;
-            font-style: italic;
         }
 
         /* CLASSE DI SUPPORTO PER NASCONDERE ELEMENTI */
@@ -43,30 +45,14 @@
             display: none !important;
         }
 
-        /* TOOLTIP DINAMICO (FINESTRELLA BIANCA) */
-        #custom-tooltip {
-            position: fixed;
-            background: #ffffff;
-            color: #193822;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-            pointer-events: none;
-            z-index: 10000;
-            white-space: nowrap;
-            transition: opacity 0.15s ease;
-        }
-
-        /* BOTTONE INDIETRO (Freccia) */
-        #back-btn {
+        /* BOTTONE INDIETRO (Freccia <-) */
+        #back-button {
             position: absolute;
             top: 2rem;
             left: 2rem;
             background: none;
             border: none;
-            color: #FFD700;
+            color: var(--Gold);
             cursor: pointer;
             width: 45px;
             height: 45px;
@@ -74,18 +60,18 @@
             z-index: 100;
         }
 
-        #back-btn:hover {
+        #back-button:hover {
             transform: translateX(-5px) scale(1.1);
             filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
         }
 
-        #back-btn svg {
+        #back-button svg {
             width: 100%;
             height: 100%;
             fill: currentColor;
         }
 
-        /* Testata */
+        /* HEADER */
         header {
             text-align: center;
             max-width: 850px;
@@ -94,6 +80,7 @@
             margin-bottom: 1.5rem;
         }
 
+        /* titolo */
         header h1 {
             font-size: clamp(2.3rem, 5.5vw, 3.8rem);
             font-weight: 800;
@@ -103,294 +90,43 @@
             line-height: 1.1;
         }
 
+        /* sottotitolo */
         header p {
             font-size: clamp(1.05rem, 2.2vw, 1.3rem);
-            color: #FFD700;
+            color: var(--Gold);
             font-weight: 300;
             font-style: italic;
             opacity: 0.95;
             transition: opacity 0.3s ease;
         }
 
-        /* Layout Principale */
-        main {
-            width: 100%;
-            max-width: 950px;
-            margin: auto 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 50vh;
-        }
-
-        /* GRIGLIA FOGLIE */
-        .leaf-grid {
-            position: relative;
-            width: min(100%, 1050px, calc((100vh - 240px) * 1.5));
-            aspect-ratio: 1050 / 700;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* GRUPPO FOGLIA INTERATTIVA */
-        .leaf-group {
-            position: absolute;
-            cursor: pointer;
-            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
-            transition: filter 0.35s ease, transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .leaf-group:not(.pos-center) {
-            width: 34.285%;
-            height: 21.285%;
-        }
-
-        .leaf-svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-            display: block;
-        }
-
-        /* Stili del tracciato TikZ */
-        .tikz-leaf-body {
-            fill: rgba(95, 130, 75, 0.85);
-            stroke: #FFD700;
-            stroke-width: 2.5px;
-            backdrop-filter: blur(6px);
-            transition: fill 0.35s ease, stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
-        }
-
-        .tikz-leaf-stem {
-            fill: none;
-            stroke: #228B22;
-            stroke-width: 3.5px;
-            stroke-linecap: round;
-            transition: stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
-        }
-
-        /* CONTENUTO CENTRATO E CONTRO-RUOTATO */
-        .leaf-content {
-            pointer-events: none;
-            transform-origin: 0px 0px;
-            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .pos-12 .leaf-content { transform: rotate(6deg); }
-        .pos-2  .leaf-content { transform: rotate(-37deg); }
-        .pos-4  .leaf-content { transform: rotate(18deg); }
-        .pos-6  .leaf-content { transform: rotate(-19deg); }
-        .pos-8  .leaf-content { transform: rotate(39deg); }
-        .pos-10 .leaf-content { transform: rotate(-20deg); }
-
-        .leaf-text {
-            fill: #FFD700;
-            font-size: 16px;
-            font-weight: 700;
-            text-anchor: middle;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
-        }
-
-        .leaf-icon-svg {
-            fill: #FFD700;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
-        }
-
-        /* EFFETTO MOUSE */
-        .leaf-group:hover {
-            z-index: 50;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
-        }
-
-        .pos-center:hover { transform: translate(-50%, -50%) scale(1.14); }
-        .pos-12:hover        { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
-        .pos-2:hover         { transform: rotate(37deg) scale(1.14); }
-        .pos-4:hover         { transform: rotate(-18deg) scale(1.14); }
-        .pos-6:hover         { transform: translateX(-50%) rotate(19deg) scale(1.14); }
-        .pos-8:hover         { transform: rotate(-39deg) scale(1.14); }
-        .pos-10:hover        { transform: rotate(20deg) scale(1.14); }
-
-        .leaf-group:hover .tikz-leaf-body {
-            fill: rgba(115, 150, 95, 0.95);
-            stroke: #FFD700;
-            stroke-width: 3.2px;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.75));
-        }
-
-        .leaf-group:hover .tikz-leaf-stem {
-            stroke: #FFD700;
-            stroke-width: 4px;
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.75));
-        }
-
-        .leaf-group:hover .leaf-text,
-        .leaf-group:hover .leaf-icon-svg {
-            fill: #FFD700;
-            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.9));
-        }
-
-        /* FOGLIA CENTRALE (DOWNLOAD) */
-        .pos-center {
-            width: 38.095%;
-            height: 23.571%;
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            z-index: 10; 
-        }
-
-        .pos-center .tikz-leaf-body {
-            fill: rgba(115, 150, 95, 0.95);
-            stroke: #FFD700;
-            stroke-width: 3.2px;
-        }
-
-        .pos-center .leaf-text {
-            font-size: 18.5px;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-        }
-
-        /* POSIZIONAMENTO E ROTAZIONI IN PERCENTUALE */
-        .pos-12 { top: 1.428%; left: 50%; transform: translateX(-50%) rotate(-6deg); }
-        .pos-2  { top: 20%; right: -3.333%; transform: rotate(37deg); }
-        .pos-4  { bottom: 20%; right: -3.333%; transform: rotate(-18deg); }
-        .pos-6  { bottom: 1.428%; left: 50%; transform: translateX(-50%) rotate(19deg); }
-        .pos-8  { bottom: 20%; left: -3.333%; transform: rotate(-39deg); }
-        .pos-10 { top: 20%; left: -3.333%; transform: rotate(20deg); }
-
-        /* CONTENITORE DELLE PAGINE INTERNE */
-        #content-view {
-            width: 100%;
-            max-width: 850px;
-            color: #ffffff;
-            background: rgba(25, 56, 34, 0.75);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            animation: fadeIn 0.4s ease forwards;
-            text-align: left;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        .section-content h2 {
-            margin-bottom: 1.2rem;
-            color: #FFD700;
-            border-bottom: 1px solid rgba(255,215,0,0.3);
-            padding-bottom: 0.5rem;
-            font-size: 1.6rem;
-        }
-
-        .section-content p {
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            color: #e2f1e7;
-        }
-
-        .section-content ul {
-            margin-left: 1.5rem;
-            margin-bottom: 1.2rem;
-            line-height: 1.6;
-            color: #e2f1e7;
-        }
-
-        .section-content li {
-            margin-bottom: 0.6rem;
-        }
-
-        .section-content a {
-            color: #FFD700;
-            text-decoration: underline;
-        }
-
-        /* STILI SPECIFICI PER GISCUS E COMMENTI */
-        .giscus-container {
-            margin-top: 1.5rem;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .giscus-guide {
-            background: rgba(255, 215, 0, 0.15);
-            border-left: 4px solid #FFD700;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 1.5rem;
-            font-size: 0.93rem;
-            color: #ffffff;
-        }
-
-        .giscus-guide h3 {
-            color: #FFD700;
-            margin-bottom: 0.5rem;
-            font-size: 1.05rem;
-        }
-
-        .giscus-guide ul {
-            margin-left: 1.2rem;
-            margin-bottom: 0;
-        }
-
-        /* STILI SPECIFICI PER LA PRESENTAZIONE DELL'AUTORE */
-        .author-container {
-            display: flex;
-            gap: 1.8rem;
-            align-items: flex-start;
-        }
-
-        .author-photo-placeholder {
-            flex-shrink: 0;
-            width: 160px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed rgba(255, 215, 0, 0.5);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #FFD700;
-            font-size: 0.85rem;
-            font-weight: 600;
+        /* box richiesta feedback nell'header */
+        .main-feedback-request {
             text-align: center;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background-color: rgb(247, 220, 111); /* Oro pallido */
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            max-width: 600px;
+            font-size: 0.95rem;
+            color: var(--GreenTxt);
+            border: 1px solid var(--Gold);
+            font-style: italic;
         }
 
-        .author-photo-placeholder img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .author-bio {
-            flex-grow: 1;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* FOOTER & MODALE */
+        /* FOOTER E MODALE SU DIRITTO D'AUTORE */
         footer {
             margin-top: 2rem;
             text-align: center;
             font-size: 0.88rem;
-            color: #e2f1e7;
+            color: var(--PaleGreen);
             opacity: 0.9;
         }
 
         footer button {
             background: none;
             border: none;
-            color: #FFD700;
+            color: var(--Gold);
             text-decoration: underline;
             cursor: pointer;
             font-weight: 600;
@@ -423,28 +159,28 @@
 
         .modal-card {
             position: relative;
-            background: #193822;
+            background: var(--GreenTxt);
             border: 1.5px solid rgba(255, 255, 255, 0.3);
             border-radius: 16px;
             padding: 2rem;
             max-width: 550px;
             width: 100%;
-            color: #ffffff;
+            color: var(--White);
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             text-align: left;
         }
 
-        .modal-card h2 { margin-bottom: 1rem; font-size: 1.5rem; color: #FFD700; border-bottom: none;}
-        .modal-card p { margin-bottom: 1rem; font-size: 0.95rem; line-height: 1.5; color: #d1e7dd; }
-        .modal-card ul { margin-bottom: 1.5rem; padding-left: 1.2rem; font-size: 0.9rem; color: #d1e7dd; }
+        .modal-card h2 { margin-bottom: 1rem; font-size: 1.5rem; color: var(--Gold); border-bottom: none;}
+        .modal-card p { margin-bottom: 1rem; font-size: 0.95rem; line-height: 1.5; color: reg(209, 231, 221); }
+        .modal-card ul { margin-bottom: 1.5rem; padding-left: 1.2rem; font-size: 0.9rem; color: rgb(209, 231, 221); }
         .modal-card li { margin-bottom: 0.4rem; }
 
-        .close-btn {
+        .close-button {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: #ffffff;
-            color: #193822;
+            background: var(--White);
+            color: var(--GreenTxt);
             border: none;
             padding: 10px 20px;
             border-radius: 8px;
@@ -452,82 +188,314 @@
             cursor: pointer;
         }
         
-        .close-btn:hover {
-            background: #FFD700;
+        .close-button:hover {
+            background: var(--Gold);
         }
 
-        /* RESPONSIVE SMARTPHONE */
-        @media (max-width: 768px) {
-            .leaf-grid {
-                width: 100%;
-                height: auto;
-                aspect-ratio: auto;
-                flex-direction: column;
-                gap: 1.2rem;
-            }
-
-            .leaf-group, .pos-center {
-                position: relative !important;
-                width: 310px !important;
-                height: 128px !important;
-                top: auto !important; bottom: auto !important;
-                left: auto !important; right: auto !important;
-                transform: none !important;
-            }
-
-            .leaf-content {
-                transform: none !important;
-            }
-
-            .pos-center { order: -1; }
-
-            .leaf-group:hover, .pos-center:hover {
-                transform: scale(1.05) !important;
-            }
-
-            #back-btn {
-                top: 1rem;
-                left: 1rem;
-                width: 35px;
-                height: 35px;
-            }
-
-            .author-container {
-                flex-direction: column;
-                align-items: center;
-                text-align: left;
-            }
-
-            .author-photo-placeholder {
-                margin: 0 auto 1rem auto;
-            }
+        /* LAYOUT PRINCIPALE */
+        main {
+            width: 100%;
+            max-width: 950px;
+            margin: auto 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
         }
 
+        /* FORMA BOTTONE FOGLIA */
+        .tikz-leaf-body {
+            fill: var(--LeafFill);
+            stroke: var(--Gold);
+            stroke-width: 2.5px;
+            backdrop-filter: blur(6px);
+            transition: fill 0.35s ease, stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
+        }
+
+        .tikz-leaf-stem {
+            fill: none;
+            stroke: rgb(34, 139, 34); /* verde dello stelo */
+            stroke-width: 3.5px;
+            stroke-linecap: round;
+            transition: stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
+        }
+
+        /* foglia centrale (download) */
+        .pos-center {
+            width: 38.095%;
+            height: 23.571%;
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 10; 
+        }
+
+        .pos-center .tikz-leaf-body {
+            fill: var(--LeafFillHover);
+            stroke: var(--Gold);
+            stroke-width: 3.2px;
+        }
+
+        .pos-center .leaf-text {
+            font-size: 18.5px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+        }
+
+        /* GRIGLIA FOGLIE */
+        .leaf-grid {
+            position: relative;
+            width: min(100%, 1050px, calc((100vh - 240px) * 1.5));
+            aspect-ratio: 1050 / 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Posizioni delle foglie laterali */
+        .pos-2  { top: 20%; right: -3.333%; transform: rotate(37deg); }
+        .pos-4  { bottom: 20%; right: -3.333%; transform: rotate(-18deg); }
+        .pos-6  { bottom: 1.428%; left: 50%; transform: translateX(-50%) rotate(19deg); }
+        .pos-8  { bottom: 20%; left: -3.333%; transform: rotate(-39deg); }
+        .pos-10 { top: 20%; left: -3.333%; transform: rotate(20deg); }
+        .pos-12 { top: 1.428%; left: 50%; transform: translateX(-50%) rotate(-6deg); }
+
+        /* Posizioni delle foglie laterali in hover */
+        .pos-center:hover { transform: translate(-50%, -50%) scale(1.14); }
+        .pos-2:hover         { transform: rotate(37deg) scale(1.14); }
+        .pos-4:hover         { transform: rotate(-18deg) scale(1.14); }
+        .pos-6:hover         { transform: translateX(-50%) rotate(19deg) scale(1.14); }
+        .pos-8:hover         { transform: rotate(-39deg) scale(1.14); }
+        .pos-10:hover        { transform: rotate(20deg) scale(1.14); }
+        .pos-12:hover        { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
+
+        /* Antirotazione testo foglie laterali*/
+        .pos-2  .leaf-content { transform: rotate(-37deg); }
+        .pos-4  .leaf-content { transform: rotate(18deg); }
+        .pos-6  .leaf-content { transform: rotate(-19deg); }
+        .pos-8  .leaf-content { transform: rotate(39deg); }
+        .pos-10 .leaf-content { transform: rotate(-20deg); }
+        .pos-12 .leaf-content { transform: rotate(6deg); }
+
+        /* Gruppo foglia interattiva */
+        .leaf-group {
+            position: absolute;
+            cursor: pointer;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+            transition: filter 0.35s ease, transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .leaf-group:not(.pos-center) {
+            width: 34.285%;
+            height: 21.285%;
+        }
+
+        /* Testo nelle foglie */
+        .leaf-content {
+            pointer-events: none;
+            transform-origin: 0px 0px;
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .leaf-text {
+            fill: var(--Gold);
+            font-size: 16px;
+            font-weight: 700;
+            text-anchor: middle;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .leaf-icon-svg {
+            fill: var(--Gold);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+        }
+
+        /* effetto mouse sulle foglie */
+        .leaf-group:hover {
+            z-index: 50;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+
+        .leaf-group:hover .tikz-leaf-body {
+            fill: var(--LeafFillHover);
+            stroke: var(--Gold);
+            stroke-width: 3.2px;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.75)); /* Oro 0.75 */
+        }
+
+        .leaf-group:hover .tikz-leaf-stem {
+            stroke: var(--Gold);
+            stroke-width: 4px;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.75)); /* Oro 0.75 */
+        }
+
+        .leaf-group:hover .leaf-text,
+        .leaf-group:hover .leaf-icon-svg {
+            fill: var(--Gold);
+            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.9)); /* Oro 0.9 */
+        }
+
+        /* tooltip dinamico delle foglie (passando col couse sopra le foglie) */
+        #custom-tooltip {
+            position: fixed;
+            background: var(--White);
+            color: var(--GreenTxt);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            pointer-events: none;
+            z-index: 10000;
+            white-space: nowrap;
+            transition: opacity 0.15s ease;
+        }
+
+        /* CONTENITORE DELLE PAGINE INTERNE */
+        #content-view {
+            width: 100%;
+            max-width: 850px;
+            color: var(--White);
+            background: rgba(25, 56, 34, 0.75); /* Verde */
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: fadeIn 0.4s ease forwards;
+            text-align: left;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* STILI PER PAGINE DI INTERAZIONE UTENTE */
+        .section-content h2 {
+            margin-bottom: 1.2rem;
+            color: var(--Gold);
+            border-bottom: 1px solid rgba(255,215,0,0.3); /* Oro pallido */
+            padding-bottom: 0.5rem;
+            font-size: 1.6rem;
+        }
+
+        .section-content p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--PaleGreen);
+        }
+
+        .section-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            color: var(--PaleGreen);
+        }
+
+        .section-content li {
+            margin-bottom: 0.6rem;
+        }
+
+        .section-content a {
+            color: var(--Gold);
+            text-decoration: underline;
+        }
+
+        /* STILI SPECIFICI PER GISCUS E COMMENTI */
+        .giscus-container {
+            margin-top: 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .giscus-guide {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid var(--Gold);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.93rem;
+            color: var(--White);
+        }
+
+        .giscus-guide h3 {
+            color: var(--Gold);
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .giscus-guide ul {
+            margin-left: 1.2rem;
+            margin-bottom: 0;
+        }
+
+        /* STILI SPECIFICI PER LA PRESENTAZIONE DELL'AUTORE */
+        .author-container {
+            display: flex;
+            gap: 1.8rem;
+            align-items: flex-start;
+        }
+
+        .author-photo-placeholder {
+            flex-shrink: 0;
+            width: 160px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 215, 0, 0.5);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--Gold);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .author-photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-bio {
+            flex-grow: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* STILI PER I REPORT */
         .report-section {
           max-width: 800px;
           margin: 2rem auto;
           padding: 1.5rem;
-          background-color: #f9fbfd;
+          background-color: rgb(249, 251, 253); /* bianco */
           border-radius: 8px;
-          border: 1px solid #e1e8ed;
+          border: 1px solid rgb(225, 232, 237); /* blu-grigio */
           font-family: inherit;
-          color: #1a2e22;
+          color: var(--GreenTxt);
         }
         
         .report-section p, 
         .report-section li {
-            color: #2c3e50;
+            color: rgb(44, 62, 80); /* blu-grigio */
         }
         
         .report-section h2, 
         .report-section h3 {
-            color: #165b26;
+            color: rgb(22, 91, 38); /* verde */
         }
         
         .email-box {
-          background-color: #ffffff;
+          background-color: var(--White);
           padding: 1rem 1.5rem;
-          border-left: 4px solid #0645ad;
+          border-left: 4px solid var(--EmailBlue);
           margin: 1.5rem 0;
           border-radius: 4px;
         }
@@ -535,7 +503,7 @@
         .email-link {
           font-size: 1.1rem;
           font-weight: bold;
-          color: #0645ad;
+          color: var(--EmailBlue);
           text-decoration: underline;
           cursor: pointer;
         }
@@ -557,203 +525,12 @@
         .thank-you-card {
           margin-top: 2rem;
           padding: 1rem;
-          background-color: #eef7ee;
+          background-color: rgb(238, 247, 238); /* grigio chiaro */
           border-radius: 6px;
-          color: #2e6b2e;
+          color: rgb(46, 107, 46; /* verde */
         }
 
-        /* Stili per la sezione Download */
-        .download-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: rgba(110, 65, 30, 0.95);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .download-card.loading {
-            justify-content: center;
-            border-left: 5px solid #ffd700;
-            color: #ffffff;
-            font-style: italic;
-            background-color: #3b2513;
-        }
-        
-        .download-card.available {
-            border-left: 5px solid #ffd700;
-        }
-        
-        .download-card.available:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-        
-        .download-card.missing {
-            border-left: 5px solid #888888;
-            cursor: default;
-        }
-        
-        .dl-details {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .dl-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ffd700;
-        }
-        
-        .dl-meta {
-            font-size: 0.9rem;
-            color: #ffffff;
-            margin-top: 0.4rem;
-        }
-        
-        .dl-missing-text {
-            font-size: 1rem;
-            font-weight: normal;
-            color: #ffffff;
-            font-style: italic;
-            margin-left: 0.5rem;
-        }
-        
-        .dl-btn {
-            background-color: #2e5a39;
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background-color 0.2s ease;
-            text-align: center;
-        }
-        
-        .dl-btn:hover {
-            background-color: #1a3822;
-            color: white;
-        }
-        
-        .dl-btn.disabled {
-            background-color: #555555;
-            color: #aaaaaa;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-        
-        .modal-content {
-            background-color: #3b2513; /* Sfondo marrone coordinato */
-            color: #ffffff;
-            padding: 2rem;
-            border-radius: 10px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            border: 1px solid #ffd700;
-        }
-        
-        .modal-content h3 {
-            color: #ffd700;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
-        }
-        
-        .modal-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
-            color: #f0f0f0;
-        }
-        
-        .modal-text ul {
-            margin: 0.5rem 0 1rem 1.2rem;
-            padding: 0;
-        }
-        
-        .modal-text li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: #ffd700;
-            font-size: 2rem;
-            cursor: pointer;
-            line-height: 1;
-        }
-        
-        .modal-close:hover {
-            color: #ffffff;
-        }
-        
-        .modal-checkbox-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-            background-color: rgba(0, 0, 0, 0.25);
-            padding: 1rem;
-            border-radius: 6px;
-        }
-        
-        .modal-checkbox-container input[type="checkbox"] {
-            margin-top: 0.3rem;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #2e5a39;
-        }
-        
-        .modal-checkbox-container label {
-            cursor: pointer;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            color: #ffffff;
-        }
-        
-        .modal-actions {
-            text-align: right;
-        }
-
-        /* Stili per la sezione Materiali Aggiuntivi */
-        .volumes-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .volume-btn {
-            background-color: rgba(110, 65, 30, 0.95);
-            color: #FFD700;
-            border: none;
-            padding: 15px 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-            text-align: center;
-        }
-        
-        .volume-btn:hover {
-            background-color: #1a3822;
-            transform: translateY(-2px);
-        }
-        
+        /* STILI PER MATERIALI AGGIUNTIVI */        
         .material-links {
             display: flex;
             flex-direction: column;
@@ -765,11 +542,11 @@
             display: flex;
             align-items: center;
             background-color: rgba(191, 128, 64, 0.65);
-            border-left: 5px solid #6666cc;
+            border-left: 5px solid rgb(102, 102, 204); /* blu */
             padding: 1rem 1.5rem;
             border-radius: 6px;
             text-decoration: none;
-            color: #1a2e22;
+            color: reg(26, 46, 34); /* verde */
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         
@@ -807,6 +584,245 @@
             flex-shrink: 0;
             object-fit: contain;
         }
+
+        /* STILI PER LA SEZIONE DI DOWLOAD DEI VOLUMI */
+        .download-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--BrownBox)
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .download-card.loading {
+            justify-content: center;
+            border-left: 5px solid var(--Gold);
+            color: var(--White);
+            font-style: italic;
+            background-color: var(--LightBrownBox);
+        }
+        
+        .download-card.available {
+            border-left: 5px solid var(--Gold);
+        }
+        
+        .download-card.available:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        .download-card.missing {
+            border-left: 5px solid rgb(136, 136, 136); /* grigio */
+            cursor: default;
+        }
+        
+        .dowlonad-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dowlonad-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--Gold);
+        }
+        
+        .dowlonad-meta {
+            font-size: 0.9rem;
+            color: var(--White);
+            margin-top: 0.4rem;
+        }
+        
+        .dowlonad-missing-text {
+            font-size: 1rem;
+            font-weight: normal;
+            color: var(--White);
+            font-style: italic;
+            margin-left: 0.5rem;
+        }
+        
+        .dowlonad-button {
+            background-color: var(--ModalGreen);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+            text-align: center;
+        }
+        
+        .dowlonad-button:hover {
+            background-color: var(--GreenTxt);
+            color: white;
+        }
+        
+        .dowlonad-button.disabled {
+            background-color: #rgb(85, 85, 85); /* grigio scuro */
+            color: #rgb(170, 170, 170); /* grigio chiaro */
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* RICHIESTA PRESA VISIONE DIRITTO D'AUTORE PRIMA DEL DOWNLOAD */
+        .modal-content {
+            background-color: var(--LightBrownBox);
+            color: var(--White);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            border: 1px solid var(--Gold);
+        }
+        
+        .modal-content h3 {
+            color: var(--Gold);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .modal-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            color: #rgb(240, 240, 240); /* grigio chiaro */
+        }
+        
+        .modal-text ul {
+            margin: 0.5rem 0 1rem 1.2rem;
+            padding: 0;
+        }
+        
+        .modal-text li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--Gold);
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .modal-close:hover {
+            color: var(--White);
+        }
+        
+        .modal-checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            background-color: rgba(0, 0, 0, 0.25);
+            padding: 1rem;
+            border-radius: 6px;
+        }
+        
+        .modal-checkbox-container input[type="checkbox"] {
+            margin-top: 0.3rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--ModalGreen);
+        }
+        
+        .modal-checkbox-container label {
+            cursor: pointer;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: var(--White);
+        }
+        
+        .modal-actions {
+            text-align: right;
+        }
+        
+        .volumes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .volume-button {
+            background-color: var(--BrownBox)
+            color: var(--Gold);
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        
+        .volume-button:hover {
+            background-color: var(--GreenTxT);
+            transform: translateY(-2px);
+        }
+
+        /* RESPONSIVE SMARTPHONE */
+        @media (max-width: 768px) {
+            .leaf-grid {
+                width: 100%;
+                height: auto;
+                aspect-ratio: auto;
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+
+            .leaf-group, .pos-center {
+                position: relative !important;
+                width: 310px !important;
+                height: 128px !important;
+                top: auto !important; bottom: auto !important;
+                left: auto !important; right: auto !important;
+                transform: none !important;
+            }
+
+            .leaf-content {
+                transform: none !important;
+            }
+
+            .pos-center { order: -1; }
+
+            .leaf-group:hover, .pos-center:hover {
+                transform: scale(1.05) !important;
+            }
+
+            #back-button {
+                top: 1rem;
+                left: 1rem;
+                width: 35px;
+                height: 35px;
+            }
+
+            .author-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: left;
+            }
+
+            .author-photo-placeholder {
+                margin: 0 auto 1rem auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -839,16 +855,16 @@
     </svg>
 
     <header>
-        <button id="back-btn" class="hidden" onclick="goBack()" aria-label="Torna al menu principale">
+        <button id="back-button" class="hidden" onclick="goBack()" aria-label="Torna al menu principale">
             <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         </button>
 
         <h1>Matematica alla Radice</h1>
         <p id="main-subtitle">Una collana di libri di testo di matematica per i licei scientifici</p>
-        <p class="feedback-cta">
+        <p class="main-feedback-request">
             Hai utilizzato il libro? Sarei felice di conoscere la tua esperienza. 
             Se ti va, inviami un'opinione personale all'indirizzo 
-            <a href="javascript:void(0)" class="email-link" onclick="copyEmail(event)" style="color: #0645ad !important; font-weight: bold;" title="Clicca per copiare l'indirizzo">matematica.alla.radice@gmail.com</a>.
+            <a href="javascript:void(0)" class="email-link" onclick="copyEmail(event)" style="color: var(--EmailBlue) !important; font-weight: bold;" title="Clicca per copiare l'indirizzo">matematica.alla.radice@gmail.com</a>.
         </p>
     </header>
 
@@ -983,7 +999,7 @@
                     </div>
                     
                     <div class="modal-actions">
-                        <button id="confirm-download-btn" class="dl-btn disabled" disabled onclick="executeDownload()">Procedi al Download</button>
+                        <button id="confirm-download-button" class="dl-button disabled" disabled onclick="executeDownload()">Procedi al Download</button>
                     </div>
                 </div>
             </div>
@@ -995,11 +1011,11 @@
                 <div id="materiali-menu">
                     <p>Seleziona un volume per visualizzare i file GeoGebra, gli approfondimenti e i materiali interattivi disponibili.</p>
                     <div class="volumes-list">
-                        <button class="volume-btn" onclick="openMateriali('vol1')">Materiali Volume 1</button>
-                        <button class="volume-btn" onclick="openMateriali('vol2')">Materiali Volume 2</button>
-                        <button class="volume-btn" onclick="openMateriali('vol3')">Materiali Volume 3</button>
-                        <button class="volume-btn" onclick="openMateriali('vol4')">Materiali Volume 4</button>
-                        <button class="volume-btn" onclick="openMateriali('vol5')">Materiali Volume 5</button>
+                        <button class="volume-button" onclick="openMateriali('vol1')">Materiali Volume 1</button>
+                        <button class="volume-button" onclick="openMateriali('vol2')">Materiali Volume 2</button>
+                        <button class="volume-button" onclick="openMateriali('vol3')">Materiali Volume 3</button>
+                        <button class="volume-button" onclick="openMateriali('vol4')">Materiali Volume 4</button>
+                        <button class="volume-button" onclick="openMateriali('vol5')">Materiali Volume 5</button>
                     </div>
                 </div>
 
@@ -1031,7 +1047,7 @@
                     <h3 id="empty-title">Materiali Volume</h3>
                     <div style="background-color: rgba(255,255,255,0.05); padding: 2rem; border-radius: 8px; text-align: center; margin-top: 1.5rem;">
                         <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">⏳</span>
-                        <p style="font-style: italic; color: #dddddd; font-size: 1.1rem; margin: 0;">
+                        <p style="font-style: italic; color: #rgb(221, 221, 221); font-size: 1.1rem; margin: 0;">
                             Non sono ancora stati caricati materiali per questo volume.
                         </p>
                     </div>
@@ -1127,7 +1143,7 @@
                         Puoi inviarmi la tua segnalazione via email direttamente all'indirizzo mail: 
                         <a href="javascript:void(0)" 
                            onclick="copyEmail(event)" 
-                           style="color: #0645ad !important; font-weight: bold; text-decoration: underline; cursor: pointer;" 
+                           style="color: var(--EmailBlue) !important; font-weight: bold; text-decoration: underline; cursor: pointer;" 
                            title="Clicca per copiare l'indirizzo">
                            matematica.alla.radice@gmail.com
                         </a>.
@@ -1141,7 +1157,7 @@
                         <li><strong>Correzione proposta:</strong> (Opzionale) La correzione suggerita o il passaggio da sostituire.</li>
                     </ul>
             
-                    <p style="margin-top: 1.8rem; font-style: italic; text-align: center; color: #ffffff; font-weight: 600;">
+                    <p style="margin-top: 1.8rem; font-style: italic; text-align: center; color: var(--White); font-weight: 600;">
                         L'autore vi ringrazia sinceramente per ogni segnalazione costruttiva.
                     </p>
                 </div>
@@ -1167,9 +1183,9 @@
             </ul>
             <p style="font-size:0.8rem; opacity:0.8;">
                 Consulta la licenza completa su 
-                <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.it" target="_blank" rel="noopener" style="color:#ffffff;">Creative Commons Official</a>.
+                <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.it" target="_blank" rel="noopener" style="color:var(--White);">Creative Commons Official</a>.
             </p>
-            <button class="close-btn" onclick="toggleLicenseModal(false)">Chiudi</button>
+            <button class="close-button" onclick="toggleLicenseModal(false)">Chiudi</button>
         </div>
     </div>
 
@@ -1204,7 +1220,7 @@
 
             document.getElementById('menu-view').classList.add('hidden');
             document.getElementById('content-view').classList.remove('hidden');
-            document.getElementById('back-btn').classList.remove('hidden');
+            document.getElementById('back-button').classList.remove('hidden');
             document.getElementById('main-subtitle').innerHTML = title;
             
             document.querySelectorAll('.section-content').forEach(sec => {
@@ -1234,7 +1250,7 @@
             // 2. Altrimenti (comportamento standard), torna al menu principale
             document.getElementById('menu-view').classList.remove('hidden');
             document.getElementById('content-view').classList.add('hidden');
-            document.getElementById('back-btn').classList.add('hidden');
+            document.getElementById('back-button').classList.add('hidden');
             document.getElementById('main-subtitle').innerHTML = originalSubtitle;
             document.querySelector('main').style.alignItems = 'center';
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1249,7 +1265,7 @@
         document.addEventListener('keydown', function(event) {
             // Controlla se il tasto premuto è "Escape"
             if (event.key === 'Escape') {
-                const backBtn = document.getElementById('back-btn');
+                const backBtn = document.getElementById('back-button');
                 
                 // Verifica che il pulsante "Back" esista e sia visibile/attivo nella pagina corrente
                 if (backBtn && window.getComputedStyle(backBtn).display !== 'none' && window.getComputedStyle(backBtn).visibility !== 'hidden') {
@@ -1327,7 +1343,7 @@
                                 <span class="dl-title">Volume ${i}</span>
                                 <span class="dl-meta">Ultimo aggiornamento: ${dateStr}</span>
                             </div>
-                            <button class="dl-btn" onclick="openDownloadModal('${filePath}')">Scarica Volume</button>
+                            <button class="dl-button" onclick="openDownloadModal('${filePath}')">Scarica Volume</button>
                         `;
                     } else {
                         setMissingLayout(card, i);
@@ -1344,9 +1360,9 @@
             card.setAttribute('title', 'Questo libro non è ancora stato caricato');
             card.innerHTML = `
                 <div class="dl-details">
-                    <span class="dl-title" style="color: #ffd700;">Volume ${volNumber} <span class="dl-missing-text">(Volume mancante)</span></span>
+                    <span class="dl-title" style="color: var(--Gold);">Volume ${volNumber} <span class="dl-missing-text">(Volume mancante)</span></span>
                 </div>
-                <a href="javascript:void(0)" class="dl-btn disabled">Non disponibile</a>
+                <a href="javascript:void(0)" class="dl-button disabled">Non disponibile</a>
             `;
         }
         
@@ -1379,7 +1395,7 @@
         // Gestisce l'abilitazione del bottone in base al checkbox
         function toggleDownloadButton() {
             const checkbox = document.getElementById('accept-license-checkbox');
-            const btn = document.getElementById('confirm-download-btn');
+            const btn = document.getElementById('confirm-download-button');
             
             if (checkbox.checked) {
                 btn.classList.remove('disabled');
