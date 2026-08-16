@@ -25,7 +25,7 @@
             overflow-x: hidden;
         }
         
-        .richiesta-feedback {
+        .feedback-cta {
             text-align: center;
             background-color: #f7dc6f;
             padding: 12px 16px;
@@ -60,7 +60,7 @@
         }
 
         /* BOTTONE INDIETRO (Freccia) */
-        #back-button {
+        #back-btn {
             position: absolute;
             top: 2rem;
             left: 2rem;
@@ -74,12 +74,12 @@
             z-index: 100;
         }
 
-        #back-button:hover {
+        #back-btn:hover {
             transform: translateX(-5px) scale(1.1);
             filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
         }
 
-        #back-button svg {
+        #back-btn svg {
             width: 100%;
             height: 100%;
             fill: currentColor;
@@ -439,7 +439,7 @@
         .modal-card ul { margin-bottom: 1.5rem; padding-left: 1.2rem; font-size: 0.9rem; color: #d1e7dd; }
         .modal-card li { margin-bottom: 0.4rem; }
 
-        .close-button {
+        .close-btn {
             position: absolute;
             top: 1rem;
             right: 1rem;
@@ -452,7 +452,7 @@
             cursor: pointer;
         }
         
-        .close-button:hover {
+        .close-btn:hover {
             background: #FFD700;
         }
 
@@ -466,7 +466,43 @@
                 gap: 1.2rem;
             }
 
-        /* REPORT */
+            .leaf-group, .pos-center {
+                position: relative !important;
+                width: 310px !important;
+                height: 128px !important;
+                top: auto !important; bottom: auto !important;
+                left: auto !important; right: auto !important;
+                transform: none !important;
+            }
+
+            .leaf-content {
+                transform: none !important;
+            }
+
+            .pos-center { order: -1; }
+
+            .leaf-group:hover, .pos-center:hover {
+                transform: scale(1.05) !important;
+            }
+
+            #back-btn {
+                top: 1rem;
+                left: 1rem;
+                width: 35px;
+                height: 35px;
+            }
+
+            .author-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: left;
+            }
+
+            .author-photo-placeholder {
+                margin: 0 auto 1rem auto;
+            }
+        }
+
         .report-section {
           max-width: 800px;
           margin: 2rem auto;
@@ -561,24 +597,24 @@
             cursor: default;
         }
         
-        .download-details {
+        .dl-details {
             display: flex;
             flex-direction: column;
         }
         
-        .download-title {
+        .dl-title {
             font-size: 1.3rem;
             font-weight: bold;
             color: #ffd700;
         }
         
-        .download-meta {
+        .dl-meta {
             font-size: 0.9rem;
             color: #ffffff;
             margin-top: 0.4rem;
         }
         
-        .download-missing-text {
+        .dl-missing-text {
             font-size: 1rem;
             font-weight: normal;
             color: #ffffff;
@@ -586,7 +622,7 @@
             margin-left: 0.5rem;
         }
         
-        .download-button {
+        .dl-btn {
             background-color: #2e5a39;
             color: white;
             padding: 12px 24px;
@@ -597,12 +633,12 @@
             text-align: center;
         }
         
-        .download-button:hover {
+        .dl-btn:hover {
             background-color: #1a3822;
             color: white;
         }
         
-        .download-button.disabled {
+        .dl-btn.disabled {
             background-color: #555555;
             color: #aaaaaa;
             cursor: not-allowed;
@@ -699,7 +735,7 @@
             margin-top: 1.5rem;
         }
         
-        .volume-button {
+        .volume-btn {
             background-color: rgba(110, 65, 30, 0.95);
             color: #FFD700;
             border: none;
@@ -713,7 +749,7 @@
             text-align: center;
         }
         
-        .volume-button:hover {
+        .volume-btn:hover {
             background-color: #1a3822;
             transform: translateY(-2px);
         }
@@ -771,43 +807,6 @@
             flex-shrink: 0;
             object-fit: contain;
         }
-
-            .leaf-group, .pos-center {
-                position: relative !important;
-                width: 310px !important;
-                height: 128px !important;
-                top: auto !important; bottom: auto !important;
-                left: auto !important; right: auto !important;
-                transform: none !important;
-            }
-
-            .leaf-content {
-                transform: none !important;
-            }
-
-            .pos-center { order: -1; }
-
-            .leaf-group:hover, .pos-center:hover {
-                transform: scale(1.05) !important;
-            }
-
-            #back-button {
-                top: 1rem;
-                left: 1rem;
-                width: 35px;
-                height: 35px;
-            }
-
-            .author-container {
-                flex-direction: column;
-                align-items: center;
-                text-align: left;
-            }
-
-            .author-photo-placeholder {
-                margin: 0 auto 1rem auto;
-            }
-        }
     </style>
 </head>
 <body>
@@ -840,13 +839,13 @@
     </svg>
 
     <header>
-        <button id="back-button" class="hidden" onclick="goBack()" aria-label="Torna al menu principale">
+        <button id="back-btn" class="hidden" onclick="goBack()" aria-label="Torna al menu principale">
             <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         </button>
 
         <h1>Matematica alla Radice</h1>
         <p id="main-subtitle">Una collana di libri di testo di matematica per i licei scientifici</p>
-        <p class="richiesta-feedback">
+        <p class="feedback-cta">
             Hai utilizzato il libro? Sarei felice di conoscere la tua esperienza. 
             Se ti va, inviami un'opinione personale all'indirizzo 
             <a href="javascript:void(0)" class="email-link" onclick="copyEmail(event)" style="color: #0645ad !important; font-weight: bold;" title="Clicca per copiare l'indirizzo">matematica.alla.radice@gmail.com</a>.
@@ -984,7 +983,7 @@
                     </div>
                     
                     <div class="modal-actions">
-                        <button id="confirm-download-button" class="download-button disabled" disabled onclick="executeDownload()">Procedi al Download</button>
+                        <button id="confirm-download-btn" class="dl-btn disabled" disabled onclick="executeDownload()">Procedi al Download</button>
                     </div>
                 </div>
             </div>
@@ -996,11 +995,11 @@
                 <div id="materiali-menu">
                     <p>Seleziona un volume per visualizzare i file GeoGebra, gli approfondimenti e i materiali interattivi disponibili.</p>
                     <div class="volumes-list">
-                        <button class="volume-button" onclick="openMateriali('vol1')">Materiali Volume 1</button>
-                        <button class="volume-button" onclick="openMateriali('vol2')">Materiali Volume 2</button>
-                        <button class="volume-button" onclick="openMateriali('vol3')">Materiali Volume 3</button>
-                        <button class="volume-button" onclick="openMateriali('vol4')">Materiali Volume 4</button>
-                        <button class="volume-button" onclick="openMateriali('vol5')">Materiali Volume 5</button>
+                        <button class="volume-btn" onclick="openMateriali('vol1')">Materiali Volume 1</button>
+                        <button class="volume-btn" onclick="openMateriali('vol2')">Materiali Volume 2</button>
+                        <button class="volume-btn" onclick="openMateriali('vol3')">Materiali Volume 3</button>
+                        <button class="volume-btn" onclick="openMateriali('vol4')">Materiali Volume 4</button>
+                        <button class="volume-btn" onclick="openMateriali('vol5')">Materiali Volume 5</button>
                     </div>
                 </div>
 
@@ -1170,7 +1169,7 @@
                 Consulta la licenza completa su 
                 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.it" target="_blank" rel="noopener" style="color:#ffffff;">Creative Commons Official</a>.
             </p>
-            <button class="close-button" onclick="toggleLicenseModal(false)">Chiudi</button>
+            <button class="close-btn" onclick="toggleLicenseModal(false)">Chiudi</button>
         </div>
     </div>
 
@@ -1205,7 +1204,7 @@
 
             document.getElementById('menu-view').classList.add('hidden');
             document.getElementById('content-view').classList.remove('hidden');
-            document.getElementById('back-button').classList.remove('hidden');
+            document.getElementById('back-btn').classList.remove('hidden');
             document.getElementById('main-subtitle').innerHTML = title;
             
             document.querySelectorAll('.section-content').forEach(sec => {
@@ -1235,7 +1234,7 @@
             // 2. Altrimenti (comportamento standard), torna al menu principale
             document.getElementById('menu-view').classList.remove('hidden');
             document.getElementById('content-view').classList.add('hidden');
-            document.getElementById('back-button').classList.add('hidden');
+            document.getElementById('back-btn').classList.add('hidden');
             document.getElementById('main-subtitle').innerHTML = originalSubtitle;
             document.querySelector('main').style.alignItems = 'center';
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1250,7 +1249,7 @@
         document.addEventListener('keydown', function(event) {
             // Controlla se il tasto premuto è "Escape"
             if (event.key === 'Escape') {
-                const backBtn = document.getElementById('back-button');
+                const backBtn = document.getElementById('back-btn');
                 
                 // Verifica che il pulsante "Back" esista e sia visibile/attivo nella pagina corrente
                 if (backBtn && window.getComputedStyle(backBtn).display !== 'none' && window.getComputedStyle(backBtn).visibility !== 'hidden') {
@@ -1324,11 +1323,11 @@
                         card.removeAttribute('title');
                         // Sostituito il link diretto con un bottone che richiama openDownloadModal
                         card.innerHTML = `
-                            <div class="download-details">
-                                <span class="download-title">Volume ${i}</span>
-                                <span class="download-meta">Ultimo aggiornamento: ${dateStr}</span>
+                            <div class="dl-details">
+                                <span class="dl-title">Volume ${i}</span>
+                                <span class="dl-meta">Ultimo aggiornamento: ${dateStr}</span>
                             </div>
-                            <button class="download-button" onclick="openDownloadModal('${filePath}')">Scarica Volume</button>
+                            <button class="dl-btn" onclick="openDownloadModal('${filePath}')">Scarica Volume</button>
                         `;
                     } else {
                         setMissingLayout(card, i);
@@ -1344,10 +1343,10 @@
             card.className = "download-card missing";
             card.setAttribute('title', 'Questo libro non è ancora stato caricato');
             card.innerHTML = `
-                <div class="download-details">
-                    <span class="download-title" style="color: #ffd700;">Volume ${volNumber} <span class="download-missing-text">(Volume mancante)</span></span>
+                <div class="dl-details">
+                    <span class="dl-title" style="color: #ffd700;">Volume ${volNumber} <span class="dl-missing-text">(Volume mancante)</span></span>
                 </div>
-                <a href="javascript:void(0)" class="download-button disabled">Non disponibile</a>
+                <a href="javascript:void(0)" class="dl-btn disabled">Non disponibile</a>
             `;
         }
         
@@ -1380,7 +1379,7 @@
         // Gestisce l'abilitazione del bottone in base al checkbox
         function toggleDownloadButton() {
             const checkbox = document.getElementById('accept-license-checkbox');
-            const btn = document.getElementById('confirm-download-button');
+            const btn = document.getElementById('confirm-download-btn');
             
             if (checkbox.checked) {
                 btn.classList.remove('disabled');
