@@ -3,965 +3,496 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matematica alla Radice</title>
+    <title>Matematica alla Radice - Home</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <style>
+        /* ==========================================================================
+           1. VARIABILI GLOBALI (Colori convertiti in RGB/RGBA)
+           ========================================================================== */
+        :root {
+            --bg-color: rgb(43, 43, 43);             /* Sfondo pagina principale */
+            --card-bg: rgb(30, 30, 30);              /* Sfondo sezioni e card */
+            --text-main: rgb(255, 255, 255);         /* Testo primario bianco */
+            --text-muted: rgb(221, 221, 221);        /* Testo secondario chiaro */
+            --text-disabled: rgb(204, 204, 204);     /* Testo per elementi disabilitati */
+            
+            --accent-color: rgb(76, 175, 80);        /* Verde principale */
+            --accent-hover: rgb(69, 160, 73);        /* Verde scuro (hover) */
+            
+            --shadow-color: rgba(0, 0, 0, 0.5);      /* Ombreggiatura base */
+            --border-color: rgb(85, 85, 85);         /* Bordi grigi */
+            
+            --error-bg: rgba(244, 67, 54, 0.1);      /* Sfondo rosso semitrasparente */
+            --error-color: rgb(244, 67, 54);         /* Rosso errore/mancante */
+            --warning-color: rgb(255, 215, 0);       /* Giallo avvisi */
+            --link-color: rgb(6, 69, 173);           /* Blu per link specifici */
+
+            --font-main: 'Montserrat', sans-serif;
+            --font-serif: 'Crimson Text', serif;
+        }
+
+        /* ==========================================================================
+           2. RESET E TIPOGRAFIA
+           ========================================================================== */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: #FFD700;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem 1rem;
-            background: linear-gradient(180deg, #165b26 0%, #4a280e 100%);
-            background-attachment: fixed;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
             overflow-x: hidden;
         }
-        
-        .feedback-cta {
-            text-align: center;
-            background-color: #f7dc6f;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin: 1.5rem auto;
-            max-width: 600px;
-            font-size: 0.95rem;
-            color: #1b4332;
-            border: 1px solid #ffd700;
-            font-style: italic;
-        }
 
-        /* CLASSE DI SUPPORTO PER NASCONDERE ELEMENTI */
-        .hidden {
-            display: none !important;
-        }
-
-        /* TOOLTIP DINAMICO (FINESTRELLA BIANCA) */
-        #custom-tooltip {
-            position: fixed;
-            background: #ffffff;
-            color: #193822;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
+        h1, h2, h3 {
+            font-family: var(--font-serif);
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-            pointer-events: none;
-            z-index: 10000;
-            white-space: nowrap;
-            transition: opacity 0.15s ease;
         }
 
-        /* BOTTONE INDIETRO (Freccia) */
-        #back-btn {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            background: none;
-            border: none;
-            color: #FFD700;
-            cursor: pointer;
-            width: 45px;
-            height: 45px;
-            transition: transform 0.2s ease, filter 0.2s ease;
-            z-index: 100;
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        #back-btn:hover {
-            transform: translateX(-5px) scale(1.1);
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
+        a:hover {
+            color: var(--accent-hover);
         }
 
-        #back-btn svg {
-            width: 100%;
-            height: 100%;
-            fill: currentColor;
-        }
-
-        /* Testata */
+        /* ==========================================================================
+           3. STRUTTURA E LAYOUT PRINCIPALE
+           ========================================================================== */
         header {
             text-align: center;
-            max-width: 850px;
-            width: 100%;
-            margin-top: 0.5rem;
-            margin-bottom: 1.5rem;
+            padding: 3rem 1rem 1rem 1rem;
         }
 
-        header h1 {
-            font-size: clamp(2.3rem, 5.5vw, 3.8rem);
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 0.4rem;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            line-height: 1.1;
-        }
-
-        header p {
-            font-size: clamp(1.05rem, 2.2vw, 1.3rem);
-            color: #FFD700;
-            font-weight: 300;
-            font-style: italic;
-            opacity: 0.95;
-            transition: opacity 0.3s ease;
-        }
-
-        /* Layout Principale */
-        main {
-            width: 100%;
-            max-width: 950px;
-            margin: auto 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 50vh;
-        }
-
-        /* GRIGLIA FOGLIE */
-        .leaf-grid {
-            position: relative;
-            width: min(100%, 1050px, calc((100vh - 240px) * 1.5));
-            aspect-ratio: 1050 / 700;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* GRUPPO FOGLIA INTERATTIVA */
-        .leaf-group {
-            position: absolute;
-            cursor: pointer;
-            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
-            transition: filter 0.35s ease, transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .leaf-group:not(.pos-center) {
-            width: 34.285%;
-            height: 21.285%;
-        }
-
-        .leaf-svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-            display: block;
-        }
-
-        /* Stili del tracciato TikZ */
-        .tikz-leaf-body {
-            fill: rgba(95, 130, 75, 0.85);
-            stroke: #FFD700;
-            stroke-width: 2.5px;
-            backdrop-filter: blur(6px);
-            transition: fill 0.35s ease, stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
-        }
-
-        .tikz-leaf-stem {
-            fill: none;
-            stroke: #228B22;
-            stroke-width: 3.5px;
-            stroke-linecap: round;
-            transition: stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease;
-        }
-
-        /* CONTENUTO CENTRATO E CONTRO-RUOTATO */
-        .leaf-content {
-            pointer-events: none;
-            transform-origin: 0px 0px;
-            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .pos-12 .leaf-content { transform: rotate(6deg); }
-        .pos-2  .leaf-content { transform: rotate(-37deg); }
-        .pos-4  .leaf-content { transform: rotate(18deg); }
-        .pos-6  .leaf-content { transform: rotate(-19deg); }
-        .pos-8  .leaf-content { transform: rotate(39deg); }
-        .pos-10 .leaf-content { transform: rotate(-20deg); }
-
-        .leaf-text {
-            fill: #FFD700;
-            font-size: 16px;
-            font-weight: 700;
-            text-anchor: middle;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
-        }
-
-        .leaf-icon-svg {
-            fill: #FFD700;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
-        }
-
-        /* EFFETTO MOUSE */
-        .leaf-group:hover {
-            z-index: 50;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
-        }
-
-        .pos-center:hover { transform: translate(-50%, -50%) scale(1.14); }
-        .pos-12:hover        { transform: translateX(-50%) rotate(-6deg) scale(1.14); }
-        .pos-2:hover         { transform: rotate(37deg) scale(1.14); }
-        .pos-4:hover         { transform: rotate(-18deg) scale(1.14); }
-        .pos-6:hover         { transform: translateX(-50%) rotate(19deg) scale(1.14); }
-        .pos-8:hover         { transform: rotate(-39deg) scale(1.14); }
-        .pos-10:hover        { transform: rotate(20deg) scale(1.14); }
-
-        .leaf-group:hover .tikz-leaf-body {
-            fill: rgba(115, 150, 95, 0.95);
-            stroke: #FFD700;
-            stroke-width: 3.2px;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.75));
-        }
-
-        .leaf-group:hover .tikz-leaf-stem {
-            stroke: #FFD700;
-            stroke-width: 4px;
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.75));
-        }
-
-        .leaf-group:hover .leaf-text,
-        .leaf-group:hover .leaf-icon-svg {
-            fill: #FFD700;
-            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.9));
-        }
-
-        /* FOGLIA CENTRALE (DOWNLOAD) */
-        .pos-center {
-            width: 38.095%;
-            height: 23.571%;
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            z-index: 10; 
-        }
-
-        .pos-center .tikz-leaf-body {
-            fill: rgba(115, 150, 95, 0.95);
-            stroke: #FFD700;
-            stroke-width: 3.2px;
-        }
-
-        .pos-center .leaf-text {
-            font-size: 18.5px;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-        }
-
-        /* POSIZIONAMENTO E ROTAZIONI IN PERCENTUALE */
-        .pos-12 { top: 1.428%; left: 50%; transform: translateX(-50%) rotate(-6deg); }
-        .pos-2  { top: 20%; right: -3.333%; transform: rotate(37deg); }
-        .pos-4  { bottom: 20%; right: -3.333%; transform: rotate(-18deg); }
-        .pos-6  { bottom: 1.428%; left: 50%; transform: translateX(-50%) rotate(19deg); }
-        .pos-8  { bottom: 20%; left: -3.333%; transform: rotate(-39deg); }
-        .pos-10 { top: 20%; left: -3.333%; transform: rotate(20deg); }
-
-        /* CONTENITORE DELLE PAGINE INTERNE */
-        #content-view {
-            width: 100%;
-            max-width: 850px;
-            color: #ffffff;
-            background: rgba(25, 56, 34, 0.75);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            animation: fadeIn 0.4s ease forwards;
-            text-align: left;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        .section-content h2 {
-            margin-bottom: 1.2rem;
-            color: #FFD700;
-            border-bottom: 1px solid rgba(255,215,0,0.3);
-            padding-bottom: 0.5rem;
-            font-size: 1.6rem;
-        }
-
-        .section-content p {
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            color: #e2f1e7;
-        }
-
-        .section-content ul {
-            margin-left: 1.5rem;
-            margin-bottom: 1.2rem;
-            line-height: 1.6;
-            color: #e2f1e7;
-        }
-
-        .section-content li {
-            margin-bottom: 0.6rem;
-        }
-
-        .section-content a {
-            color: #FFD700;
-            text-decoration: underline;
-        }
-
-        /* STILI SPECIFICI PER GISCUS E COMMENTI */
-        .giscus-container {
-            margin-top: 1.5rem;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .giscus-guide {
-            background: rgba(255, 215, 0, 0.15);
-            border-left: 4px solid #FFD700;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 1.5rem;
-            font-size: 0.93rem;
-            color: #ffffff;
-        }
-
-        .giscus-guide h3 {
-            color: #FFD700;
+        .main-title {
+            font-size: 3rem;
             margin-bottom: 0.5rem;
-            font-size: 1.05rem;
         }
 
-        .giscus-guide ul {
-            margin-left: 1.2rem;
-            margin-bottom: 0;
+        #main-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            font-style: italic;
         }
 
-        /* STILI SPECIFICI PER LA PRESENTAZIONE DELL'AUTORE */
-        .author-container {
+        main {
+            min-height: 70vh;
             display: flex;
-            gap: 1.8rem;
-            align-items: flex-start;
-        }
-
-        .author-photo-placeholder {
-            flex-shrink: 0;
-            width: 160px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed rgba(255, 215, 0, 0.5);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            color: #FFD700;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-align: center;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            padding: 2rem;
+            position: relative;
         }
 
-        .author-photo-placeholder img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .author-bio {
-            flex-grow: 1;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* FOOTER & MODALE */
         footer {
-            margin-top: 2rem;
             text-align: center;
-            font-size: 0.88rem;
-            color: #e2f1e7;
-            opacity: 0.9;
+            padding: 2rem;
+            color: rgb(187, 187, 187);
+            font-size: 0.9rem;
         }
 
         footer button {
             background: none;
             border: none;
-            color: #FFD700;
-            text-decoration: underline;
+            color: var(--accent-color);
             cursor: pointer;
+            text-decoration: underline;
+            font-family: inherit;
+        }
+
+        /* ==========================================================================
+           4. MENU SVG E INTERFACCIA DI NAVIGAZIONE
+           ========================================================================== */
+        #menu-view {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .menu-svg {
+            width: 100%;
+            height: auto;
+            max-height: 600px;
+        }
+
+        .center-circle {
+            fill: var(--card-bg);
+            stroke: var(--accent-color);
+            stroke-width: 3;
+        }
+
+        .center-text {
+            fill: var(--text-main);
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .leaf-group {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            transform-origin: center;
+        }
+
+        .leaf-group:hover .leaf-bg {
+            fill: var(--accent-hover);
+            stroke: var(--text-main);
+        }
+
+        .leaf-bg {
+            fill: var(--accent-color);
+            stroke: var(--card-bg);
+            stroke-width: 2;
+            transition: all 0.3s ease;
+        }
+
+        .leaf-text {
+            fill: var(--text-main);
+            font-family: var(--font-main);
+            font-size: 14px;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        #back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--accent-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
             font-weight: 600;
         }
 
-        .modal-overlay {
-            display: none; /* Inizia nascosto */
+        #back-btn:hover {
+            background-color: var(--accent-color);
+        }
+
+        #custom-tooltip {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(6px);
+            background-color: rgb(51, 51, 51);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            pointer-events: none;
             z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            white-space: nowrap;
         }
-        
-        /* Questa classe serve a JS per mostrare il modale */
-        .modal-overlay.active {
-            display: flex !important;
-        }
-        
-        /* Questa classe serve per forzare l'invisibilità se necessario */
-        .modal-overlay.hidden {
+
+        .hidden {
             display: none !important;
         }
 
-        .modal-card {
-            position: relative;
-            background: #193822;
-            border: 1.5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 550px;
+        /* ==========================================================================
+           5. SEZIONI E COMPONENTI INTERNI
+           ========================================================================== */
+        #content-view {
             width: 100%;
-            color: #ffffff;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            text-align: left;
+            max-width: 900px;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        .modal-card h2 { margin-bottom: 1rem; font-size: 1.5rem; color: #FFD700; border-bottom: none;}
-        .modal-card p { margin-bottom: 1rem; font-size: 0.95rem; line-height: 1.5; color: #d1e7dd; }
-        .modal-card ul { margin-bottom: 1.5rem; padding-left: 1.2rem; font-size: 0.9rem; color: #d1e7dd; }
-        .modal-card li { margin-bottom: 0.4rem; }
-
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: #ffffff;
-            color: #193822;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        
-        .close-btn:hover {
-            background: #FFD700;
+        .section-content {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 16px var(--shadow-color);
+            margin-bottom: 2rem;
         }
 
-        /* RESPONSIVE SMARTPHONE */
-        @media (max-width: 768px) {
-            .leaf-grid {
-                width: 100%;
-                height: auto;
-                aspect-ratio: auto;
-                flex-direction: column;
-                gap: 1.2rem;
-            }
-
-            .leaf-group, .pos-center {
-                position: relative !important;
-                width: 310px !important;
-                height: 128px !important;
-                top: auto !important; bottom: auto !important;
-                left: auto !important; right: auto !important;
-                transform: none !important;
-            }
-
-            .leaf-content {
-                transform: none !important;
-            }
-
-            .pos-center { order: -1; }
-
-            .leaf-group:hover, .pos-center:hover {
-                transform: scale(1.05) !important;
-            }
-
-            #back-btn {
-                top: 1rem;
-                left: 1rem;
-                width: 35px;
-                height: 35px;
-            }
-
-            .author-container {
-                flex-direction: column;
-                align-items: center;
-                text-align: left;
-            }
-
-            .author-photo-placeholder {
-                margin: 0 auto 1rem auto;
-            }
+        .section-content h2 {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .report-section {
-          max-width: 800px;
-          margin: 2rem auto;
-          padding: 1.5rem;
-          background-color: #f9fbfd;
-          border-radius: 8px;
-          border: 1px solid #e1e8ed;
-          font-family: inherit;
-          color: #1a2e22;
-        }
-        
-        .report-section p, 
-        .report-section li {
-            color: #2c3e50;
-        }
-        
-        .report-section h2, 
-        .report-section h3 {
-            color: #165b26;
-        }
-        
-        .email-box {
-          background-color: #ffffff;
-          padding: 1rem 1.5rem;
-          border-left: 4px solid #0645ad;
-          margin: 1.5rem 0;
-          border-radius: 4px;
-        }
-        
-        .email-link {
-          font-size: 1.1rem;
-          font-weight: bold;
-          color: #0645ad;
-          text-decoration: underline;
-          cursor: pointer;
-        }
-        
-        .email-link:hover {
-          text-decoration: underline;
-        }
-        
-        .subject-hint {
-          font-size: 0.9rem;
-          color: #555;
-          margin-top: 0.5rem;
-        }
-        
-        .report-details ol > li {
-          margin-bottom: 0.8rem;
-        }
-        
-        .thank-you-card {
-          margin-top: 2rem;
-          padding: 1rem;
-          background-color: #eef7ee;
-          border-radius: 6px;
-          color: #2e6b2e;
+        .section-content p { margin-bottom: 1.2rem; }
+        .section-content ul { margin-left: 2rem; margin-bottom: 1.5rem; }
+        .section-content li { margin-bottom: 0.5rem; }
+
+        /* Griglia e Card di Download */
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
         }
 
-        /* Stili per la sezione Download */
         .download-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: rgba(110, 65, 30, 0.95);
-            padding: 1.5rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .download-card.available { border-color: var(--accent-color); }
+        .download-card.available:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        .download-card.missing {
+            border-color: var(--error-color);
+            background-color: var(--error-bg);
+        }
+
+        .dl-details { margin-bottom: 1.5rem; }
+        .dl-title { display: block; font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem; font-family: var(--font-serif); }
+        .dl-meta { display: block; font-size: 0.85rem; color: var(--text-muted); }
+        .dl-missing-text { font-size: 0.9rem; color: var(--warning-color); display: block; margin-top: 0.5rem; }
+
+        .dl-btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .dl-btn:hover:not(.disabled) { background-color: var(--accent-hover); }
+        .dl-btn.disabled { background-color: rgb(85, 85, 85); cursor: not-allowed; color: var(--text-disabled); }
+
+        /* Materiali Specifici */
+        .volumes-list { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+        
+        .volume-btn {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--accent-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         
-        .download-card.loading {
-            justify-content: center;
-            border-left: 5px solid #ffd700;
-            color: #ffffff;
-            font-style: italic;
-            background-color: #3b2513;
-        }
+        .volume-btn:hover { background-color: var(--accent-color); }
+
+        .material-links { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
         
-        .download-card.available {
-            border-left: 5px solid #ffd700;
-        }
-        
-        .download-card.available:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-        
-        .download-card.missing {
-            border-left: 5px solid #888888;
-            cursor: default;
-        }
-        
-        .dl-details {
+        .material-card {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            background-color: rgb(40, 40, 40);
+            padding: 1rem;
+            border-radius: 8px;
+            transition: background-color 0.3s;
         }
         
-        .dl-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ffd700;
-        }
+        .material-card:hover { background-color: rgb(50, 50, 50); }
+        .material-icon { width: 40px; height: 40px; margin-right: 1rem; }
+        .material-info strong { display: block; color: var(--text-main); font-size: 1.1rem; }
+        .material-info span { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* Autore */
+        .author-container { display: flex; flex-direction: column; gap: 2rem; align-items: center; }
+        @media(min-width: 768px) { .author-container { flex-direction: row; align-items: flex-start; } }
         
-        .dl-meta {
-            font-size: 0.9rem;
-            color: #ffffff;
-            margin-top: 0.4rem;
+        .author-photo-placeholder img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 4px 10px var(--shadow-color);
         }
-        
-        .dl-missing-text {
-            font-size: 1rem;
-            font-weight: normal;
-            color: #ffffff;
-            font-style: italic;
-            margin-left: 0.5rem;
+
+        /* Giscus e Segnalazioni */
+        .giscus-guide {
+            background-color: rgb(40, 40, 40);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--warning-color);
         }
-        
-        .dl-btn {
-            background-color: #2e5a39;
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background-color 0.2s ease;
-            text-align: center;
+
+        /* ==========================================================================
+           6. FINESTRE MODALI E POPUP
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
         }
-        
-        .dl-btn:hover {
-            background-color: #1a3822;
-            color: white;
-        }
-        
-        .dl-btn.disabled {
-            background-color: #555555;
-            color: #aaaaaa;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-        
-        .modal-content {
-            background-color: #3b2513; /* Sfondo marrone coordinato */
-            color: #ffffff;
-            padding: 2rem;
-            border-radius: 10px;
+
+        .modal-content, .modal-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2.5rem;
+            width: 90%;
             max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
             position: relative;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            border: 1px solid #ffd700;
+            box-shadow: 0 10px 25px var(--shadow-color);
+            animation: modalIn 0.3s ease-out;
         }
-        
-        .modal-content h3 {
-            color: #ffd700;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
-        }
-        
-        .modal-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
-            color: #f0f0f0;
-        }
-        
-        .modal-text ul {
-            margin: 0.5rem 0 1rem 1.2rem;
-            padding: 0;
-        }
-        
-        .modal-text li {
-            margin-bottom: 0.5rem;
-        }
+
+        .modal-close, .close-btn { cursor: pointer; }
         
         .modal-close {
             position: absolute;
-            top: 15px;
-            right: 20px;
+            top: 15px; right: 20px;
+            font-size: 1.8rem;
+            color: var(--text-muted);
             background: none;
             border: none;
-            color: #ffd700;
-            font-size: 2rem;
-            cursor: pointer;
-            line-height: 1;
         }
-        
-        .modal-close:hover {
-            color: #ffffff;
-        }
+
+        .modal-close:hover { color: var(--error-color); }
+        .modal-text { font-size: 0.95rem; margin-bottom: 1.5rem; }
         
         .modal-checkbox-container {
             display: flex;
             align-items: flex-start;
             gap: 0.8rem;
-            margin-bottom: 1.5rem;
-            background-color: rgba(0, 0, 0, 0.25);
+            background-color: rgb(40, 40, 40);
             padding: 1rem;
-            border-radius: 6px;
-        }
-        
-        .modal-checkbox-container input[type="checkbox"] {
-            margin-top: 0.3rem;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #2e5a39;
-        }
-        
-        .modal-checkbox-container label {
-            cursor: pointer;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            color: #ffffff;
-        }
-        
-        .modal-actions {
-            text-align: right;
-        }
-
-        /* Stili per la sezione Materiali Aggiuntivi */
-        .volumes-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .volume-btn {
-            background-color: rgba(110, 65, 30, 0.95);
-            color: #FFD700;
-            border: none;
-            padding: 15px 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
             border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-            text-align: center;
-        }
-        
-        .volume-btn:hover {
-            background-color: #1a3822;
-            transform: translateY(-2px);
-        }
-        
-        .material-links {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .material-card {
-            display: flex;
-            align-items: center;
-            background-color: rgba(191, 128, 64, 0.65);
-            border-left: 5px solid #6666cc;
-            padding: 1rem 1.5rem;
-            border-radius: 6px;
-            text-decoration: none;
-            color: #1a2e22;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .material-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .material-icon {
-            width: 36px;
-            height: 36px;
-            margin-right: 1rem;
-            flex-shrink: 0;
-        }
-        
-        .material-info {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .material-info strong {
-            font-size: 1.1rem;
-            margin-bottom: 0.2rem;
-        }
-        
-        .material-info span {
-            font-size: 0.9rem;
-            color: #555;
+            margin-bottom: 1.5rem;
         }
 
-        .material-icon {
-            width: 36px;
-            height: 36px;
-            margin-right: 1rem;
-            flex-shrink: 0;
-            object-fit: contain;
+        .modal-checkbox-container input[type="checkbox"] { margin-top: 0.2rem; cursor: pointer; }
+        .modal-checkbox-container label { font-size: 0.9rem; cursor: pointer; line-height: 1.4; }
+
+        .close-btn {
+            display: block;
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.2rem;
+            background-color: var(--accent-color);
+            color: var(--text-main);
+            border: none;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .close-btn:hover { background-color: var(--accent-hover); }
+
+        /* ==========================================================================
+           7. ANIMAZIONI (KEYFRAMES)
+           ========================================================================== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Finestrella tooltip dinamica -->
-    <div id="custom-tooltip" class="hidden"></div>
-
-    <svg style="display: none;">
-        <defs>
-            <g id="tikz-leaf-shape">
-                <!-- Stelo -->
-                <path class="tikz-leaf-stem" d="M -71.5,0 A 58.5,45 0 0,1 -117.0,-22.5" />
-                <!-- Corpo foglia -->
-                <path class="tikz-leaf-body" transform="scale(1.3, 1)" d="
-                    M -55,0 
-                    A 60,60 0 0,0 52.9,60 
-                    A 120,120 0 0,1 156.8,0 
-                    A 120,120 0 0,1 52.9,-60 
-                    A 60,60 0 0,0 -55,0 Z" />
-            </g>
-
-            <g id="icon-download"><path class="leaf-icon-svg" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" transform="translate(-12, -12)"/></g>
-            <g id="icon-materiali"><path class="leaf-icon-svg" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" transform="translate(-12, -12)"/></g>
-            <g id="icon-commenti"><path class="leaf-icon-svg" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" transform="translate(-12, -12)"/></g>
-            <g id="icon-descrizione"><path class="leaf-icon-svg" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" transform="translate(-12, -12)"/></g>
-            <g id="icon-diritto"><path class="leaf-icon-svg" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" transform="translate(-12, -12)"/></g>
-            <g id="icon-autore"><path class="leaf-icon-svg" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" transform="translate(-12, -12)"/></g>
-            <g id="icon-segnalazioni"><path class="leaf-icon-svg" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" transform="translate(-12, -12)"/></g>
-        </defs>
-    </svg>
-
+    <!-- Intestazione -->
     <header>
-        <button id="back-btn" class="hidden" onclick="goBack()" aria-label="Torna al menu principale">
-            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-        </button>
-
-        <h1>Matematica alla Radice</h1>
+        <h1 class="main-title">Matematica alla Radice</h1>
         <p id="main-subtitle">Una collana di libri di testo di matematica per i licei scientifici</p>
-        <p class="feedback-cta">
-            Hai utilizzato il libro? Sarei felice di conoscere la tua esperienza. 
-            Se ti va, inviami un'opinione personale all'indirizzo 
-            <a href="javascript:void(0)" class="email-link" onclick="copyEmail(event)" style="color: #0645ad !important; font-weight: bold;" title="Clicca per copiare l'indirizzo">matematica.alla.radice@gmail.com</a>.
-        </p>
     </header>
 
+    <!-- Contenitore Principale -->
     <main>
-        <div id="menu-view" class="leaf-grid">
-            
-            <div class="leaf-group pos-center" role="button" tabindex="0" onclick="openSection('download', 'Download dei Volumi')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('download', 'Download dei Volumi'); }" data-tooltip="Scarica i PDF dei volumi">
-                <svg class="leaf-svg" viewBox="-125 -70 340 140">
-                    <use href="#tikz-leaf-shape" />
-                    <g class="leaf-content">
-                        <use href="#icon-download" x="0" y="-18" />
-                        <text x="0" y="16" class="leaf-text">DOWNLOAD</text>
-                    </g>
-                </svg>
-            </div>
+        
+        <!-- Tooltip Hover e Pulsante Indietro -->
+        <div id="custom-tooltip" class="hidden"></div>
+        <button id="back-btn" class="hidden" onclick="goBack()">&#8592; Torna al Menu</button>
 
-            <div class="leaf-group pos-12" role="button" tabindex="0" onclick="openSection('materiali', 'Materiali Aggiuntivi')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('materiali', 'Materiali Aggiuntivi'); }" data-tooltip="File GeoGebra e altri allegati">
-                <svg class="leaf-svg" viewBox="-125 -70 340 140">
-                    <use href="#tikz-leaf-shape" />
-                    <g class="leaf-content">
-                        <use href="#icon-materiali" x="0" y="-20" />
-                        <text x="0" y="10" class="leaf-text">
-                            <tspan x="0" dy="0">Materiali</tspan>
-                            <tspan x="0" dy="18">aggiuntivi</tspan>
-                        </text>
-                    </g>
-                </svg>
-            </div>
+        <!-- MENU A RAGGIERA SVG -->
+        <div id="menu-view">
+            <svg viewBox="0 0 800 600" class="menu-svg">
+                <!-- Nodo Centrale -->
+                <circle cx="400" cy="300" r="45" class="center-circle" />
+                <text x="400" y="306" class="center-text" text-anchor="middle">Menu</text>
 
-            <div class="leaf-group pos-2" role="button" tabindex="0" onclick="openSection('commenti', 'Commenti e Recensioni')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('commenti', 'Commenti e Recensioni'); }" data-tooltip="Pareri, recensioni e feedback">
-                <svg class="leaf-svg" viewBox="-125 -70 340 140">
-                    <use href="#tikz-leaf-shape" />
-                    <g class="leaf-content">
-                        <use href="#icon-commenti" x="0" y="-20" />
-                        <text x="0" y="10" class="leaf-text">
-                            <tspan x="0" dy="0">Commenti</tspan>
-                            <tspan x="0" dy="18">e recensioni</tspan>
-                        </text>
-                    </g>
-                </svg>
-            </div>
+                <!-- Foglie Stile TikZ per le Sezioni (Distribuite sui 360 Gradi) -->
+                
+                <!-- 1. Download -->
+                <g class="leaf-group" onclick="openSection('download', 'Download dei Volumi')" data-tooltip="Scarica i Volumi" transform="rotate(0 400 300)">
+                    <path class="leaf-bg" d="M 400,250 Q 440,190 400,130 Q 360,190 400,250 Z" />
+                    <text x="400" y="200" class="leaf-text" text-anchor="middle" transform="rotate(0 400 195)">Download</text>
+                </g>
 
-            <div class="leaf-group pos-4" role="button" tabindex="0" onclick="openSection('descrizione', 'Descrizione del Testo')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('descrizione', 'Descrizione del Testo'); }" data-tooltip="Perché esistono questi volumi?">
-                <svg class="leaf-svg" viewBox="-125 -70 340 140">
-                    <use href="#tikz-leaf-shape" />
-                    <g class="leaf-content">
-                        <use href="#icon-descrizione" x="0" y="-20" />
-                        <text x="0" y="10" class="leaf-text">
-                            <tspan x="0" dy="0">Descrizione</tspan>
-                            <tspan x="0" dy="18">del testo</tspan>
-                        </text>
-                    </g>
-                </svg>
-            </div>
+                <!-- 2. Materiali Aggiuntivi -->
+                <g class="leaf-group" onclick="openSection('materiali', 'Materiali Aggiuntivi')" data-tooltip="Simulazioni e approfondimenti" transform="rotate(60 400 300)">
+                    <path class="leaf-bg" d="M 400,250 Q 440,190 400,130 Q 360,190 400,250 Z" />
+                    <text x="400" y="200" class="leaf-text" text-anchor="middle" transform="rotate(-60 400 195)">Materiali</text>
+                </g>
 
-            <div class="leaf-group pos-6" role="button" tabindex="0" onclick="openSection('diritto', 'Diritto d\'Autore e Licenza')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('diritto', 'Diritto d\'Autore e Licenza'); }" data-tooltip="Licenze, note legali e condivisione">
-                <svg class="leaf-svg" viewBox="-125 -70 340 140">
-                    <use href="#tikz-leaf-shape" />
-                    <g class="leaf-content">
-                        <use href="#icon-diritto" x="0" y="-20" />
-                        <text x="0" y="10" class="leaf-text">
-                            <tspan x="0" dy="0">Diritto</tspan>
-                            <tspan x="0" dy="18">d'autore</tspan>
-                        </text>
-                    </g>
-                </svg>
-            </div>
+                <!-- 3. Commenti -->
+                <g class="leaf-group" onclick="openSection('commenti', 'Commenti e Recensioni')" data-tooltip="Lascia un parere" transform="rotate(120 400 300)">
+                    <path class="leaf-bg" d="M 400,250 Q 440,190 400,130 Q 360,190 400,250 Z" />
+                    <text x="400" y="200" class="leaf-text" text-anchor="middle" transform="rotate(-120 400 195)">Commenti</text>
+                </g>
 
-            <div class="leaf-group pos-8" role="button" tabindex="0" onclick="openSection('autore', 'Presentazione dell\'Autore')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('autore', 'Presentazione dell\'Autore'); }" data-tooltip="Biografia e percorso professionale dell'autore">
-                <svg class="leaf-svg" viewBox="-125 -70 340 140">
-                    <use href="#tikz-leaf-shape" />
-                    <g class="leaf-content">
-                        <use href="#icon-autore" x="0" y="-20" />
-                        <text x="0" y="10" class="leaf-text">
-                            <tspan x="0" dy="0">Presentazione</tspan>
-                            <tspan x="0" dy="18">dell'autore</tspan>
-                        </text>
-                    </g>
-                </svg>
-            </div>
+                <!-- 4. Descrizione del Testo -->
+                <g class="leaf-group" onclick="openSection('descrizione', 'Descrizione del Testo')" data-tooltip="La filosofia dell'opera" transform="rotate(180 400 300)">
+                    <path class="leaf-bg" d="M 400,250 Q 440,190 400,130 Q 360,190 400,250 Z" />
+                    <text x="400" y="200" class="leaf-text" text-anchor="middle" transform="rotate(-180 400 195)">Descrizione</text>
+                </g>
 
-            <div class="leaf-group pos-10" role="button" tabindex="0" onclick="openSection('segnalazioni', 'Segnalazioni per l\'Autore')" onkeydown="if(event.key==='Enter'||event.key===' '){ event.preventDefault(); openSection('segnalazioni', 'Segnalazioni per l\'Autore'); }" data-tooltip="Segnala refusi o suggerimenti">
-                <svg class="leaf-svg" viewBox="-125 -70 340 140">
-                    <use href="#tikz-leaf-shape" />
-                    <g class="leaf-content">
-                        <use href="#icon-segnalazioni" x="0" y="-20" />
-                        <text x="0" y="10" class="leaf-text">
-                            <tspan x="0" dy="0">Segnalazioni</tspan>
-                            <tspan x="0" dy="18">per l'autore</tspan>
-                        </text>
-                    </g>
-                </svg>
-            </div>
+                <!-- 5. Licenza -->
+                <g class="leaf-group" onclick="openSection('diritto', 'Licenza d\'uso e note legali')" data-tooltip="Creative Commons" transform="rotate(240 400 300)">
+                    <path class="leaf-bg" d="M 400,250 Q 440,190 400,130 Q 360,190 400,250 Z" />
+                    <text x="400" y="200" class="leaf-text" text-anchor="middle" transform="rotate(-240 400 195)">Note Legali</text>
+                </g>
+
+                <!-- 6. Autore -->
+                <g class="leaf-group" onclick="openSection('autore', 'Presentazione dell\'autore')" data-tooltip="Chi ha scritto i libri" transform="rotate(300 400 300)">
+                    <path class="leaf-bg" d="M 400,250 Q 440,190 400,130 Q 360,190 400,250 Z" />
+                    <text x="400" y="200" class="leaf-text" text-anchor="middle" transform="rotate(-300 400 195)">Autore</text>
+                </g>
+            </svg>
         </div>
 
+        <!-- CONTENITORI SEZIONI -->
         <div id="content-view" class="hidden">
             
-            <!-- Sezione Download -->
+            <!-- SEZIONE: DOWNLOAD -->
             <div id="section-download" class="section-content hidden">
                 <h2>Download Volumi</h2>
-                <p>Scarica i volumi in formato PDF. I file vengono aggiornati costantemente con le ultime revisioni.</p>
-
-                <div class="volumes-list" id="download-list">
-                    <!-- I 5 rettangoli verranno inizializzati e popolati dal JavaScript -->
-                    <div id="download-vol-1" class="download-card loading"><p>Verifica disponibilità Volume 1...</p></div>
-                    <div id="download-vol-2" class="download-card loading"><p>Verifica disponibilità Volume 2...</p></div>
-                    <div id="download-vol-3" class="download-card loading"><p>Verifica disponibilità Volume 3...</p></div>
-                    <div id="download-vol-4" class="download-card loading"><p>Verifica disponibilità Volume 4...</p></div>
-                    <div id="download-vol-5" class="download-card loading"><p>Verifica disponibilità Volume 5...</p></div>
+                <p>Scarica i volumi della collana in formato PDF.</p>
+                <div class="download-grid">
+                    <div id="download-vol-1" class="download-card">Caricamento...</div>
+                    <div id="download-vol-2" class="download-card">Caricamento...</div>
+                    <div id="download-vol-3" class="download-card">Caricamento...</div>
+                    <div id="download-vol-4" class="download-card">Caricamento...</div>
+                    <div id="download-vol-5" class="download-card">Caricamento...</div>
                 </div>
+                
+                <!-- Link Rapido a Segnalazioni per completezza visiva sotto i Download -->
+                <p style="margin-top: 2rem; font-size: 0.9rem; text-align: center;">
+                    Hai trovato un errore nei file? <a href="#" onclick="openSection('segnalazioni', 'Segnalazioni e Suggerimenti'); return false;" style="text-decoration: underline;">Invia una segnalazione</a>.
+                </p>
             </div>
 
-            <!-- Finestra Modale per la Licenza e Download -->
+            <!-- Modale Download e Licenza -->
             <div id="download-modal" class="modal-overlay hidden">
                 <div class="modal-content">
                     <button class="modal-close" onclick="closeDownloadModal()">&times;</button>
@@ -971,9 +502,9 @@
                         <p>Quest'opera è distribuita con licenza <em>Creative Commons Attribuzione - Non commerciale - Non opere derivate 4.0 Internazionale</em> (CC BY-NC-ND 4.0).</p>
                         <p>Prima di procedere al download, prendi visione delle seguenti condizioni:</p>
                         <ul>
-                            <li><strong>Condividere</strong>: puoi riprodurre e ridistribuire il materiale in qualsiasi formato o supporto, rispettando i termini.</li>
-                            <li><strong>Non commerciale</strong>: non è consentito utilizzare il materiale per scopi commerciali. La vendita è severamente vietata.</li>
-                            <li><strong>Non opere derivate</strong>: è fatto divieto di alterare, modificare o distribuire materiale modificato senza esplicita autorizzazione.</li>
+                            <li><strong>Condividere</strong>: puoi riprodurre e ridistribuire il materiale.</li>
+                            <li><strong>Non commerciale</strong>: non è consentito utilizzare il materiale per scopi commerciali.</li>
+                            <li><strong>Non opere derivate</strong>: è fatto divieto di alterare o distribuire materiale modificato.</li>
                         </ul>
                     </div>
                     
@@ -988,10 +519,10 @@
                 </div>
             </div>
             
+            <!-- SEZIONE: MATERIALI AGGIUNTIVI -->
             <div id="section-materiali" class="section-content hidden">
                 <h2>Materiali Aggiuntivi</h2>
                 
-                <!-- Menu dei 5 Volumi -->
                 <div id="materiali-menu">
                     <p>Seleziona un volume per visualizzare i file GeoGebra, gli approfondimenti e i materiali interattivi disponibili.</p>
                     <div class="volumes-list">
@@ -1003,10 +534,8 @@
                     </div>
                 </div>
 
-                <!-- Contenuto Volume 1 -->
                 <div id="materiali-vol1" class="hidden">
                     <h3>Materiali Volume 1</h3>
-                    
                     <div class="material-links">
                         <a href="https://www.geogebra.org/m/t2tkpxke" target="_blank" rel="noopener" class="material-card">
                             <img src="./assets/Icone/Geogebra-Logo.png" alt="Logo GeoGebra" class="material-icon">
@@ -1015,7 +544,6 @@
                                 <span>Clicca per aprire la simulazione su GeoGebra</span>
                             </div>
                         </a>
-                        
                         <a href="https://www.geogebra.org/m/bzfwccmw" target="_blank" rel="noopener" class="material-card">
                             <img src="./assets/Icone/Geogebra-Logo.png" alt="Logo GeoGebra" class="material-icon">
                             <div class="material-info">
@@ -1026,23 +554,21 @@
                     </div>
                 </div>
 
-                <!-- Contenuto Vuoto (Volumi 2-5) -->
                 <div id="materiali-empty" class="hidden">
                     <h3 id="empty-title">Materiali Volume</h3>
-                    <div style="background-color: rgba(255,255,255,0.05); padding: 2rem; border-radius: 8px; text-align: center; margin-top: 1.5rem;">
+                    <div style="background-color: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 8px; text-align: center; margin-top: 1.5rem;">
                         <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">⏳</span>
-                        <p style="font-style: italic; color: #dddddd; font-size: 1.1rem; margin: 0;">
+                        <p style="font-style: italic; color: rgb(221, 221, 221); font-size: 1.1rem; margin: 0;">
                             Non sono ancora stati caricati materiali per questo volume.
                         </p>
                     </div>
                 </div>
             </div>
             
-            <!-- SEZIONE COMMENTI E RECENSIONI CON GISCUS -->
+            <!-- SEZIONE: COMMENTI (GISCUS) -->
             <div id="section-commenti" class="section-content hidden">
                 <h2>Commenti e Recensioni</h2>
                 <p>In questa sezione puoi leggere i commenti della community, lasciare una tua recensione o scambiare pareri sulla collana.</p>
-
                 <div class="giscus-guide">
                     <h3>💡 Come lasciare un commento:</h3>
                     <ul>
@@ -1051,8 +577,6 @@
                         <li>Puoi anche lasciare reazioni (👍, ❤️, ecc.) ai commenti degli altri lettori.</li>
                     </ul>
                 </div>
-
-                <!-- CONTENITORE WIDGET GISCUS -->
                 <div class="giscus-container">
                     <script src="https://giscus.app/client.js"
                             data-repo="matematica-alla-radice/matematica-alla-radice.github.io"
@@ -1072,6 +596,7 @@
                 </div>
             </div>
             
+            <!-- SEZIONE: DESCRIZIONE -->
             <div id="section-descrizione" class="section-content hidden">
                 <h2>Descrizione del testo</h2>
                 <p>La collana <em>Matematica alla Radice</em> nasce dall'esigenza di affiancare ai manuali tradizionali dei volumi di accompagnamento, più in linea con lo stile didattico dell'autore.</p>
@@ -1080,6 +605,7 @@
                 <p>Il testo presenta inoltre continui riferimenti alla fisica, così da mantenere vivo il dialogo tra le due discipline, oltre a occasionali e stimolanti collegamenti con le scienze naturali e dell'informatica.</p>
             </div>
             
+            <!-- SEZIONE: DIRITTO -->
             <div id="section-diritto" class="section-content hidden">
                 <h2>Licenza d'uso e note legali</h2>
                 <p>Quest'opera è distribuita con licenza <em>Creative Commons Attribuzione - Non commerciale - Non opere derivate 4.0 Internazionale</em> (CC BY-NC-ND 4.0).</p>
@@ -1091,14 +617,15 @@
                 
                 <p>Alle seguenti condizioni:</p>
                 <ul>
-                    <li><strong>Attribuzione</strong>: devi riconoscere una menzione di paternità adeguata, fornire un link alla licenza e indicare se sono state effettuate delle modifiche. Non puoi farlo in modo tale da suggerire che l'autore approvi te o il tuo utilizzo del materiale.</li>
-                    <li><strong>Non commerciale</strong>: non è consentito utilizzare il materiale per scopi commerciali. La vendita di questo volume, in tutto o in parte, è severamente vietata.</li>
-                    <li><strong>Non opere derivate</strong>: se remixi, trasformi o ti basi sul materiale, non puoi distribuire il materiale modificato. È fatto divieto di alterare, modificare o distorcere i contenuti senza esplicita autorizzazione scritta dell'autore.</li>
+                    <li><strong>Attribuzione</strong>: devi riconoscere una menzione di paternità adeguata.</li>
+                    <li><strong>Non commerciale</strong>: non è consentito utilizzare il materiale per scopi commerciali. La vendita è severamente vietata.</li>
+                    <li><strong>Non opere derivate</strong>: se remixi o ti basi sul materiale, non puoi distribuire il materiale modificato.</li>
                 </ul>
                 
-                <p>Qualsiasi utilizzo del presente volume che non rispetti le condizioni sopra elencate costituisce violazione del diritto d'autore. Per autorizzazioni specifiche, usi didattici particolari o richieste di modifica, si prega di contattare direttamente l'autore all'indirizzo mail <a href="mailto:matematica.alla.radice@gmail.com">matematica.alla.radice@gmail.com</a>.</p>
+                <p>Qualsiasi utilizzo non conforme costituisce violazione del diritto d'autore. Per autorizzazioni specifiche, contattare l'autore all'indirizzo mail <a href="mailto:matematica.alla.radice@gmail.com">matematica.alla.radice@gmail.com</a>.</p>
             </div>
             
+            <!-- SEZIONE: AUTORE -->
             <div id="section-autore" class="section-content hidden">
                 <h2>Presentazione dell'autore</h2>
                 <div class="author-container">
@@ -1107,41 +634,40 @@
                     </div>
                     <div class="author-bio">
                         <p>Mi chiamo <strong>Federico Miceli</strong>. Sono un professore di Matematica e Fisica del Liceo Scientifico F. Vercelli di Asti. Questa è la mia storia.</p>
-                        <p>Sono nato ad Asti, dove ho vissuto per la maggior parte della mia vita. La mia adolescenza si è retta su due pilastri per me fondamentali: il basket, a cui ho giocato per nove anni (dall'ultimo anno di elementari all'ultimo di liceo), e la matematica, che è sempre stata una grande passione.</p>
-                        <p>Dopo essermi diplomato nel 2014 al liceo scientifico dove ora insegno, mi sono iscritto alla facoltà di matematica di Udine, conseguendo la laurea triennale all'interno della Scuola d'Eccellenza Toppo Wassermann. Nell'estate del 2017 mi sono poi trasferito all'Università di Bonn, in Germania, per la laurea magistrale, ottenuta a febbraio del 2020. Durante i miei studi ho anche collaborato con il gruppo di ricerca di Matematica Discreta dell'ateneo in un progetto di implementazione software di algoritmi per l'ottimizzazione di microchip.</p>
-                        <p>A partire dall'anno scolastico 2020-2021 ho iniziato la mia carriera da docente. Il primo anno ho prestato servizio all'ITIS Artom di Asti con una cattedra di potenziamento in matematica. Nell'estate del 2021 ho superato il concorso a cattedra per l'abilitazione in Matematica e Fisica, prendendo servizio presso il Liceo Scientifico C. Cattaneo di Torino, dove ho insegnato per tre anni scolastici. Infine, nell'estate del 2024, ho ottenuto il trasferimento al Liceo Scientifico F. Vercelli di Asti, dove insegno tuttora.</p>
+                        <p>Sono nato ad Asti, dove ho vissuto per la maggior parte della mia vita. La mia adolescenza si è retta su due pilastri per me fondamentali: il basket, a cui ho giocato per nove anni, e la matematica, che è sempre stata una grande passione.</p>
+                        <p>Dopo essermi diplomato nel 2014 al liceo scientifico dove ora insegno, mi sono iscritto alla facoltà di matematica di Udine, conseguendo la laurea triennale all'interno della Scuola d'Eccellenza Toppo Wassermann. Nell'estate del 2017 mi sono poi trasferito all'Università di Bonn, in Germania, per la laurea magistrale, ottenuta a febbraio del 2020. Durante i miei studi ho anche collaborato con il gruppo di ricerca di Matematica Discreta dell'ateneo.</p>
+                        <p>A partire dall'anno scolastico 2020-2021 ho iniziato la mia carriera da docente. Ho prestato servizio all'ITIS Artom di Asti, successivamente al Liceo Scientifico C. Cattaneo di Torino, per poi approdare al Liceo Scientifico F. Vercelli di Asti nell'estate del 2024, dove insegno tuttora.</p>
                         <p>Da studente di liceo avevo partecipato al progetto delle Olimpiadi di Matematica, conquistando anche una medaglia d'oro alle gare nazionali di Cesenatico nel 2014; da insegnante ho continuato a occuparmi con entusiasmo di questo progetto.</p>
-                        <p>Inoltre, dopo il mio ingresso in ruolo, ho sempre insegnato anche in classi aderenti al progetto Liceo Matematico, di cui sono uno dei referenti d'istituto al Liceo Scientifico F. Vercelli.</p>
                     </div>
                 </div>
             </div>
             
+            <!-- SEZIONE: SEGNALAZIONI -->
             <div id="section-segnalazioni" class="section-content hidden">
                 <h2>Segnalazioni e Suggerimenti</h2>
-                <p>Hai trovato un refuso, un errore di stampa o desideri proporre un miglioramento per i prossimi aggiornamenti del testo? Il tuo contributo è fondamentale per la revisione dei volumi.</p>
-                
+                <p>Hai trovato un refuso, un errore di stampa o desideri proporre un miglioramento? Il tuo contributo è fondamentale per la revisione dei volumi.</p>
                 <div class="giscus-guide">
-                    <p>⚠️ <strong>Prima di inviare una segnalazione:</strong> ti chiedo di verificare di aver scaricato la versione più recente del PDF dalla sezione <strong>Download</strong>, così da evitare la segnalazione di refusi già corretti nelle ultime revisioni.</p>
+                    <p>⚠️ <strong>Prima di inviare una segnalazione:</strong> ti chiedo di verificare di aver scaricato la versione più recente del PDF dalla sezione <strong>Download</strong>.</p>
                     
                     <p style="margin-top: 1.2rem;">
-                        Puoi inviarmi la tua segnalazione via email direttamente all'indirizzo mail: 
+                        Puoi inviarmi la tua segnalazione via email direttamente all'indirizzo: 
                         <a href="javascript:void(0)" 
                            onclick="copyEmail(event)" 
-                           style="color: #0645ad !important; font-weight: bold; text-decoration: underline; cursor: pointer;" 
+                           style="color: rgb(6, 69, 173) !important; font-weight: bold; text-decoration: underline; cursor: pointer;" 
                            title="Clicca per copiare l'indirizzo">
                            matematica.alla.radice@gmail.com
                         </a>.
                     </p>
                     
-                    <p style="margin-top: 1rem;">Per aiutarmi a individuare e correggere rapidamente il problema, ti chiedo gentilmente di indicare nella mail:</p>
+                    <p style="margin-top: 1rem;">Per aiutarmi a individuare e correggere rapidamente il problema, indica nella mail:</p>
                     <ul>
-                        <li><strong>Oggetto dell'email:</strong> Indica chiaramente volume e capitolo (es. <code>Segnalazione Volume 1 - Capitolo 3</code>).</li>
+                        <li><strong>Oggetto dell'email:</strong> Indica chiaramente volume e capitolo.</li>
                         <li><strong>Pagina / Sezione:</strong> Il numero di pagina o il paragrafo interessato.</li>
                         <li><strong>Descrizione del refuso:</strong> Il testo o la formula errata riscontrata.</li>
-                        <li><strong>Correzione proposta:</strong> (Opzionale) La correzione suggerita o il passaggio da sostituire.</li>
+                        <li><strong>Correzione proposta:</strong> (Opzionale) La correzione suggerita.</li>
                     </ul>
             
-                    <p style="margin-top: 1.8rem; font-style: italic; text-align: center; color: #ffffff; font-weight: 600;">
+                    <p style="margin-top: 1.8rem; font-style: italic; text-align: center; color: rgb(255, 255, 255); font-weight: 600;">
                         L'autore vi ringrazia sinceramente per ogni segnalazione costruttiva.
                     </p>
                 </div>
@@ -1150,13 +676,15 @@
         </div>
     </main>
 
+    <!-- Piè di Pagina -->
     <footer>
         <p>© 2026 Matematica alla Radice. Contenuti distribuiti con licenza 
             <button onclick="toggleLicenseModal(true)">CC BY-NC-ND 4.0</button>.
         </p>
     </footer>
 
-    <div id="licenseModal" class="modal-overlay" onclick="if(event.target === this) toggleLicenseModal(false)">
+    <!-- Modale Licenza Footer -->
+    <div id="licenseModal" class="modal-overlay hidden" onclick="if(event.target === this) toggleLicenseModal(false)">
         <div class="modal-card">
             <h2>Licenza CC BY-NC-ND 4.0</h2>
             <p>I contenuti dell'opera <strong>Matematica alla Radice</strong> sono distribuiti sotto Licenza Creative Commons Attribuzione - Non commerciale - Non opere derivate 4.0 Internazionale.</p>
@@ -1167,15 +695,21 @@
             </ul>
             <p style="font-size:0.8rem; opacity:0.8;">
                 Consulta la licenza completa su 
-                <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.it" target="_blank" rel="noopener" style="color:#ffffff;">Creative Commons Official</a>.
+                <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.it" target="_blank" rel="noopener" style="color:rgb(255, 255, 255);">Creative Commons Official</a>.
             </p>
             <button class="close-btn" onclick="toggleLicenseModal(false)">Chiudi</button>
         </div>
     </div>
 
+    <!-- Script JavaScript -->
     <script>
         function toggleLicenseModal(show) {
-            document.getElementById('licenseModal').style.display = show ? 'flex' : 'none';
+            const modal = document.getElementById('licenseModal');
+            if(show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
         }
 
         const originalSubtitle = "Una collana di libri di testo di matematica per i licei scientifici";
@@ -1191,7 +725,6 @@
                 tooltip.style.top = (event.clientY + 15) + 'px';
                 tooltip.classList.remove('hidden');
         
-                // Nasconde il tooltip dopo 2 secondi
                 setTimeout(() => {
                     tooltip.classList.add('hidden');
                 }, 2000);
@@ -1199,9 +732,7 @@
         }
 
         function openSection(sectionId, title) {
-            // Nascondi il tooltip se aperto mentre si clicca
             document.getElementById('custom-tooltip').classList.add('hidden');
-
             document.getElementById('menu-view').classList.add('hidden');
             document.getElementById('content-view').classList.remove('hidden');
             document.getElementById('back-btn').classList.remove('hidden');
@@ -1221,17 +752,14 @@
             const matVol1 = document.getElementById('materiali-vol1');
             const matEmpty = document.getElementById('materiali-empty');
         
-            // 1. Controlla se siamo in un sottomenu (dentro a un volume specifico)
-            if (!matVol1.classList.contains('hidden') || !matEmpty.classList.contains('hidden')) {
-                // Nascondi i dettagli e mostra la lista dei bottoni volumi
+            if (matVol1 && matEmpty && (!matVol1.classList.contains('hidden') || !matEmpty.classList.contains('hidden'))) {
                 matVol1.classList.add('hidden');
                 matEmpty.classList.add('hidden');
                 matMenu.classList.remove('hidden');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                return; // Interrompe qui, così la freccia non chiude tutto
+                return; 
             }
         
-            // 2. Altrimenti (comportamento standard), torna al menu principale
             document.getElementById('menu-view').classList.remove('hidden');
             document.getElementById('content-view').classList.add('hidden');
             document.getElementById('back-btn').classList.add('hidden');
@@ -1239,28 +767,21 @@
             document.querySelector('main').style.alignItems = 'center';
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Resetta lo stato dei materiali per la prossima volta che si aprirà la sezione
             if(matVol1) matVol1.classList.add('hidden');
             if(matEmpty) matEmpty.classList.add('hidden');
             if(matMenu) matMenu.classList.remove('hidden');
         }
 
-        // Ascolta la pressione dei tasti sulla tastiera
         document.addEventListener('keydown', function(event) {
-            // Controlla se il tasto premuto è "Escape"
             if (event.key === 'Escape') {
                 const backBtn = document.getElementById('back-btn');
-                
-                // Verifica che il pulsante "Back" esista e sia visibile/attivo nella pagina corrente
-                if (backBtn && window.getComputedStyle(backBtn).display !== 'none' && window.getComputedStyle(backBtn).visibility !== 'hidden') {
-                    backBtn.click(); // Simula il click sul pulsante Indietro
+                if (backBtn && !backBtn.classList.contains('hidden')) {
+                    backBtn.click(); 
                 }
             }
         });
 
-        // Gestione del Tooltip dinamico che segue il mouse
         const tooltip = document.getElementById('custom-tooltip');
-
         document.querySelectorAll('.leaf-group').forEach(leaf => {
             leaf.addEventListener('mouseenter', (e) => {
                 const text = leaf.getAttribute('data-tooltip');
@@ -1281,10 +802,8 @@
         });
 
         function openMateriali(vol) {
-            // Nascondi la lista dei bottoni
             document.getElementById('materiali-menu').classList.add('hidden');
             
-            // Mostra il volume corretto
             if (vol === 'vol1') {
                 document.getElementById('materiali-vol1').classList.remove('hidden');
                 document.getElementById('materiali-empty').classList.add('hidden');
@@ -1292,17 +811,12 @@
                 document.getElementById('materiali-vol1').classList.add('hidden');
                 document.getElementById('materiali-empty').classList.remove('hidden');
                 
-                // Estrai il numero dal nome (es. 'vol2' -> '2') e aggiorna il titolo
                 const num = vol.replace('vol', '');
                 document.getElementById('empty-title').textContent = 'Materiali Volume ' + num;
             }
-            
-            // Riporta la visuale all'inizio della scheda
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Funzione per verificare l'esistenza dei PDF e costruire i rettangoli
-        // Funzione per verificare l'esistenza dei PDF e recuperare i contatori di download reali
         async function checkDownloadsAvailability() {
             for (let i = 1; i <= 5; i++) {
                 const card = document.getElementById(`download-vol-${i}`);
@@ -1321,7 +835,6 @@
         
                         card.className = "download-card available";
                         card.removeAttribute('title');
-                        // Sostituito il link diretto con un bottone che richiama openDownloadModal
                         card.innerHTML = `
                             <div class="dl-details">
                                 <span class="dl-title">Volume ${i}</span>
@@ -1338,45 +851,36 @@
             }
         }
         
-        // Funzione di supporto per creare il layout del volume mancante
         function setMissingLayout(card, volNumber) {
             card.className = "download-card missing";
             card.setAttribute('title', 'Questo libro non è ancora stato caricato');
             card.innerHTML = `
                 <div class="dl-details">
-                    <span class="dl-title" style="color: #ffd700;">Volume ${volNumber} <span class="dl-missing-text">(Volume mancante)</span></span>
+                    <span class="dl-title" style="color: rgb(255, 215, 0);">Volume ${volNumber} <span class="dl-missing-text">(Volume mancante)</span></span>
                 </div>
                 <a href="javascript:void(0)" class="dl-btn disabled">Non disponibile</a>
             `;
         }
         
-        // Lancia il controllo in background non appena la pagina web si è caricata
         window.addEventListener('DOMContentLoaded', () => {
             checkDownloadsAvailability();
         });
 
         let pendingDownloadUrl = "";
 
-        // Apre la finestra modale e memorizza il file da scaricare
         function openDownloadModal(filePath) {
             pendingDownloadUrl = filePath;
-            
-            // Resetta la spunta e disabilita il bottone di conferma alla apertura
             const checkbox = document.getElementById('accept-license-checkbox');
             checkbox.checked = false;
             toggleDownloadButton();
-            
-            // Mostra la modale
             document.getElementById('download-modal').classList.remove('hidden');
         }
         
-        // Chiude la finestra modale
         function closeDownloadModal() {
             document.getElementById('download-modal').classList.add('hidden');
             pendingDownloadUrl = "";
         }
         
-        // Gestisce l'abilitazione del bottone in base al checkbox
         function toggleDownloadButton() {
             const checkbox = document.getElementById('accept-license-checkbox');
             const btn = document.getElementById('confirm-download-btn');
@@ -1390,7 +894,6 @@
             }
         }
         
-        // Avvia effettivamente il download del PDF e chiude il popup
         function executeDownload() {
             if (!pendingDownloadUrl) return;
             
